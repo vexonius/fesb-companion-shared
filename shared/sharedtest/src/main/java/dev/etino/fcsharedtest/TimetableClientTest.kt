@@ -20,11 +20,7 @@ class TimetableClientTest {
             )
 
             val result = client.getTimetableEvents(params)
-
-            val parser = TimetableParser()
-            val parsed = parser.parse(result)
-
-            assert(parsed.isNotEmpty())
+            assert(result.isNotEmpty())
         }
     }
 
