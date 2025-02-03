@@ -32,8 +32,8 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-            implementation("com.fleeksoft.ksoup:ksoup:0.2.1")
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.1")
+            implementation(libs.ksoup)
+            implementation(libs.kotlinx.datetime)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
