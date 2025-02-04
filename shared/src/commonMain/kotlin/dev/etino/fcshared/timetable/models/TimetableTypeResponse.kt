@@ -1,6 +1,6 @@
 package dev.etino.fcshared.timetable.models
 
-enum class TimetableType(val value: String) {
+enum class TimetableTypeResponse(val value: String) {
     PREDAVANJE("Predavanja"),
     AUDITORNA_VJEZBA("Auditorne vježbe"),
     KOLOKVIJ("Kolokviji"),

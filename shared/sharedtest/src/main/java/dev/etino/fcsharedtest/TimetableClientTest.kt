@@ -1,7 +1,6 @@
 package dev.etino.fcsharedtest
 
 import dev.etino.fcshared.timetable.client.TimetableClientImpl
-import dev.etino.fcshared.timetable.parser.TimetableParser
 import kotlinx.coroutines.runBlocking
 import org.testng.annotations.Test
 

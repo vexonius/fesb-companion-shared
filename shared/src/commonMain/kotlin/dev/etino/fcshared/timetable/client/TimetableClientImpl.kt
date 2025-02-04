@@ -10,8 +10,6 @@ import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
-import io.ktor.client.statement.content
-import io.ktor.client.statement.request
 import io.ktor.http.Cookie
 import io.ktor.http.Url
 
@@ -25,7 +23,7 @@ class TimetableClientImpl: TimetableClient {
 
         }
         install(HttpCookies) {
-            storage = CustomCookieStorage()
+            storage = TimetableCookieStorage()
         }
         install(HttpTimeout) {
             requestTimeoutMillis = 10_000
@@ -58,28 +56,4 @@ class TimetableClientImpl: TimetableClient {
         }.body<String>()
     }
 
-}
-
-class CustomCookieStorage(
-    private val defaultStorage: CookiesStorage = AcceptAllCookiesStorage()
-): CookiesStorage {
-
-    override suspend fun get(requestUrl: Url): List<Cookie> {
-        val stored = defaultStorage.get(requestUrl)
-
-        return stored
-    }
-
-    override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {
-        defaultStorage.addCookie(requestUrl, cookie)
-    }
-
-    override fun close() {
-        defaultStorage.close()
-    }
-
-}
-
-interface HttpClientInterceptor {
-    fun intercept(context: HttpRequestBuilder): HttpRequestBuilder
 }

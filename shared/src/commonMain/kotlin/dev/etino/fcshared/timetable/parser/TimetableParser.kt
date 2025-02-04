@@ -4,16 +4,16 @@ import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Document
 import com.fleeksoft.ksoup.nodes.Element
 import dev.etino.fcshared.Utils.Parsable
-import dev.etino.fcshared.timetable.models.Event
-import dev.etino.fcshared.timetable.models.Recurring
-import dev.etino.fcshared.timetable.models.TimetableType
+import dev.etino.fcshared.timetable.models.EventResponse
+import dev.etino.fcshared.timetable.models.RecurringResponse
+import dev.etino.fcshared.timetable.models.TimetableTypeResponse
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 
-class TimetableParser: Parsable<String, List<Event>> {
+class TimetableParser: Parsable<String, List<EventResponse>> {
 
-    override fun parse(data: String): List<Event> {
+    override fun parse(data: String): List<EventResponse> {
         val doc: Document = Ksoup.parse(data)
 
         val elements = doc.select("div.event")
@@ -37,11 +37,11 @@ class TimetableParser: Parsable<String, List<Event>> {
                 val detailTime = it.selectFirst("div.detailItem.datetime")?.text() ?: ""
                 val professor = it.selectFirst("div.detailItem.user")?.text() ?: ""
                 val repetsType = parseRecurring(it.selectFirst("div.recurring > span.type > span"))
-                val isItRecurring = !(repetsType == Recurring.ONCE || repetsType == Recurring.UNDEFINED)
+                val isItRecurring = !(repetsType == RecurringResponse.ONCE || repetsType == RecurringResponse.UNDEFINED)
 
                 val repeatsUntil = it.selectFirst("span.repeat")?.text() ?: ""
 
-                return@map Event(
+                return@map EventResponse(
                     id = id.toString(),
                     name = name,
                     shortName = makeAcronym(name),
@@ -68,16 +68,16 @@ class TimetableParser: Parsable<String, List<Event>> {
         return events
     }
 
-    private fun parseType(value: String): TimetableType = TimetableType
-        .entries.firstOrNull { it.value == value } ?: TimetableType.OTHER
+    private fun parseType(value: String): TimetableTypeResponse = TimetableTypeResponse
+        .entries.firstOrNull { it.value == value } ?: TimetableTypeResponse.OTHER
 
-    private fun parseRecurring(element: Element?): Recurring {
+    private fun parseRecurring(element: Element?): RecurringResponse {
         return when {
-            element == null -> Recurring.ONCE
-            element.hasClass("weekly") -> Recurring.WEEKLY
-            element.hasClass("everyTwoWeeks") -> Recurring.EVERY_TWO_WEEKS
-            element.hasClass("monthly") -> Recurring.MONTHLY
-            else -> Recurring.UNDEFINED
+            element == null -> RecurringResponse.ONCE
+            element.hasClass("weekly") -> RecurringResponse.WEEKLY
+            element.hasClass("everyTwoWeeks") -> RecurringResponse.EVERY_TWO_WEEKS
+            element.hasClass("monthly") -> RecurringResponse.MONTHLY
+            else -> RecurringResponse.UNDEFINED
         }
     }
 
