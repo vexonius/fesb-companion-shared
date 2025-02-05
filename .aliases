@@ -1,0 +1,2 @@
+alias actsh="DOCKER_HOST='ssh://vexonius@raspberrypi' act"
+actfc='act -P macos-15=-self-hosted'
