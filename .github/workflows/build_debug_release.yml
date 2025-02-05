@@ -23,7 +23,7 @@ jobs:
           ./gradlew assembleXCFramework
           mv shared/build/XCFrameworks/debug/shared.xcframework shared.xcframework
           zip -r shared.xcframework.zip shared.xcframework
-       - uses: ncipollo/release-action@v1
+      - uses: ncipollo/release-action@v1
         with:
           name: "0.1.1"
           tag: debug
