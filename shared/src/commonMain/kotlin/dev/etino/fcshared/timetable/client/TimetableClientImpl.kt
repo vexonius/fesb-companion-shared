@@ -4,14 +4,9 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
-import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.client.plugins.cookies.HttpCookies
-import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.Cookie
-import io.ktor.http.Url
 
 class TimetableClientImpl: TimetableClient {
 

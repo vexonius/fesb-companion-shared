@@ -16,6 +16,8 @@ kotlin {
         }
     }
 
+    version = "0.1.0"
+
     val xcf = XCFramework()
     val iosTargets = listOf(iosX64(), iosArm64(), iosSimulatorArm64())
 
