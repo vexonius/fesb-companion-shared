@@ -1,4 +1,4 @@
-package dev.etino.fcshared
+package dev.etino.fcshared.timetable.client
 
 interface TimetableClient {
 

@@ -1,16 +1,12 @@
-package dev.etino.fcshared
+package dev.etino.fcshared.timetable.client
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
-import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.client.plugins.cookies.HttpCookies
-import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
-import io.ktor.http.Cookie
-import io.ktor.http.Url
+import io.ktor.client.statement.bodyAsText
 
 class TimetableClientImpl: TimetableClient {
 
@@ -22,7 +18,7 @@ class TimetableClientImpl: TimetableClient {
 
         }
         install(HttpCookies) {
-            storage = CustomCookieStorage()
+            storage = TimetableCookieStorage()
         }
         install(HttpTimeout) {
             requestTimeoutMillis = 10_000
@@ -38,11 +34,9 @@ class TimetableClientImpl: TimetableClient {
                     parameters.append(key, value)
                 }
             }
-        }.body<String>()
+        }
 
-        println(result)
-
-        return result
+        return result.bodyAsText()
     }
 
     override suspend fun fetchTimetableCalendar(params: HashMap<String, String>): String {
@@ -57,28 +51,4 @@ class TimetableClientImpl: TimetableClient {
         }.body<String>()
     }
 
-}
-
-class CustomCookieStorage(
-    private val defaultStorage: CookiesStorage = AcceptAllCookiesStorage()
-): CookiesStorage {
-
-    override suspend fun get(requestUrl: Url): List<Cookie> {
-        val stored = defaultStorage.get(requestUrl)
-
-        return stored
-    }
-
-    override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {
-        defaultStorage.addCookie(requestUrl, cookie)
-    }
-
-    override fun close() {
-        defaultStorage.close()
-    }
-
-}
-
-interface HttpClientInterceptor {
-    fun intercept(context: HttpRequestBuilder): HttpRequestBuilder
 }
