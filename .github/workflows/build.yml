@@ -26,7 +26,8 @@ jobs:
           zip -r shared.xcframework.zip shared.xcframework
       - uses: ncipollo/release-action@v1
         with:
-          name: "0.1.1"
+          allowUpdates: "true"
+          name: "0.1.2"
           tag: "debug"
           makeLatest: "true"
           artifacts: "shared.xcframework.zip"
