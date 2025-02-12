@@ -23,4 +23,18 @@ class TimetableClientTest {
         }
     }
 
+    fun testCalendarMetadata() {
+        runBlocking {
+            val client = TimetableClientImpl()
+
+            val params: HashMap<String, String> = hashMapOf(
+                "FromDate" to "08-08-2024",
+                "ToDate" to "08-08-2025"
+            )
+
+            val result = client.fetchCalendarMetadata(params)
+            assert(result.isNotEmpty())
+        }
+    }
+
 }
