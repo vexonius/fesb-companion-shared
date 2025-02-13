@@ -32,7 +32,7 @@ class TimetableClientTest {
                 "ToDate" to "08-08-2025"
             )
 
-            val result = client.fetchCalendarMetadata(params)
+            val result = client.getCalendarMetadata(params)
             assert(result.isNotEmpty())
         }
     }

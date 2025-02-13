@@ -39,7 +39,7 @@ class TimetableClientImpl: TimetableClient {
         return result.bodyAsText()
     }
 
-    override suspend fun fetchCalendarMetadata(params: HashMap<String, String>): String {
+    override suspend fun getCalendarMetadata(params: Map<String, String>): String {
         val endpointUrl = "$baseURL/raspored/periodi-u-mjesecu-json"
 
         return client.get(endpointUrl) {
