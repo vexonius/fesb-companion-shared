@@ -1,12 +1,14 @@
 package dev.etino.fcshared.timetable.client
 
+import dev.etino.fcshared.timetable.models.CalendarMetadataResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import io.ktor.serialization.kotlinx.json.json
 
 class TimetableClientImpl: TimetableClient {
 
@@ -14,12 +16,14 @@ class TimetableClientImpl: TimetableClient {
     private val client = HttpClient {
         expectSuccess = false
 
-        install(HttpSend) {
-
+        install(ContentNegotiation) {
+            json()
         }
+
         install(HttpCookies) {
             storage = TimetableCookieStorage()
         }
+
         install(HttpTimeout) {
             requestTimeoutMillis = 10_000
         }
@@ -39,16 +43,18 @@ class TimetableClientImpl: TimetableClient {
         return result.bodyAsText()
     }
 
-    override suspend fun getCalendarMetadata(params: Map<String, String>): String {
+    override suspend fun getCalendarMetadata(params: Map<String, String>): List<CalendarMetadataResponse> {
         val endpointUrl = "$baseURL/raspored/periodi-u-mjesecu-json"
 
-        return client.get(endpointUrl) {
+        val response: List<CalendarMetadataResponse> = client.get(endpointUrl) {
             url {
                 for ((key, value) in params) {
                     parameters.append(key, value)
                 }
             }
-        }.body<String>()
+        }.body()
+
+        return response
     }
 
 }
