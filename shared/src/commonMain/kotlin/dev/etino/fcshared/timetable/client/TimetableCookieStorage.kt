@@ -5,9 +5,9 @@ import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.http.Cookie
 import io.ktor.http.Url
 
-class TimetableCookieStorage(
+object TimetableCookieStorage: CookiesStorage {
+
     private val defaultStorage: CookiesStorage = AcceptAllCookiesStorage()
-): CookiesStorage {
 
     override suspend fun get(requestUrl: Url): List<Cookie> {
         val stored = defaultStorage.get(requestUrl)

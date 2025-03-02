@@ -1,11 +1,14 @@
 package dev.etino.fcshared.timetable.client
 
 import dev.etino.fcshared.timetable.models.CalendarMetadataResponse
+import dev.etino.fcshared.user.LoginInterceptorPlugin
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.cookies.HttpCookies
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
@@ -16,12 +19,16 @@ class TimetableClientImpl: TimetableClient {
     private val client = HttpClient {
         expectSuccess = false
 
+        install(Logging) {
+            level = LogLevel.INFO
+        }
+
         install(ContentNegotiation) {
             json()
         }
 
         install(HttpCookies) {
-            storage = TimetableCookieStorage()
+            storage = TimetableCookieStorage
         }
 
         install(HttpTimeout) {
