@@ -833,11 +833,6 @@ class ExampleUnitTest {
         val attendanceRepository = AttendanceRepositoryImpl(attendanceClient, parser)
 
         runBlocking {
-            val userService = UserServiceImpl()
-            val loginServiceResult = userService.login("", "!")
-
-            delay(1000)
-
             try {
                 val result = attendanceRepository.getAttendance()
                 print(result)

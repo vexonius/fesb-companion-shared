@@ -1,6 +1,6 @@
 package dev.etino.fcshared.user
 
-import dev.etino.fcshared.timetable.client.TimetableCookieStorage
+import dev.etino.fcshared.networking.PortalCookieStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.UserAgent
@@ -13,7 +13,6 @@ import io.ktor.client.request.post
 import io.ktor.client.statement.request
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
-import io.ktor.http.content.MultiPartData
 import io.ktor.utils.io.InternalAPI
 
 class UserServiceImpl : UserService {
@@ -34,7 +33,7 @@ class UserServiceImpl : UserService {
         }
 
         install(HttpCookies) {
-            storage = TimetableCookieStorage
+            storage = PortalCookieStorage
         }
     }
 

@@ -36,6 +36,7 @@ kotlin {
             implementation(libs.ksoup)
             implementation(libs.kotlinx.datetime)
             implementation(libs.ktor.client.logging)
+            implementation(libs.kvault)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)

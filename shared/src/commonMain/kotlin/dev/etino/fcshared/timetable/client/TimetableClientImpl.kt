@@ -1,6 +1,8 @@
 package dev.etino.fcshared.timetable.client
 
 import dev.etino.fcshared.timetable.models.CalendarMetadataResponse
+import dev.etino.fcshared.networking.LoginInterceptorPlugin
+import dev.etino.fcshared.networking.PortalCookieStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpTimeout
@@ -27,7 +29,7 @@ class TimetableClientImpl: TimetableClient {
         }
 
         install(HttpCookies) {
-            storage = TimetableCookieStorage
+            storage = PortalCookieStorage
         }
 
         install(HttpTimeout) {

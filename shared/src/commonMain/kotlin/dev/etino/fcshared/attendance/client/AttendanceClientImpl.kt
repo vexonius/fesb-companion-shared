@@ -1,6 +1,7 @@
 package dev.etino.fcshared.attendance.client
 
-import dev.etino.fcshared.timetable.client.TimetableCookieStorage
+import dev.etino.fcshared.networking.LoginInterceptorPlugin
+import dev.etino.fcshared.networking.PortalCookieStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cookies.HttpCookies
@@ -10,7 +11,6 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol.Companion.HTTPS
-import io.ktor.http.appendPathSegments
 
 class AttendanceClientImpl: AttendanceClient {
 
@@ -22,12 +22,14 @@ class AttendanceClientImpl: AttendanceClient {
         }
 
         install(HttpCookies) {
-            storage = TimetableCookieStorage
+            storage = PortalCookieStorage
         }
 
         install(HttpTimeout) {
             requestTimeoutMillis = 15_000
         }
+
+        LoginInterceptorPlugin().setup(this)
     }
 
     override suspend fun getAttendanceItems(): String {
@@ -46,7 +48,12 @@ class AttendanceClientImpl: AttendanceClient {
     companion object {
         private const val baseUrl = "raspored.fesb.unist.hr"
 
-        private  val tableOverviewUrl = URLBuilder(
+        private  val itemPartialUrl = URLBuilder(
+            protocol = HTTPS,
+            host = baseUrl
+        )
+
+        val tableOverviewUrl = URLBuilder(
             protocol = HTTPS,
             host = baseUrl,
             pathSegments = listOf(
@@ -55,11 +62,6 @@ class AttendanceClientImpl: AttendanceClient {
                 "opcenito",
                 "tablica"
             )
-        )
-
-        private  val itemPartialUrl = URLBuilder(
-            protocol = HTTPS,
-            host = baseUrl
         )
     }
 
