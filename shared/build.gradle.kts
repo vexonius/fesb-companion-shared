@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
@@ -10,7 +9,6 @@ plugins {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -37,6 +35,7 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ksoup)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.ktor.client.logging)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
