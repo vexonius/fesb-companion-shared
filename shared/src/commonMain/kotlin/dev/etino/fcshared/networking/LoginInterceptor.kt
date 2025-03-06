@@ -14,16 +14,20 @@ class LoginInterceptorPlugin(
     private val secureStorage: KVault
 ) {
 
+    @Throws(Exception::class)
     fun setup(config: HttpClientConfig<*>) {
         config.install(createClientPlugin(pluginName) {
             onRequest { request, content ->
                 if (!cookieStorage.isFESBTokenValid()) {
                     runBlocking {
-                        userService
-                            .login(
-                                secureStorage.string(SecureField.USERNAME.name) ?: "",
-                                secureStorage.string(SecureField.PASSWORD.name) ?: ""
-                            )
+                        val username = secureStorage.string(SecureField.USERNAME.value)
+                        val password = secureStorage.string(SecureField.PASSWORD.value)
+
+                        if (username == null || password == null) {
+                            throw  Exception("LoginInterceptorPlugin: Username or password is null")
+                        }
+
+                        userService.login(username, password)
                     }
                 }
             }
