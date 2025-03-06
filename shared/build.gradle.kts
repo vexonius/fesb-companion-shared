@@ -1,10 +1,23 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    id("com.github.gmazzo.buildconfig") version "5.5.1"
+}
+
+val secrets = Properties().apply {
+    file("secrets.properties").inputStream().use { load(it) }
+}
+
+buildConfig {
+    className("Secrets")
+
+    buildConfigField("String", "TEST_USERNAME", secrets["USERNAME"].toString())
+    buildConfigField("String", "TEST_PASSWORD",  secrets["PASSWORD"].toString())
 }
 
 kotlin {
