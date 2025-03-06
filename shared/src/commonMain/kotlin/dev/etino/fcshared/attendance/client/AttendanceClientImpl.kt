@@ -12,7 +12,9 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol.Companion.HTTPS
 
-class AttendanceClientImpl: AttendanceClient {
+class AttendanceClientImpl(
+    private val loginInterceptorPlugin: LoginInterceptorPlugin
+): AttendanceClient {
 
     private val client = HttpClient {
         expectSuccess = true
@@ -29,7 +31,7 @@ class AttendanceClientImpl: AttendanceClient {
             requestTimeoutMillis = 15_000
         }
 
-        LoginInterceptorPlugin().setup(this)
+        loginInterceptorPlugin.setup(this)
     }
 
     override suspend fun getAttendanceItems(): String {
