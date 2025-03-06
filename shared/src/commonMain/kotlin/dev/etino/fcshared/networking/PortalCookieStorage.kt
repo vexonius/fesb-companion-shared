@@ -1,6 +1,5 @@
 package dev.etino.fcshared.networking
 
-import dev.etino.fcshared.attendance.client.AttendanceClientImpl
 import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.http.Cookie
@@ -27,7 +26,7 @@ object PortalCookieStorage: CookiesStorage {
     }
 
     suspend fun isFESBTokenValid(): Boolean {
-        val cookies = get(AttendanceClientImpl.tableOverviewUrl.build())
+        val cookies = get(Endpoints.tableOverviewUrl.build())
         val authCookies = cookies
             .filter {
                 it.name == authCookieFESB && (it.expires?.timestamp ?: 0) > GMTDate().timestamp
