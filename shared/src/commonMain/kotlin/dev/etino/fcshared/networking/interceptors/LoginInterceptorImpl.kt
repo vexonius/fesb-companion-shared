@@ -1,18 +1,18 @@
-package dev.etino.fcshared.networking
+package dev.etino.fcshared.networking.interceptors
 
 import com.liftric.kvault.KVault
 import dev.etino.fcshared.Utils.SecureField
+import dev.etino.fcshared.networking.cookieStorage.PortalCookieStorage
 import dev.etino.fcshared.user.UserService
-import dev.etino.fcshared.user.UserServiceImpl
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.api.createClientPlugin
 import kotlinx.coroutines.runBlocking
 
 class LoginInterceptorPluginImpl(
-    private val userService: UserService = UserServiceImpl(),
-    private val cookieStorage: PortalCookieStorage = PortalCookieStorage,
-    private val secureStorage: KVault
-): LoginInterceptorPlugin {
+    private val userService: UserService,
+    private val secureStorage: KVault,
+    private val cookieStorage: PortalCookieStorage = PortalCookieStorage
+    ): LoginInterceptorPlugin {
 
     @Throws(Exception::class)
     override fun setup(config: HttpClientConfig<*>) {

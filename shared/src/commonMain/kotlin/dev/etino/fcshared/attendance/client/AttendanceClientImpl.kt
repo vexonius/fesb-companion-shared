@@ -1,8 +1,8 @@
 package dev.etino.fcshared.attendance.client
 
 import dev.etino.fcshared.networking.Endpoints
-import dev.etino.fcshared.networking.LoginInterceptorPlugin
-import dev.etino.fcshared.networking.PortalCookieStorage
+import dev.etino.fcshared.networking.interceptors.LoginInterceptorPlugin
+import dev.etino.fcshared.networking.cookieStorage.PortalCookieStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cookies.HttpCookies

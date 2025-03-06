@@ -16,11 +16,12 @@ junit = "4.13.2"
 kotlin = "2.1.0"
 kotlinxDatetime = "0.6.1"
 ksoup = "0.1.9"
-ktor = "3.0.3"
+ktor = "3.1.1"
 coroutinesVersion = "1.9.0"
 kvault = "1.12.0"
 testng = "6.9.6"
 buildConfig = "5.5.1"
+koin = "4.1.0-Beta5"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -46,6 +47,7 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 kvault = { module = "com.liftric:kvault", version.ref = "kvault" }
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
+koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -1,5 +1,6 @@
-package dev.etino.fcshared.networking
+package dev.etino.fcshared.networking.cookieStorage
 
+import dev.etino.fcshared.networking.Endpoints
 import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.http.Cookie

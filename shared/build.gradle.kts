@@ -50,6 +50,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.ktor.client.logging)
             implementation(libs.kvault)
+            implementation(libs.koin)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)

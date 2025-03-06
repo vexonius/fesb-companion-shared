@@ -3,10 +3,7 @@ package dev.etino.fcsharedtest
 import dev.etino.fcshared.attendance.client.AttendanceClientImpl
 import dev.etino.fcshared.attendance.parser.AttendanceParser
 import dev.etino.fcshared.attendance.repository.AttendanceRepositoryImpl
-import dev.etino.fcshared.networking.LoginInterceptorPlugin
-import dev.etino.fcshared.networking.LoginInterceptorPluginMockImpl
-import dev.etino.fcshared.user.UserServiceImpl
-import kotlinx.coroutines.delay
+import dev.etino.fcshared.networking.interceptors.LoginInterceptorPluginMockImpl
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 

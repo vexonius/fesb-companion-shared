@@ -1,6 +1,6 @@
 package dev.etino.fcshared.user
 
-import dev.etino.fcshared.networking.PortalCookieStorage
+import dev.etino.fcshared.networking.cookieStorage.PortalCookieStorage
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.UserAgent

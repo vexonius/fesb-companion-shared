@@ -1,6 +1,6 @@
-package dev.etino.fcshared.networking
+package dev.etino.fcshared.networking.interceptors
 
-import dev.etino.fcshared.networking.LoginInterceptorPluginImpl.Companion.pluginName
+import dev.etino.fcshared.networking.interceptors.LoginInterceptorPluginImpl.Companion.pluginName
 import dev.etino.fcshared.user.UserService
 import dev.etino.fcshared.user.UserServiceImpl
 import fesb_companion_shared.shared.Secrets

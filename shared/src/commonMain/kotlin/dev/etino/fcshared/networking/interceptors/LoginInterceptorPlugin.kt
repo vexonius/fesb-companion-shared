@@ -1,4 +1,4 @@
-package dev.etino.fcshared.networking
+package dev.etino.fcshared.networking.interceptors
 
 import io.ktor.client.HttpClientConfig
 
