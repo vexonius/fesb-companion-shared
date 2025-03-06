@@ -3,6 +3,8 @@ package dev.etino.fcsharedtest
 import dev.etino.fcshared.attendance.client.AttendanceClientImpl
 import dev.etino.fcshared.attendance.parser.AttendanceParser
 import dev.etino.fcshared.attendance.repository.AttendanceRepositoryImpl
+import dev.etino.fcshared.networking.LoginInterceptorPlugin
+import dev.etino.fcshared.networking.LoginInterceptorPluginMockImpl
 import dev.etino.fcshared.user.UserServiceImpl
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -828,7 +830,7 @@ class ExampleUnitTest {
 
     @Test
     fun testAttendanceFetching() {
-        val attendanceClient = AttendanceClientImpl()
+        val attendanceClient = AttendanceClientImpl(LoginInterceptorPluginMockImpl())
         val parser = AttendanceParser()
         val attendanceRepository = AttendanceRepositoryImpl(attendanceClient, parser)
 

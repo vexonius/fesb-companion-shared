@@ -8,14 +8,14 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.api.createClientPlugin
 import kotlinx.coroutines.runBlocking
 
-class LoginInterceptorPlugin(
+class LoginInterceptorPluginImpl(
     private val userService: UserService = UserServiceImpl(),
     private val cookieStorage: PortalCookieStorage = PortalCookieStorage,
     private val secureStorage: KVault
-) {
+): LoginInterceptorPlugin {
 
     @Throws(Exception::class)
-    fun setup(config: HttpClientConfig<*>) {
+    override fun setup(config: HttpClientConfig<*>) {
         config.install(createClientPlugin(pluginName) {
             onRequest { request, content ->
                 if (!cookieStorage.isFESBTokenValid()) {
