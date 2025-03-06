@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
-    id("com.github.gmazzo.buildconfig") version "5.5.1"
+    alias(libs.plugins.buildConfig)
 }
 
 val secrets = Properties().apply {
