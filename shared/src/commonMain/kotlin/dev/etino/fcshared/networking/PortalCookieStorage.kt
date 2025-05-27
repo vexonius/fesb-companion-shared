@@ -1,13 +1,15 @@
-package dev.etino.fcshared.timetable.client
+package dev.etino.fcshared.networking
 
 import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.http.Cookie
 import io.ktor.http.Url
+import io.ktor.util.date.GMTDate
 
-object TimetableCookieStorage: CookiesStorage {
+object PortalCookieStorage: CookiesStorage {
 
     private val defaultStorage: CookiesStorage = AcceptAllCookiesStorage()
+    private const val authCookieFESB = "Fesb.AuthCookie"
 
     override suspend fun get(requestUrl: Url): List<Cookie> {
         val stored = defaultStorage.get(requestUrl)
@@ -21,6 +23,16 @@ object TimetableCookieStorage: CookiesStorage {
 
     override fun close() {
         defaultStorage.close()
+    }
+
+    suspend fun isFESBTokenValid(): Boolean {
+        val cookies = get(Endpoints.tableOverviewUrl.build())
+        val authCookies = cookies
+            .filter {
+                it.name == authCookieFESB && (it.expires?.timestamp ?: 0) > GMTDate().timestamp
+            }
+
+        return authCookies.isNotEmpty()
     }
 
 }

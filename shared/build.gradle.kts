@@ -1,16 +1,27 @@
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.buildConfig)
+}
+
+val secrets = Properties().apply {
+    file("secrets.properties").inputStream().use { load(it) }
+}
+
+buildConfig {
+    className("Secrets")
+
+    buildConfigField("String", "TEST_USERNAME", secrets["USERNAME"].toString())
+    buildConfigField("String", "TEST_PASSWORD",  secrets["PASSWORD"].toString())
 }
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -37,6 +48,8 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ksoup)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.kvault)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
