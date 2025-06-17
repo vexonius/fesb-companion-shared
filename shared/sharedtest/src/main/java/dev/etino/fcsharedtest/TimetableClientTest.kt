@@ -1,5 +1,6 @@
 package dev.etino.fcsharedtest
 
+import android.util.Log
 import dev.etino.fcshared.timetable.client.TimetableClientImpl
 import kotlinx.coroutines.runBlocking
 import org.testng.annotations.Test
