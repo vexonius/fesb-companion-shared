@@ -3,6 +3,7 @@ name: Shared.xcframework debug release
 on:
   push:
     branches: ["main", "develop"]
+  workflow_dispatch:
 permissions:
   contents: write
 
