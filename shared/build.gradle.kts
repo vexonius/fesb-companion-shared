@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.androidx.room)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -14,7 +16,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -25,7 +27,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
@@ -34,7 +36,9 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.koin.compose)
             // Required core library
-            implementation("com.fleeksoft.ksoup:ksoup:0.2.5")
+            implementation(libs.ksoup)
+            implementation(libs.androidx.room.runtime)
+            implementation(libs.androidx.sqlite.bundled)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
@@ -45,6 +49,17 @@ kotlin {
     }
 }
 
+dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    //add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    //add("kspIosX64", libs.androidx.room.compiler)
+    //add("kspIosArm64", libs.androidx.room.compiler)
+    // Add any other platform target you use in your project, for example kspDesktop
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 android {
     namespace = "dev.etino.fcshared.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()

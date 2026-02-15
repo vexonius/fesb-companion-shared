@@ -1,6 +1,10 @@
 package dev.etino.fcshared.attendance.models
 
+import androidx.room.Entity
+
+@Entity
 data class AttendanceEntry(
+    @androidx.room.PrimaryKey
     var id: String = "",
     var subject: String = "",
     var type: String = "",
@@ -11,3 +15,4 @@ data class AttendanceEntry(
     var semester: Int = 0,
     var total: Int = 0,
 )
+

@@ -38,6 +38,8 @@ import dev.etino.fcshared.compose.contentColors
 import dev.etino.fcshared.screens.attendance.ShownSemester
 import dev.etino.fcshared.screens.attendance.view.AttendanceViewModel
 import fesb_companion_shared.composeapp.generated.resources.Res
+import fesb_companion_shared.composeapp.generated.resources.first_semester
+import fesb_companion_shared.composeapp.generated.resources.second_semester
 import fesb_companion_shared.composeapp.generated.resources.tab_attendance
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -112,11 +114,11 @@ fun CreateAttendanceListView(attendanceViewModel: AttendanceViewModel, snackbarH
             ) {
                 FilterButton(
                     selected = shownSemester == ShownSemester.FIRST,
-                    text = "1",
+                    text = stringResource(Res.string.first_semester),
                     onClick = { attendanceViewModel.showSemester(ShownSemester.FIRST) })
                 FilterButton(
                     selected = shownSemester == ShownSemester.SECOND,
-                    text = "3",
+                    text = stringResource(Res.string.second_semester),
                     onClick = { attendanceViewModel.showSemester(ShownSemester.SECOND) })
             }
 
