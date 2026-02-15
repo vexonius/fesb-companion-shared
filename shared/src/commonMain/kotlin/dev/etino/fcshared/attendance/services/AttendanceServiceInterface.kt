@@ -1,6 +1,6 @@
 package dev.etino.fcshared.attendance.services
 
-import dev.etino.fcshared.NetworkServiceResult
+import dev.etino.fcshared.networking.NetworkServiceResult
 
 interface AttendanceServiceInterface {
 

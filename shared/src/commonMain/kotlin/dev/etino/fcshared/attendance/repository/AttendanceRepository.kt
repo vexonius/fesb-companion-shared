@@ -3,7 +3,7 @@ package dev.etino.fcshared.attendance.repository
 
 import dev.etino.fcshared.attendance.models.AttendanceEntry
 import dev.etino.fcshared.attendance.services.AttendanceServiceInterface
-import dev.etino.fcshared.NetworkServiceResult
+import dev.etino.fcshared.networking.NetworkServiceResult
 import dev.etino.fcshared.attendance.ParseAttendance
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

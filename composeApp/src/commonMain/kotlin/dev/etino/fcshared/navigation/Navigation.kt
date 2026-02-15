@@ -15,6 +15,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import dev.etino.fcshared.screens.attendance.compose.AttendanceCompose
 import dev.etino.fcshared.screens.attendance.view.AttendanceViewModel
+import dev.etino.fcshared.screens.login.compose.LoginCompose
+import dev.etino.fcshared.screens.login.view.LoginViewModel
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.icon_attendance
 import fesb_companion_shared.composeapp.generated.resources.icon_home
@@ -93,13 +95,15 @@ fun Appl() {
                 }
             }
             entry<Home> { key ->
-                Scaffold() { ihatethis->
-                    Column(
-                        Modifier.fillMaxSize().padding(ihatethis),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) { Text(key.toString()) }
-                }
+                val loginViewModel = koinViewModel<LoginViewModel>()
+                LoginCompose(
+                    showLoading = loginViewModel.showLoading,
+                    snackbarHostState = loginViewModel.snackbarHostState,
+                    username = loginViewModel.username,
+                    password = loginViewModel.password,
+                    passwordHidden = loginViewModel.passwordHidden,
+                    tryUserLogin = { loginViewModel.tryUserLogin() }
+                )
             }
             entry<Studomat> { key ->
                 Scaffold() { ihatethis->

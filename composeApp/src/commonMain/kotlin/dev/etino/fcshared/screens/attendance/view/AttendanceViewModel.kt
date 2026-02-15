@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.etino.fcshared.NetworkServiceResult
+import dev.etino.fcshared.networking.NetworkServiceResult
 import dev.etino.fcshared.attendance.models.AttendanceEntry
 import dev.etino.fcshared.attendance.repository.AttendanceRepositoryInterface
 import dev.etino.fcshared.screens.attendance.ShownSemester

@@ -1,9 +1,14 @@
-package dev.etino.fcshared
+package dev.etino.fcshared.networking
 
 import dev.etino.fcshared.attendance.models.AttendanceEntry
+import dev.etino.fcshared.login.user.models.User
 
 sealed class NetworkServiceResult {
 
+    sealed class LoginResult : NetworkServiceResult() {
+        data class Success(val data: User) : LoginResult()
+        class Failure(val throwable: Throwable) : LoginResult()
+    }
 
     sealed class LogoutResult : NetworkServiceResult() {
         data class Success(val data: String) : LogoutResult()

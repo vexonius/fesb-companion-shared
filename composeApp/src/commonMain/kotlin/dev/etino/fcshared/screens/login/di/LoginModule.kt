@@ -1,0 +1,22 @@
+package dev.etino.fcshared.screens.login.di
+
+import dev.etino.fcshared.database.AppDatabase
+import dev.etino.fcshared.login.dao.UserDao
+import dev.etino.fcshared.login.user.UserRepository
+import dev.etino.fcshared.login.user.UserRepositoryInterface
+import dev.etino.fcshared.screens.login.view.LoginViewModel
+import kotlinx.coroutines.InternalCoroutinesApi
+import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.module
+
+@OptIn(InternalCoroutinesApi::class)
+val loginModule = module {
+    single<UserRepositoryInterface> { UserRepository(get(), get(), get()) }
+    single<UserDao> { getUserDao(get()) }
+    viewModel { LoginViewModel(get()) }
+}
+
+
+fun getUserDao(db: AppDatabase): UserDao {
+    return db.userDao()
+}

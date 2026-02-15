@@ -1,34 +1,14 @@
 package dev.etino.fcshared.attendance.services
 
-import dev.etino.fcshared.CustomCookieStorage
-import dev.etino.fcshared.NetworkServiceResult
+import dev.etino.fcshared.networking.NetworkServiceResult
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.HttpSend
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.cookies.HttpCookies
-import io.ktor.client.plugins.cookies.cookies
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.Cookie
 
-class AttendanceService(
-) : AttendanceServiceInterface {
+class AttendanceService(val client: HttpClient) : AttendanceServiceInterface {
 
     private val baseURL = "https://raspored.fesb.unist.hr"
-    private val client = HttpClient {
-        expectSuccess = false
-
-        install(HttpSend) {
-
-        }
-        install(HttpCookies) {
-            storage = CustomCookieStorage()
-        }
-        install(HttpTimeout) {
-            requestTimeoutMillis = 10_000
-        }
-    }
 
     override suspend fun fetchAllAttendance(): NetworkServiceResult.AttendanceFetchResult {
 

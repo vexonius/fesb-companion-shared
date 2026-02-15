@@ -1,7 +1,6 @@
 package dev.etino.fcshared.attendance.repository
 
-import dev.etino.fcshared.attendance.models.AttendanceEntry
-import dev.etino.fcshared.NetworkServiceResult
+import dev.etino.fcshared.networking.NetworkServiceResult
 
 interface AttendanceRepositoryInterface {
 
