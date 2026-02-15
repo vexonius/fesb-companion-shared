@@ -65,8 +65,12 @@ class CustomCookieStorage(
 
     override suspend fun get(requestUrl: Url): List<Cookie> {
         val stored = defaultStorage.get(requestUrl)
-
-        return stored
+        val added = stored.toMutableList().plus(Cookie(
+            name = "Fesb.AuthCookie",
+            domain = "fesb.unist.hr",
+            value = ""
+        ))
+        return added
     }
 
     override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {

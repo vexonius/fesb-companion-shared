@@ -32,6 +32,9 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.koin.compose)
+            // Required core library
+            implementation("com.fleeksoft.ksoup:ksoup:0.2.5")
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
