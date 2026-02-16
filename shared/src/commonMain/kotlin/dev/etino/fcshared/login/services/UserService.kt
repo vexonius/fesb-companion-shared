@@ -27,7 +27,7 @@ class UserService(val client: HttpClient) : UserServiceInterface {
 
         val nameOfUser = Ksoup.parse(response.body<String>()).select(".welcomeBack h2").text()
 
-        return if (targetUrl.toString().contains(url.toString())) {
+        return if (url.toString().dropLast(1)==targetUrl.toString()) {
             NetworkServiceResult.LoginResult.Success(User(nameOfUser, username, password))
         } else {
             NetworkServiceResult.LoginResult.Failure(Throwable("Error during login"))

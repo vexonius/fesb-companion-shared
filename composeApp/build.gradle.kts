@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.androidx.navigation3.ui)
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
+            implementation("com.kizitonwose.calendar:compose-multiplatform:2.10.0")
         }
     }
 }

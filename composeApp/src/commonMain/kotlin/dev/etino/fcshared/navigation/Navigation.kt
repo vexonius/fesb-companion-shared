@@ -1,5 +1,7 @@
 package dev.etino.fcshared.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +19,8 @@ import dev.etino.fcshared.screens.attendance.compose.AttendanceCompose
 import dev.etino.fcshared.screens.attendance.view.AttendanceViewModel
 import dev.etino.fcshared.screens.login.compose.LoginCompose
 import dev.etino.fcshared.screens.login.view.LoginViewModel
+import dev.etino.fcshared.screens.timetable.TimetableViewModel
+import dev.etino.fcshared.screens.timetable.compose.TimetableCompose
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.icon_attendance
 import fesb_companion_shared.composeapp.generated.resources.icon_home
@@ -115,13 +119,7 @@ fun Appl() {
                 }
             }
             entry<TimeTable> { key ->
-                Scaffold() { ihatethis->
-                    Column(
-                        Modifier.fillMaxSize().padding(ihatethis),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) { Text(key.toString()) }
-                }
+                TimetableCompose(koinViewModel<TimetableViewModel>(),paddingValues)
             }
         }
         NavDisplay(

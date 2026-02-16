@@ -1,4 +1,4 @@
-package com.tstudioz.fax.fme.feature.login.models
+package dev.etino.fcshared.screens.login.models
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions

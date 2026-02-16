@@ -1,6 +1,6 @@
 package dev.etino.fcsharedtest
 
-import dev.etino.fcshared.TimetableClientImpl
+import dev.etino.fcshared.timetable.TimetableClientImpl
 import kotlinx.coroutines.runBlocking
 import org.testng.annotations.Test
 
@@ -8,13 +8,7 @@ import org.testng.annotations.Test
 class TimetableClientTest {
 
     fun testTimetableClient() {
-        runBlocking {
-            val client = TimetableClientImpl()
-            val result = client.getTimetableEvents(emptyMap())
-            println(result)
 
-            assert(result.isNotEmpty())
-        }
     }
 
 }

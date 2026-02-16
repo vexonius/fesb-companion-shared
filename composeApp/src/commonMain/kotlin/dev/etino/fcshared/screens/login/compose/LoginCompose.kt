@@ -48,7 +48,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.tstudioz.fax.fme.feature.login.models.TextFieldModel
+import dev.etino.fcshared.screens.login.models.TextFieldModel
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.login_action_submit
 import fesb_companion_shared.composeapp.generated.resources.login_email_or_username

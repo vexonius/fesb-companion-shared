@@ -10,6 +10,7 @@ import dev.etino.fcshared.navigation.Appl
 import dev.etino.fcshared.networking.networkModule
 import dev.etino.fcshared.screens.attendance.di.attendanceModule
 import dev.etino.fcshared.screens.login.di.loginModule
+import dev.etino.fcshared.screens.timetable.di.timetableModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
                 loginModule,
                 dbModule,
                 networkModule,
+                timetableModule,
             )
         }
         setContent {
