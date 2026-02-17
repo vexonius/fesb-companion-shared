@@ -11,9 +11,9 @@ import org.koin.dsl.module
 
 @OptIn(InternalCoroutinesApi::class)
 val loginModule = module {
-    single<UserRepositoryInterface> { UserRepository(get(), get(), get()) }
+    single<UserRepositoryInterface> { UserRepository(get(), get(), get(),get()) }
     single<UserDao> { getUserDao(get()) }
-    viewModel { LoginViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
 }
 
 

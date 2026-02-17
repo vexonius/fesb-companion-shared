@@ -32,6 +32,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,35 +50,56 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.screens.login.models.TextFieldModel
+import dev.etino.fcshared.screens.login.view.LoginSnackbar
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.login_action_submit
 import fesb_companion_shared.composeapp.generated.resources.login_email_or_username
+import fesb_companion_shared.composeapp.generated.resources.login_error_empty_credentials
+import fesb_companion_shared.composeapp.generated.resources.login_error_generic
+import fesb_companion_shared.composeapp.generated.resources.login_error_invalid_credentials
 import fesb_companion_shared.composeapp.generated.resources.login_login_title
 import fesb_companion_shared.composeapp.generated.resources.login_password
 import fesb_companion_shared.composeapp.generated.resources.login_safe_data
 import fesb_companion_shared.composeapp.generated.resources.visibility_hide
 import fesb_companion_shared.composeapp.generated.resources.visibility_show
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LoginCompose(
     showLoading: MutableStateFlow<Boolean>,
-    snackbarHostState: SnackbarHostState,
     username: MutableStateFlow<String>,
     password: MutableStateFlow<String>,
     passwordHidden: MutableStateFlow<Boolean>,
-    tryUserLogin: () -> Unit
+    tryUserLogin: () -> Unit,
+    showSnackbar: StateFlow<LoginSnackbar?>,
 ) {
 
+    val snackbarHostState = SnackbarHostState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val showLoadingObserved = showLoading.collectAsState().value
+    val message = stringResource(
+        when (showSnackbar.collectAsState().value) {
+            LoginSnackbar.INVALID_CREDENTIALS -> Res.string.login_error_invalid_credentials
+            LoginSnackbar.EMPTY_CREDENTIALS -> Res.string.login_error_empty_credentials
+            LoginSnackbar.GENERIC_ERROR -> Res.string.login_error_generic
+            else -> Res.string.login_error_generic
+        }
+    )
 
     fun onDone() {
         keyboardController?.hide()
         tryUserLogin()
     }
+
+    LaunchedEffect(showSnackbar.collectAsState().value) {
+        showSnackbar.value?.let{
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
 
     val usernameModel = TextFieldModel(
         text = username,
@@ -229,9 +251,10 @@ fun ButtonCircularLoading(
 fun LoginComposePreview() {
     LoginCompose(
         MutableStateFlow(false),
-        SnackbarHostState(),
         MutableStateFlow(""),
         MutableStateFlow(""),
         MutableStateFlow(true),
-        {})
+        {},
+        MutableStateFlow(null)
+    )
 }

@@ -41,6 +41,10 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
             implementation(libs.kotlinx.datetime)
+
+            implementation("androidx.datastore:datastore:1.2.0")
+            // The Preferences DataStore library
+            implementation("androidx.datastore:datastore-preferences:1.2.0")
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)

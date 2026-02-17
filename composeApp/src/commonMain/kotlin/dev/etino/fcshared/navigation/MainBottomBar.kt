@@ -25,41 +25,44 @@ fun MainBottomBar(
     topLevelRoutes: List<TopLevelRoute>,
     //timetableViewModel: TimetableViewModel
 ) {
-    NavigationBar(
-        contentColor = MaterialTheme.colorScheme.onSurface,
-        containerColor = MaterialTheme.colorScheme.surface
-    ) {
-        val currentDestination =  topLevelRoute
-        topLevelRoutes.forEach { topLevelRoute ->
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        painterResource(topLevelRoute.iconId),
-                        contentDescription = stringResource(topLevelRoute.nameId),
-                        modifier = Modifier.size(30.dp)
-                    )
-                },
-                label = {
-                    Text(
-                        text = stringResource(topLevelRoute.nameId),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp
-                    )
-                },
-                selected = topLevelRoute.route == currentDestination,
-                alwaysShowLabel = false,
-                onClick = {
-                    if (currentDestination != topLevelRoute.route) {
-                        navigate(topLevelRoute.route)
-                    } else if (currentDestination == topLevelRoute.route) {
-                        when (topLevelRoute.route) {
-                            TimeTable -> {
-                                //timetableViewModel.showWeekChooseMenu()
+    val bottomBarHiddenRoutes = listOf(Login)
+    if (!bottomBarHiddenRoutes.contains(topLevelRoute)) {
+        NavigationBar(
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
+            val currentDestination = topLevelRoute
+            topLevelRoutes.forEach { topLevelRoute ->
+                NavigationBarItem(
+                    icon = {
+                        Icon(
+                            painterResource(topLevelRoute.iconId),
+                            contentDescription = stringResource(topLevelRoute.nameId),
+                            modifier = Modifier.size(30.dp)
+                        )
+                    },
+                    label = {
+                        Text(
+                            text = stringResource(topLevelRoute.nameId),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 10.sp
+                        )
+                    },
+                    selected = topLevelRoute.route == currentDestination,
+                    alwaysShowLabel = false,
+                    onClick = {
+                        if (currentDestination != topLevelRoute.route) {
+                            navigate(topLevelRoute.route)
+                        } else if (currentDestination == topLevelRoute.route) {
+                            when (topLevelRoute.route) {
+                                TimeTable -> {
+                                    //timetableViewModel.showWeekChooseMenu()
+                                }
                             }
                         }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

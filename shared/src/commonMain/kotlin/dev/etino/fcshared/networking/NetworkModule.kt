@@ -2,6 +2,8 @@ package dev.etino.fcshared.networking
 
 import dev.etino.fcshared.attendance.services.AttendanceService
 import dev.etino.fcshared.attendance.services.AttendanceServiceInterface
+import dev.etino.fcshared.home.services.WeatherService
+import dev.etino.fcshared.home.services.WeatherServiceInterface
 import dev.etino.fcshared.login.services.UserService
 import dev.etino.fcshared.login.services.UserServiceInterface
 import dev.etino.fcshared.timetable.TimetableClient
@@ -25,6 +27,7 @@ val networkModule = module {
     single<TimetableClient> { TimetableClientImpl(get()) }
     single<UserServiceInterface> { UserService(get()) }
     single<AttendanceServiceInterface> { AttendanceService(get()) }
+    single<WeatherServiceInterface> { WeatherService(get()) }
 }
 
 val client = HttpClient {

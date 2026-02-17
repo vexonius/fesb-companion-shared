@@ -2,36 +2,52 @@ package dev.etino.fcshared.screens.login.view
 
 import android.util.Patterns
 import androidx.compose.material3.SnackbarHostState
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.etino.fcshared.SPKey
 import dev.etino.fcshared.login.user.UserRepositoryInterface
 import dev.etino.fcshared.login.user.models.UserRepositoryResult
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @InternalCoroutinesApi
 class LoginViewModel(
     private val repository: UserRepositoryInterface,
-    //private val sharedPreferences: SharedPreferences
+    private val datastore: DataStore<Preferences>
 ) : ViewModel() {
 
     var username = MutableStateFlow("")
     var password = MutableStateFlow("")
     val showLoading = MutableStateFlow(false)
-    val snackbarHostState: SnackbarHostState = SnackbarHostState()
     var passwordHidden = MutableStateFlow(true)
 
     var firstTimeInApp = MutableStateFlow(false)
         private set
 
-    /*  var loggedIn = SingleLiveEvent<Unit>()
-          private set
-  */
+    var loggedIn = MutableStateFlow(false)
+        private set
+
     private val handler = CoroutineExceptionHandler { _, exception ->
-        //showSnackbar(application.getString(R.string.login_error_generic))
+        _showSnackbar.update { LoginSnackbar.GENERIC_ERROR }
+    }
+
+    private val _showSnackbar = MutableStateFlow<LoginSnackbar?>(null)
+    val showSnackbar : StateFlow<LoginSnackbar?> = _showSnackbar
+
+    init{
+        checkIfFirstTimeInApp()
+        checkIfLoggedIn()
     }
 
     /*private fun addTestData() {
@@ -60,7 +76,7 @@ class LoginViewModel(
          }*/
 
         if (username.isNullOrEmpty() || password.isNullOrEmpty()) {
-            //showSnackbar(application.getString(Res.string.login_error_empty_credentials))
+            _showSnackbar.update { LoginSnackbar.EMPTY_CREDENTIALS }
             return
         } else if (isEmailValid(username)) {
             username = username.substringBefore("@")
@@ -70,40 +86,56 @@ class LoginViewModel(
         viewModelScope.launch(Dispatchers.IO + handler) {
             when (repository.attemptLogin(username, password)) {
                 is UserRepositoryResult.LoginResult.Success -> {
-                    //loggedIn.postValue(Unit)
+                    loggedIn.update { true }
                 }
 
                 is UserRepositoryResult.LoginResult.Failure -> {
-                    //showSnackbar(application.getString(R.string.login_error_invalid_credentials))
+                    _showSnackbar.update { LoginSnackbar.INVALID_CREDENTIALS }
                 }
             }
             showLoading.value = false
         }
     }
 
-    private fun showSnackbar(message: String) {
-        viewModelScope.launch(Dispatchers.Main) {
-            snackbarHostState.showSnackbar(message)
+    fun setTestMode(isTestUser: Boolean) {
+        viewModelScope.launch {
+            datastore.edit { preferences ->
+                preferences[SPKey.TEST_MODE.key] = isTestUser
+            }
         }
     }
 
-    /*  fun setTestMode(isTestUser: Boolean) {
-          sharedPreferences[SPKey.TEST_MODE] = isTestUser
-      }
+    fun checkIfFirstTimeInApp() {
+        viewModelScope.launch {
+            firstTimeInApp.value = datastore.data.map { preferences ->
+                preferences[SPKey.LOGGED_IN.key] ?: false
+            }.first()
+            datastore.edit { preferences ->
+                preferences[SPKey.FIRST_TIME.key] = false
+            }
+        }
+    }
 
-      fun checkIfFirstTimeInApp() {
-          firstTimeInApp.value = sharedPreferences[SPKey.FIRST_TIME, true]
-          sharedPreferences[SPKey.FIRST_TIME] = false
-      }
+    fun checkIfLoggedIn() {
+        viewModelScope.launch {
+            val loggedInDatastore = datastore.data.map { prefs ->
+                prefs[SPKey.LOGGED_IN.key] ?: false
+            }.first()
+            if (loggedInDatastore) {
+                loggedIn.value = true
+            }
+        }
+    }
 
-      fun checkIfLoggedIn() {
-          if (sharedPreferences[SPKey.LOGGED_IN, false]) {
-              loggedIn.value = Unit
-          }
-      }
-  */
     private fun isEmailValid(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
+}
+
+
+enum class LoginSnackbar{
+    INVALID_CREDENTIALS,
+    EMPTY_CREDENTIALS,
+    GENERIC_ERROR,
 }

@@ -5,7 +5,6 @@ import dev.etino.fcshared.timetable.Event
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.until
-import java.time.temporal.ChronoUnit
 
 
 fun splitEvents(events: List<Event>): List<PositionedEvent> {

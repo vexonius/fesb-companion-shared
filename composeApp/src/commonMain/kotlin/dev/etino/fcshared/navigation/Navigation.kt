@@ -1,7 +1,5 @@
 package dev.etino.fcshared.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +17,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import dev.etino.fcshared.screens.attendance.compose.AttendanceCompose
 import dev.etino.fcshared.screens.attendance.view.AttendanceViewModel
+import dev.etino.fcshared.screens.home.view.HomeTabCompose
+import dev.etino.fcshared.screens.home.view.HomeViewModel
 import dev.etino.fcshared.screens.login.compose.LoginCompose
 import dev.etino.fcshared.screens.login.view.LoginViewModel
 import dev.etino.fcshared.screens.timetable.TimetableViewModel
@@ -54,6 +56,8 @@ data object Attendance : NavKey
 @Serializable
 data object TimeTable : NavKey
 
+@Serializable
+data object Login : NavKey
 
 data class TopLevelRoute(val nameId: StringResource, val route: NavKey, val iconId: DrawableResource)
 
@@ -67,10 +71,10 @@ val topLevelRoutes = listOf(
 
 @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 @Composable
-fun Appl() {
+fun Application(loggedIn: Boolean) {
     val navigationState = rememberNavigationState(
-        startRoute = Attendance,
-        topLevelRoutes = topLevelRoutes.map { it.route }.toSet()
+        startRoute = if (!loggedIn) Login else Home,
+        topLevelRoutes = topLevelRoutes.map { it.route }.plus(Login).toSet()
     )
 
     val navigator = remember { Navigator(navigationState) }
@@ -84,42 +88,54 @@ fun Appl() {
             )
         }
     ) { paddingValues ->
-
         val entryProvider = entryProvider {
+            entry<Login> { key ->
+                val loginViewModel = koinViewModel<LoginViewModel>()
+
+                LaunchedEffect(loginViewModel.loggedIn.collectAsState().value) {
+                    if (loginViewModel.loggedIn.value) {
+                        navigator.navigate(Home)
+                    }
+                }
+                LoginCompose(
+                    showLoading = loginViewModel.showLoading,
+                    username = loginViewModel.username,
+                    password = loginViewModel.password,
+                    passwordHidden = loginViewModel.passwordHidden,
+                    tryUserLogin = { loginViewModel.tryUserLogin() },
+                    showSnackbar = loginViewModel.showSnackbar
+                )
+            }
             entry<Attendance> {
                 AttendanceCompose(koinViewModel<AttendanceViewModel>(), paddingValues)
             }
             entry<Iksica> { key ->
-                Scaffold() { ihatethis->
+                Scaffold() { ihatethis ->
                     Column(
-                        Modifier.fillMaxSize().padding(ihatethis),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(ihatethis),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) { Text(key.toString()) }
                 }
             }
             entry<Home> { key ->
-                val loginViewModel = koinViewModel<LoginViewModel>()
-                LoginCompose(
-                    showLoading = loginViewModel.showLoading,
-                    snackbarHostState = loginViewModel.snackbarHostState,
-                    username = loginViewModel.username,
-                    password = loginViewModel.password,
-                    passwordHidden = loginViewModel.passwordHidden,
-                    tryUserLogin = { loginViewModel.tryUserLogin() }
-                )
+                HomeTabCompose(koinViewModel<HomeViewModel>(), paddingValues)
             }
             entry<Studomat> { key ->
-                Scaffold() { ihatethis->
+                Scaffold() { ihatethis ->
                     Column(
-                        Modifier.fillMaxSize().padding(ihatethis),
+                        Modifier
+                            .fillMaxSize()
+                            .padding(ihatethis),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) { Text(key.toString()) }
                 }
             }
             entry<TimeTable> { key ->
-                TimetableCompose(koinViewModel<TimetableViewModel>(),paddingValues)
+                TimetableCompose(koinViewModel<TimetableViewModel>(), paddingValues)
             }
         }
         NavDisplay(

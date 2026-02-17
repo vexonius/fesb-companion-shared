@@ -12,7 +12,6 @@ import com.kizitonwose.calendar.core.plusDays
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.until
-import java.time.temporal.ChronoUnit
 
 @Composable
 fun ScheduleHeader(

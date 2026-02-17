@@ -7,10 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import com.tstudioz.fax.fme.feature.timetable.view.schedule.BasicSidebarLabel
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalTime
-import java.time.temporal.ChronoUnit
 
 @Composable
 fun ScheduleSidebar(

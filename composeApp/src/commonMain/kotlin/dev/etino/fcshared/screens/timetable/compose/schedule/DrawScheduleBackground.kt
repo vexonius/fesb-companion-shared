@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalTime
-import java.time.temporal.ChronoUnit
 
 fun DrawScope.drawScheduleBackground(
     minDayTime: LocalTime,

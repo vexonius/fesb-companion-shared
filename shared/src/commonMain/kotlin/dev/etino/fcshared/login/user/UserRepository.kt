@@ -1,6 +1,10 @@
 package dev.etino.fcshared.login.user
 
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import dev.etino.fcshared.SPKey
 import dev.etino.fcshared.login.user.models.User
 import dev.etino.fcshared.login.user.models.UserRepositoryResult
 import dev.etino.fcshared.login.user.models.UserRoom
@@ -13,7 +17,7 @@ class UserRepository(
     private val userService: UserServiceInterface,
     private val userDao: UserDao,
     //private val sharedPreferences: SharedPreferences,
-    //private val sessionDelegate: SessionDelegateInterface,
+    private val datastore: DataStore<Preferences>,
     private val appDatabase: AppDatabase,
 ) : UserRepositoryInterface {
 
@@ -22,7 +26,7 @@ class UserRepository(
             is NetworkServiceResult.LoginResult.Success -> {
                 val user = result.data
                 userDao.insert(UserRoom(user))
-                //sharedPreferences[SPKey.LOGGED_IN] = true
+                datastore.edit { it[SPKey.LOGGED_IN.key] = true }
 
                 UserRepositoryResult.LoginResult.Success(result.data)
             }
@@ -48,6 +52,6 @@ class UserRepository(
     override suspend fun deleteAllUserData() {
         //sessionDelegate.clearSession()
         //appDatabase.clearAllTables()
-        //sharedPreferences[SPKey.LOGGED_IN] = false
+        datastore.edit { it[SPKey.LOGGED_IN.key] = false }
     }
 }

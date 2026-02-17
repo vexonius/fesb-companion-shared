@@ -1,4 +1,4 @@
-package com.tstudioz.fax.fme.feature.timetable.view.schedule
+package dev.etino.fcshared.screens.timetable.compose.schedule
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding

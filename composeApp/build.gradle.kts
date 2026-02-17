@@ -44,6 +44,10 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
             implementation("com.kizitonwose.calendar:compose-multiplatform:2.10.0")
+            // DataStore library
+            implementation("androidx.datastore:datastore:1.2.0")
+            // The Preferences DataStore library
+            implementation("androidx.datastore:datastore-preferences:1.2.0")
         }
     }
 }

@@ -20,13 +20,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kizitonwose.calendar.core.now
-import com.tstudioz.fax.fme.feature.timetable.view.schedule.BasicSidebarLabel
 import dev.etino.fcshared.timetable.Event
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.until
-import java.time.temporal.ChronoUnit
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
