@@ -11,11 +11,11 @@ import dev.etino.fcshared.home.models.NoteRoom
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM noteroom")
-    fun getNotes(): List<NoteRoom>
+    suspend fun getNotes(): List<NoteRoom>
 
     @Insert(onConflict = REPLACE)
-    fun insert(note: NoteRoom)
+    suspend fun insert(note: NoteRoom)
 
     @Delete
-    fun delete(note: NoteRoom)
+    suspend fun delete(note: NoteRoom)
 }

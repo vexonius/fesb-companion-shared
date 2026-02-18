@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId = "dev.etino.fcsharedtest"
-        minSdk = 24
-        targetSdk = 35
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 

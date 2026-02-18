@@ -1,6 +1,5 @@
 package dev.etino.fcshared.screens.timetable.compose.schedule
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.until
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun Schedule(
     events: List<Event>,

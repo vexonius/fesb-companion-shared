@@ -1,6 +1,5 @@
 package dev.etino.fcshared.screens.home.view
 
-import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -51,7 +50,6 @@ class HomeViewModel(
         )
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        Log.d("HomeViewModel", "Caught $exception")
         viewModelScope.launch(Dispatchers.Main) {
             snackbarHostState.showSnackbar(
                 "getApplication<Application>().applicationContext.getString( R.string.general_error)"

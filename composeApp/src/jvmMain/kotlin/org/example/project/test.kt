@@ -1,4 +1,4 @@
-package dev.etino.fcshared.networking
+package org.example.project
 
 import dev.etino.fcshared.attendance.services.AttendanceService
 import dev.etino.fcshared.attendance.services.AttendanceServiceInterface
@@ -20,9 +20,11 @@ import io.ktor.http.Cookie
 import io.ktor.http.Url
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.dsl.module
+import java.security.cert.X509Certificate
+import javax.net.ssl.X509TrustManager
 
 @OptIn(InternalCoroutinesApi::class)
-val networkModule = module {
+val networkModule1 = module {
     single<HttpClient> { client }
     single<TimetableClient> { TimetableClientImpl(get()) }
     single<UserServiceInterface> { UserService(get()) }
@@ -32,6 +34,17 @@ val networkModule = module {
 
 val client = HttpClient(CIO) {
     expectSuccess = false
+    engine {
+        https {
+            trustManager = object: X509TrustManager {
+                override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) { }
+
+                override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) { }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate>? = null
+            }
+        }
+    }
 
     install(HttpRedirect) {
         checkHttpMethod = false

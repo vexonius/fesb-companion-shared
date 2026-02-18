@@ -1,7 +1,5 @@
 package dev.etino.fcshared.screens.timetable.compose
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

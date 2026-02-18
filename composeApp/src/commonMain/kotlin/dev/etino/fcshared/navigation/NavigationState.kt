@@ -31,8 +31,8 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import androidx.navigation3.runtime.serialization.NavKeySerializer
 import androidx.savedstate.compose.serialization.serializers.MutableStateSerializer
+import kotlinx.serialization.PolymorphicSerializer
 
 /**
  * Create a navigation state that persists config changes and process death.
@@ -48,13 +48,14 @@ fun rememberNavigationState(
 
     val topLevelRoute = rememberSerializable(
         startRoute, topLevelRoutes,
-        serializer = MutableStateSerializer(NavKeySerializer())
+        configuration = config,
+        serializer = MutableStateSerializer(PolymorphicSerializer(NavKey::class))
     ) {
         mutableStateOf(startRoute)
     }
 
     // Create a back stack for each top level route.
-    val backStacks = topLevelRoutes.associateWith { key -> rememberNavBackStack(key) }
+    val backStacks = topLevelRoutes.associateWith { key -> rememberNavBackStack(config,key) }
 
     return remember(startRoute, topLevelRoutes) {
         NavigationState(

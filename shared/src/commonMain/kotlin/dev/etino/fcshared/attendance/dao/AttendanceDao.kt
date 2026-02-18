@@ -9,11 +9,11 @@ import dev.etino.fcshared.attendance.models.AttendanceEntry
 @Dao
 interface AttendanceDao {
     @Query("DELETE FROM attendanceentry")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     @Insert(onConflict = REPLACE)
-    fun insert(attendance: List<AttendanceEntry>)
+    suspend fun insert(attendance: List<AttendanceEntry>)
 
     @Query("SELECT * FROM attendanceentry")
-    fun read(): List<AttendanceEntry>
+    suspend fun read(): List<AttendanceEntry>
 }

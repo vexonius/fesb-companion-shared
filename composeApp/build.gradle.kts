@@ -1,4 +1,5 @@
 
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -19,9 +20,8 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+    jvm()
     sourceSets {
-        
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -37,10 +37,15 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
+            //implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
             implementation(libs.koin.compose)
-            implementation(libs.ui.text.google.fonts)
+            implementation(libs.koin.compose.viewModel)
+            implementation(libs.koin.compose.viewModel.navigation)
+            //implementation(libs.ui.text.google.fonts)
+            implementation(libs.jetbrains.navigation3.ui)
+            //implementation(libs.androidx.navigation3.ui)
             implementation(libs.androidx.navigation3.runtime)
-            implementation(libs.androidx.navigation3.ui)
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
             implementation("com.kizitonwose.calendar:compose-multiplatform:2.10.0")
@@ -48,6 +53,16 @@ kotlin {
             implementation("androidx.datastore:datastore:1.2.0")
             // The Preferences DataStore library
             implementation("androidx.datastore:datastore-preferences:1.2.0")
+
+        }
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutinesSwing)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation("io.ktor:ktor-client-cio:3.4.0")
         }
     }
 }
@@ -85,5 +100,17 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+}
+
+compose.desktop {
+    application {
+        mainClass = "org.example.project.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "org.example.project"
+            packageVersion = "1.0.0"
+        }
+    }
 }
 

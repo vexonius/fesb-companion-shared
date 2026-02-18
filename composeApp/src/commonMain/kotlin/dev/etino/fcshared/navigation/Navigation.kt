@@ -1,5 +1,9 @@
 package dev.etino.fcshared.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import androidx.savedstate.serialization.SavedStateConfiguration
 import dev.etino.fcshared.screens.attendance.compose.AttendanceCompose
 import dev.etino.fcshared.screens.attendance.view.AttendanceViewModel
 import dev.etino.fcshared.screens.home.view.HomeTabCompose
@@ -37,9 +42,11 @@ import fesb_companion_shared.composeapp.generated.resources.tab_timetable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Serializable
 data object Iksica : NavKey
@@ -68,6 +75,19 @@ val topLevelRoutes = listOf(
     TopLevelRoute(Res.string.tab_timetable, TimeTable, Res.drawable.icon_timetable),
     TopLevelRoute(Res.string.tab_studomat, Studomat, Res.drawable.icon_studomat),
 )
+val config = SavedStateConfiguration {
+    serializersModule = SerializersModule {
+        polymorphic(NavKey::class) {
+            subclass(Iksica::class, Iksica.serializer())
+            subclass(Home::class, Home.serializer())
+            subclass(Login::class, Login.serializer())
+            subclass(TimeTable::class, TimeTable.serializer())
+            subclass(Attendance::class, Attendance.serializer())
+            subclass(Studomat::class, Studomat.serializer())
+        }
+    }
+}
+
 
 @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 @Composable
@@ -140,7 +160,37 @@ fun Application(loggedIn: Boolean) {
         }
         NavDisplay(
             entries = navigationState.toDecoratedEntries(entryProvider),
-            onBack = { navigator.goBack() }
+            onBack = { navigator.goBack() },
+            transitionSpec = {
+                // Slide in from right when navigating forward
+                slideInHorizontally(
+                    initialOffsetX = { it },
+                    animationSpec = tween(1000)
+                ) togetherWith slideOutHorizontally(
+                    targetOffsetX = { -it },
+                    animationSpec = tween(1000)
+                )
+            },
+            popTransitionSpec = {
+                // Slide in from left when navigating back
+                slideInHorizontally(
+                    initialOffsetX = { -it },
+                    animationSpec = tween(1000)
+                ) togetherWith slideOutHorizontally(
+                    targetOffsetX = { it },
+                    animationSpec = tween(1000)
+                )
+            },
+            predictivePopTransitionSpec = {
+                // Slide in from left when navigating back
+                slideInHorizontally(
+                    initialOffsetX = { -it },
+                    animationSpec = tween(1000)
+                ) togetherWith slideOutHorizontally(
+                    targetOffsetX = { it },
+                    animationSpec = tween(1000)
+                )
+            }
         )
     }
 }

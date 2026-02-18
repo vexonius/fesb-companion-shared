@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TimeTableDao {
     @Query("DELETE FROM eventroom")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     @Insert(onConflict = REPLACE)
-    fun insert(classes: List<EventRoom>)
+    suspend fun insert(classes: List<EventRoom>)
 
     @Query("SELECT * FROM eventroom")
-    fun getEvents(): List<EventRoom>
+    suspend fun getEvents(): List<EventRoom>
 
     @Query("SELECT * FROM eventroom")
     fun getEventsAsync(): Flow<List<EventRoom>>

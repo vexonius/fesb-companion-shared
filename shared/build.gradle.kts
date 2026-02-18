@@ -1,9 +1,10 @@
-import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.androidx.room)
@@ -17,7 +18,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-
+    jvm()
     listOf(
         iosX64(),
         iosArm64(),
@@ -35,7 +36,10 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-            implementation(libs.koin.compose)
+            implementation(libs.koin.core)
+            implementation(libs.ui)
+            implementation(libs.ui.util)
+            implementation("io.ktor:ktor-client-cio:3.4.0")
             // Required core library
             implementation(libs.ksoup)
             implementation(libs.androidx.room.runtime)
@@ -57,6 +61,7 @@ kotlin {
 
 dependencies {
     add("kspAndroid", libs.androidx.room.compiler)
+    add("kspJvm", libs.androidx.room.compiler)
     //add("kspIosSimulatorArm64", libs.androidx.room.compiler)
     //add("kspIosX64", libs.androidx.room.compiler)
     //add("kspIosArm64", libs.androidx.room.compiler)

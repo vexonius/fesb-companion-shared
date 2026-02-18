@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao {
 
     @Insert(onConflict = REPLACE)
-    fun insert(user: UserRoom)
+    suspend fun insert(user: UserRoom)
 
     @Query("SELECT * FROM userroom")
-    fun getUser(): UserRoom
+    suspend fun getUser(): UserRoom
 
     @Query("DELETE FROM userroom")
-    fun deleteAllUserData()
+    suspend fun deleteAllUserData()
 
     @Query("SELECT * FROM userroom LIMIT 1")
     fun observeUserChanges(): Flow<UserRoom?>

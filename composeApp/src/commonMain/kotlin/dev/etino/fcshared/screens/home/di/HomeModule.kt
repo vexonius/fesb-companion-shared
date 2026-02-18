@@ -5,12 +5,9 @@ import dev.etino.fcshared.home.repository.NoteRepository
 import dev.etino.fcshared.home.repository.NoteRepositoryInterface
 import dev.etino.fcshared.home.repository.WeatherRepository
 import dev.etino.fcshared.home.repository.WeatherRepositoryInterface
-import dev.etino.fcshared.home.services.WeatherService
-import dev.etino.fcshared.home.services.WeatherServiceInterface
 import dev.etino.fcshared.screens.home.view.HomeViewModel
 import dev.etino.fcshared.database.AppDatabase
 import kotlinx.coroutines.InternalCoroutinesApi
-import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 

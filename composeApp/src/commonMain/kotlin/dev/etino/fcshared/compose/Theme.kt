@@ -1,6 +1,5 @@
 package dev.etino.fcshared.compose
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -87,7 +86,6 @@ data class ContentColors(
     val tertiary: Color
 )
 
-@SuppressLint("CompositionLocalNaming")
 val AppComposition = staticCompositionLocalOf {
     ContentColors(
         primary = Color.Unspecified,

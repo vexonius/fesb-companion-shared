@@ -1,7 +1,5 @@
 package dev.etino.fcshared.screens.login.view
 
-import android.util.Patterns
-import androidx.compose.material3.SnackbarHostState
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -128,7 +126,7 @@ class LoginViewModel(
     }
 
     private fun isEmailValid(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return true //fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     }
 
 }

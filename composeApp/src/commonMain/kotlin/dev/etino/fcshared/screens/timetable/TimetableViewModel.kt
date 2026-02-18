@@ -1,12 +1,7 @@
 package dev.etino.fcshared.screens.timetable
 
-import android.content.SharedPreferences
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.minusDays
@@ -22,7 +17,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
@@ -43,7 +41,7 @@ class TimetableViewModel(
     private val _currentEventShown = MutableStateFlow<Event?>(null)
     val currentEventShown: StateFlow<Event?> = _currentEventShown
 
-    private var _events = MutableStateFlow(timeTableRepository.events.asLiveData().value ?: emptyList())
+    private var _events = MutableStateFlow<List<Event>>(emptyList())//timeTableRepository.events.first())
     var events: StateFlow<List<Event>> = _events
 
     /*val eventsGlowing: MutableLiveData<Boolean> = MutableLiveData(
@@ -70,7 +68,6 @@ class TimetableViewModel(
     )
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        Log.e("Error timetable", exception.toString())
         viewModelScope.launch(Dispatchers.Main) { snackbarHostState.showSnackbar("Došlo je do pogreške") }
     }
 

@@ -1,6 +1,5 @@
 package dev.etino.fcshared.screens.attendance.view
 
-import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -67,7 +66,6 @@ class AttendanceViewModel(
 
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        Log.e("Error attendance", exception.toString())
         viewModelScope.launch(Dispatchers.Main) { snackbarHostState.showSnackbar("Došlo je do pogreške") }
     }
 
