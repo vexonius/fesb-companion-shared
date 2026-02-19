@@ -10,6 +10,10 @@ import dev.etino.fcshared.home.models.NoteRoom
 
 @Dao
 interface NoteDao {
+
+    @Query("DELETE FROM noteroom")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM noteroom")
     suspend fun getNotes(): List<NoteRoom>
 

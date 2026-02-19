@@ -37,7 +37,7 @@ class UserRepository(
         }
     }
     override suspend fun insertDummyUser() {
-        //sharedPreferences[SPKey.LOGGED_IN] = true
+        datastore.edit { it[SPKey.LOGGED_IN.key] = true }
         userDao.insert(UserRoom(11, "Test user", "User", "User"))
     }
 
@@ -50,8 +50,10 @@ class UserRepository(
     }
 
     override suspend fun deleteAllUserData() {
-        //sessionDelegate.clearSession()
-        //appDatabase.clearAllTables()
+        appDatabase.userDao().deleteAllUserData()
+        appDatabase.noteDao().deleteAll()
+        appDatabase.timetableDao().deleteAll()
+        appDatabase.attendanceDao().deleteAll()
         datastore.edit { it[SPKey.LOGGED_IN.key] = false }
     }
 }

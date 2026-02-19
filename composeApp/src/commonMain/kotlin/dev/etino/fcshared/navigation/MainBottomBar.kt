@@ -25,7 +25,7 @@ fun MainBottomBar(
     topLevelRoutes: List<TopLevelRoute>,
     //timetableViewModel: TimetableViewModel
 ) {
-    val bottomBarHiddenRoutes = listOf(Login)
+    val bottomBarHiddenRoutes = listOf(Login, Settings)
     if (!bottomBarHiddenRoutes.contains(topLevelRoute)) {
         NavigationBar(
             contentColor = MaterialTheme.colorScheme.onSurface,

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.etino.fcshared.compose.AppTheme
 import dev.etino.fcshared.screens.timetable.compose.schedule.until
-import dev.etino.fcshared.testEvents
+import dev.etino.fcshared.screens.timetable.testEvents
 import dev.etino.fcshared.timetable.Event
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.getRest
@@ -47,7 +47,6 @@ import kotlinx.datetime.format
 import kotlinx.datetime.format.char
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import kotlin.time.Duration
 
 @Composable
 fun TodayTimetableCompose(events: List<Event>) {

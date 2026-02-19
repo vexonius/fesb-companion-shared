@@ -1,4 +1,4 @@
-package dev.etino.fcshared
+package dev.etino.fcshared.screens.timetable
 
 import dev.etino.fcshared.compose.accentBlue
 import dev.etino.fcshared.compose.accentRed

@@ -48,21 +48,24 @@ kotlin {
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
-            implementation("com.kizitonwose.calendar:compose-multiplatform:2.10.0")
+            implementation(libs.compose.multiplatform)
             // DataStore library
-            implementation("androidx.datastore:datastore:1.2.0")
+            implementation(libs.androidx.datastore)
             // The Preferences DataStore library
-            implementation("androidx.datastore:datastore-preferences:1.2.0")
+            implementation(libs.androidx.datastore.preferences)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ui.backhandler)
+            implementation("io.coil-kt.coil3:coil-compose:3.3.0")
+            implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
 
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
-
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
-            implementation("io.ktor:ktor-client-cio:3.4.0")
         }
     }
 }

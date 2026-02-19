@@ -29,18 +29,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.navigation3.runtime.NavKey
 import dev.etino.fcshared.compose.AppTheme
 import dev.etino.fcshared.home.models.Note
 import dev.etino.fcshared.home.models.WeatherDisplay
+import dev.etino.fcshared.navigation.Settings
 import dev.etino.fcshared.now
+import dev.etino.fcshared.screens.home.compose.CardsCompose
 import dev.etino.fcshared.screens.home.compose.NotesCompose
 import dev.etino.fcshared.screens.home.compose.TodayTimetableCompose
 import dev.etino.fcshared.screens.home.utils.getWeatherText
+import dev.etino.fcshared.screens.menza.view.MenzaCompose
+import dev.etino.fcshared.screens.menza.view.MenzaViewModel
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.hi_user
 import fesb_companion_shared.composeapp.generated.resources.settings_icon
@@ -49,6 +52,8 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 val sidePadding = 24.dp
 
@@ -56,9 +61,9 @@ val sidePadding = 24.dp
 @Composable
 fun HomeTabCompose(
     homeViewModel: HomeViewModel,
-    //menzaViewModel: MenzaViewModel = koinViewModel(),
-    //router: HomeRouter = koinInject<HomeRouter>(),
-    innerPaddingValues: PaddingValues
+    menzaViewModel: MenzaViewModel,
+    innerPaddingValues: PaddingValues,
+    navigate: (NavKey) -> Unit,
 ) {
 
     val weather = homeViewModel.weatherDisplay
@@ -84,10 +89,10 @@ fun HomeTabCompose(
         contentWindowInsets = WindowInsets(0.dp),
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxHeight()) {
-            /*if (menzaViewModel.menzaOpened.observeAsState().value == true) {
+            if (menzaViewModel.menzaOpened.collectAsState().value) {
                 MenzaCompose(menzaViewModel, innerPaddingValues)
                 return@Scaffold
-            }*/
+            }
             LazyColumn(
                 Modifier
                     .padding(innerPaddingValues)
@@ -109,7 +114,7 @@ fun HomeTabCompose(
                                 .size(32.dp)
                                 .clip(CircleShape)
                                 .clickable {
-                                    //router.routeToSettings()
+                                    navigate(Settings)
                                 }
                         )
                     }
@@ -133,7 +138,7 @@ fun HomeTabCompose(
                             ?: emptyList()
                     )
                 }
-                //item { CardsCompose({ menzaViewModel.openMenza() }, homeViewModel) }
+                item { CardsCompose({ menzaViewModel.openMenza() }, homeViewModel) }
             }
 
         }

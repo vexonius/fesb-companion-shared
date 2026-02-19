@@ -14,6 +14,8 @@ import dev.etino.fcshared.networking.networkModule
 import dev.etino.fcshared.screens.attendance.di.attendanceModule
 import dev.etino.fcshared.screens.home.di.homeModule
 import dev.etino.fcshared.screens.login.di.loginModule
+import dev.etino.fcshared.screens.menza.di.menzaModule
+import dev.etino.fcshared.screens.settings.di.settingsModule
 import dev.etino.fcshared.screens.timetable.di.timetableModule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -37,7 +39,9 @@ class MainActivity : ComponentActivity() {
                 dbModule,
                 networkModule,
                 timetableModule,
-                homeModule
+                homeModule,
+                settingsModule,
+                menzaModule,
             )
         }
         val datastore: DataStore<Preferences> by inject(DataStore::class.java)

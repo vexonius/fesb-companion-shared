@@ -44,6 +44,7 @@ fun CardsCompose(openMenza: ()-> Unit, homeViewModel: HomeViewModel) {
                 meniColor,
                 meniColor,
                 onClick = {
+                    openMenza()
                     /*if (homeViewModel.internetAvailable.value == true) {
                         openMenza()
                     } else {
