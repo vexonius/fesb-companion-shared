@@ -1,7 +1,9 @@
 package dev.etino.fcshared.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.RoomDatabaseConstructor
 import dev.etino.fcshared.home.dao.NoteDao
 import dev.etino.fcshared.timetable.dao.TimeTableDao
 import dev.etino.fcshared.attendance.dao.AttendanceDao
@@ -25,6 +27,7 @@ import dev.etino.fcshared.timetable.EventRoom
     ],
     version = 1
 )
+@ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun attendanceDao(): AttendanceDao
@@ -33,4 +36,10 @@ abstract class AppDatabase : RoomDatabase() {
     /*
     abstract fun iksicaDao(): IksicaDao
     abstract fun studomatDao(): StudomatDao*/
+}
+
+// The Room compiler generates the `actual` implementations.
+@Suppress("KotlinNoActualForExpect")
+expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
+    override fun initialize(): AppDatabase
 }

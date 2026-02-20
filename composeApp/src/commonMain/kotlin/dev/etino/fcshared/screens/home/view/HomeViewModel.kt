@@ -66,7 +66,7 @@ class HomeViewModel(
 
     private fun getForecast() {
         //if (internetAvailable.value == false) return
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             try {
                 weatherRepository.fetchWeatherDetails()?.let { _weatherDisplay.update { it } }
             } catch (e: Exception) {
@@ -85,14 +85,14 @@ class HomeViewModel(
         else {
             _notes.value = _notes.value?.plus(note)
         }
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             noteRepository.insert(note)
         }
     }
 
     fun delete(note: Note) {
         _notes.value = _notes.value?.minus(note)
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             noteRepository.delete(note)
         }
     }
@@ -108,7 +108,7 @@ class HomeViewModel(
     }
 
     private fun getNotes() {
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             val notes = noteRepository.getNotes()
             _notes.update { notes }
         }
@@ -128,7 +128,7 @@ class HomeViewModel(
         val startDateFormated = dateFormatter.format(startDate)
         val endDateFormated = dateFormatter.format(endDate)
 
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             val username = userRepository.getCurrentUserName()
             timeTableRepository.fetchTimetable(username, startDateFormated, endDateFormated, true)
         }
@@ -145,7 +145,7 @@ class HomeViewModel(
     }
 
     fun loadUsersName() {
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             val name = userRepository.getCurrentUser().fullName.split(" ").firstOrNull() ?: ""
             nameOfUser.update {
                 name.replaceFirstChar {

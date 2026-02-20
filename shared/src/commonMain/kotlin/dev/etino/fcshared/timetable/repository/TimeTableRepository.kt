@@ -80,7 +80,7 @@ class TimeTableRepository(
     }
 
     private fun observeEventsFromCache() {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Default).launch {
             timeTableDao.getEventsAsync().collect { events ->
                 _events.emit(events.map { Event(it) })
             }

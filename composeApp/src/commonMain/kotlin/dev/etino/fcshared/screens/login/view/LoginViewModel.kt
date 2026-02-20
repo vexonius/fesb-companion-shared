@@ -55,7 +55,7 @@ class LoginViewModel(
 
     /*private fun addTestData() {
         val db : AppDatabase by inject(AppDatabase::class.java)
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             db.studomatDao().insert(studomatSubjectTestData)
             db.studomatDao().insertYears(studomatYearInfoTestData)
             db.timetableDao().insert(eventsTestData)
@@ -71,7 +71,7 @@ class LoginViewModel(
 
         /* if (username == "test" && password == "testpassword12421") {
              setTestMode(true)
-             viewModelScope.launch(Dispatchers.IO + handler) {
+             viewModelScope.launch(Dispatchers.Default + handler) {
                  repository.insertDummyUser()
              }
              addTestData()
@@ -86,7 +86,7 @@ class LoginViewModel(
         }
         showLoading.value = true
 
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             when (repository.attemptLogin(username, password)) {
                 is UserRepositoryResult.LoginResult.Success -> {
                     loggedIn.update { true }

@@ -22,7 +22,7 @@ class SettingsViewModel(
     val routeToLogin = MutableStateFlow(false)
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             username.update { userRepository.getCurrentUserName() }
             //version.update { getBuildVersion() }
         }
@@ -34,7 +34,7 @@ class SettingsViewModel(
      * router will route to login screen
      */
     fun logout() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             userRepository.deleteAllUserData()
             routeToLogin.emit(true)
             datastore.edit { it.clear() }

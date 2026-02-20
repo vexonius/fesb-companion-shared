@@ -76,7 +76,7 @@ class TimetableViewModel(
     }
 
     fun resetToCurrentWeek() {
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             timeTableRepository.events.collect { _events.value = it }
         }
         _mondayOfSelectedWeek.value =
@@ -117,7 +117,7 @@ class TimetableViewModel(
         val endDateFormated = dateFormatter.format(endDate)
 
 
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             val username = userRepository.getCurrentUserName()
             val items = timeTableRepository.fetchTimetable(username, startDateFormated, endDateFormated, shouldCache)
             _mondayOfSelectedWeek.value = shownWeekMonday
@@ -130,7 +130,7 @@ class TimetableViewModel(
         endDate: String = (LocalDate.now().year + 1).toString() + "-8-1"
     ) {
         if (internetAvailable.value == false) return
-        viewModelScope.launch(Dispatchers.IO + handler) {
+        viewModelScope.launch(Dispatchers.Default + handler) {
             _daysInPeriods.postValue(timeTableRepository.fetchTimeTableCalendar(startDate, endDate))
         }
     }*/

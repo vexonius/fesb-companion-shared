@@ -68,9 +68,10 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.cio)
             implementation(libs.ui.backhandler)
-            implementation("io.coil-kt.coil3:coil-compose:3.3.0")
-            implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
-
+            implementation(libs.coil.compose)
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil.network.ktor3)
+                    //implementation(libs.ui.tooling.preview)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)

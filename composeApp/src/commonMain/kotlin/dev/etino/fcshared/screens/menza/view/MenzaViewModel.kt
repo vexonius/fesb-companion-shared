@@ -60,7 +60,7 @@ class MenzaViewModel(
 
     private fun fetchMenza() {
         //if (internetAvailable.value == false) return
-        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+        viewModelScope.launch(Dispatchers.Default + coroutineExceptionHandler) {
             val test = menzaLocations.map {
                 it to when (val menza = menzaRepository.fetchMenzaDetails(it.meniName, false)) {
                     is MenzaResult.Success -> {
@@ -107,7 +107,7 @@ class MenzaViewModel(
     }
 
     private fun getImageUrl(location: MenzaLocation) {
-        viewModelScope.launch(Dispatchers.IO + coroutineExceptionHandler) {
+        viewModelScope.launch(Dispatchers.Default + coroutineExceptionHandler) {
             _images.update { location to camerasRepository.getImages(location.cameraName) }
         }
     }

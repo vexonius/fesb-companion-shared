@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.Density
 import dev.etino.fcshared.timetable.Event
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
+import kotlin.jvm.JvmInline
 
 
 @JvmInline

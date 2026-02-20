@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
@@ -74,7 +75,7 @@ fun Application(loggedIn: Boolean) {
             )
         }
     ) { paddingValues ->
-        val entryProvider = entryProvider {
+        val entryProvider:(NavKey) -> NavEntry<NavKey> = entryProvider {
             entry<Login> { key ->
                 val loginViewModel = koinViewModel<LoginViewModel>()
 
@@ -133,7 +134,7 @@ fun Application(loggedIn: Boolean) {
             }
         }
         NavDisplay(
-            entries = navigationState.toDecoratedEntries(entryProvider),
+            entries = navigationState.toEntries(entryProvider),
             onBack = { navigator.goBack() },
         )
     }

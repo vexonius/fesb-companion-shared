@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
+import kotlin.time.Clock
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
@@ -30,7 +31,7 @@ class AttendanceViewModel(
 
     private var lastFetch = 0L
     private val has60SecondPassed: Boolean
-        get() = System.currentTimeMillis() - lastFetch > 60000
+        get() = Clock.System.now().toEpochMilliseconds() - lastFetch > 60000
 
     // Full list of attendance
     private val _attendanceListFull = MutableStateFlow<List<List<AttendanceEntry>>>(emptyList())
@@ -81,8 +82,8 @@ class AttendanceViewModel(
 
     fun fetchAttendance() {
         if (!has60SecondPassed) return
-        viewModelScope.launch(context = Dispatchers.IO + handler) {
-            lastFetch = System.currentTimeMillis()
+        viewModelScope.launch(context = Dispatchers.Default + handler) {
+            lastFetch = Clock.System.now().toEpochMilliseconds()
             when (val attendance = repository.fetchAttendance()) {
                 is NetworkServiceResult.AttendanceParseResult.Success -> {
                     val data = attendance.data
