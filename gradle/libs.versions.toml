@@ -32,8 +32,17 @@ ksp = "2.3.5"
 multiplatform-nav3-ui = "1.0.0-alpha06"
 kotlinx-coroutines = "1.10.2"
 backhandler = "1.10.1"
+connectivity = "2.2.1"
 
 [libraries]
+connectivity-core = { module = "dev.jordond.connectivity:connectivity-core", version.ref = "connectivity" }
+connectivity-device = { module = "dev.jordond.connectivity:connectivity-device", version.ref = "connectivity" }
+connectivity-android = { module = "dev.jordond.connectivity:connectivity-android", version.ref = "connectivity" }
+connectivity-apple = { module = "dev.jordond.connectivity:connectivity-apple", version.ref = "connectivity" }
+connectivity-http = { module = "dev.jordond.connectivity:connectivity-http", version.ref = "connectivity" }
+connectivity-compose = { module = "dev.jordond.connectivity:connectivity-compose", version.ref = "connectivity" }
+connectivity-compose-device = { module = "dev.jordond.connectivity:connectivity-compose-device", version.ref = "connectivity" }
+connectivity-compose-http = { module = "dev.jordond.connectivity:connectivity-compose-http", version.ref = "connectivity" }
 androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 compose-multiplatform = { module = "com.kizitonwose.calendar:compose-multiplatform", version.ref = "calendar" }

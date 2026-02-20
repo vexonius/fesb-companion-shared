@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -100,7 +101,7 @@ fun TimetableCompose(timetableViewModel: TimetableViewModel, innerPaddingValues:
     val showEvent = { it: Event -> timetableViewModel.showEvent(it) }
     val showWeekChooseMenu = { it: Boolean -> timetableViewModel.showWeekChooseMenu(it) }
     val hideEvent = { timetableViewModel.hideEvent() }
-    val snackbarHostState = timetableViewModel.snackbarHostState
+    val snackbarHostState = SnackbarHostState()
 
     val sheetStateEvent = rememberModalBottomSheetState()
     val sheetStateCalendar = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -115,6 +116,13 @@ fun TimetableCompose(timetableViewModel: TimetableViewModel, innerPaddingValues:
             }
 
             else -> {}
+        }
+    }
+
+    val message = timetableViewModel.showSnackbar.collectAsState().value?.let { stringResource(it) }
+    LaunchedEffect(message) {
+        message?.let {
+            snackbarHostState.showSnackbar(message)
         }
     }
     Box(Modifier.padding(innerPaddingValues)) {

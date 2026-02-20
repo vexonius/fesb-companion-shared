@@ -47,17 +47,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.screens.login.models.TextFieldModel
-import dev.etino.fcshared.screens.login.view.LoginSnackbar
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.login_action_submit
 import fesb_companion_shared.composeapp.generated.resources.login_email_or_username
-import fesb_companion_shared.composeapp.generated.resources.login_error_empty_credentials
-import fesb_companion_shared.composeapp.generated.resources.login_error_generic
-import fesb_companion_shared.composeapp.generated.resources.login_error_invalid_credentials
 import fesb_companion_shared.composeapp.generated.resources.login_login_title
 import fesb_companion_shared.composeapp.generated.resources.login_password
 import fesb_companion_shared.composeapp.generated.resources.login_safe_data
@@ -65,8 +59,10 @@ import fesb_companion_shared.composeapp.generated.resources.visibility_hide
 import fesb_companion_shared.composeapp.generated.resources.visibility_show
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LoginCompose(
@@ -75,32 +71,23 @@ fun LoginCompose(
     password: MutableStateFlow<String>,
     passwordHidden: MutableStateFlow<Boolean>,
     tryUserLogin: () -> Unit,
-    showSnackbar: StateFlow<LoginSnackbar?>,
+    showSnackbar: StateFlow<StringResource?>,
 ) {
-
     val snackbarHostState = SnackbarHostState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val showLoadingObserved = showLoading.collectAsState().value
-    val message = stringResource(
-        when (showSnackbar.collectAsState().value) {
-            LoginSnackbar.INVALID_CREDENTIALS -> Res.string.login_error_invalid_credentials
-            LoginSnackbar.EMPTY_CREDENTIALS -> Res.string.login_error_empty_credentials
-            LoginSnackbar.GENERIC_ERROR -> Res.string.login_error_generic
-            else -> Res.string.login_error_generic
-        }
-    )
+    val message = showSnackbar.collectAsState().value?.let { stringResource(it) }
 
     fun onDone() {
         keyboardController?.hide()
         tryUserLogin()
     }
 
-    LaunchedEffect(showSnackbar.collectAsState().value) {
-        showSnackbar.value?.let{
+    LaunchedEffect(message) {
+        message?.let {
             snackbarHostState.showSnackbar(message)
         }
     }
-
 
     val usernameModel = TextFieldModel(
         text = username,

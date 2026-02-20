@@ -52,7 +52,7 @@ fun AttendanceCompose(attendanceViewModel: AttendanceViewModel, innerPaddingValu
     val items by attendanceViewModel.attendanceListFull.collectAsState(initial = emptyList())
 
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
-    val snackbarHostState = attendanceViewModel.snackbarHostState
+    val snackbarHostState = SnackbarHostState()
 
     LaunchedEffect(lifecycleState) {
         when (lifecycleState) {
@@ -61,6 +61,13 @@ fun AttendanceCompose(attendanceViewModel: AttendanceViewModel, innerPaddingValu
             }
 
             else -> {}
+        }
+    }
+
+    val message = attendanceViewModel.showSnackbar.collectAsState().value?.let { stringResource(it) }
+    LaunchedEffect(message) {
+        message?.let {
+            snackbarHostState.showSnackbar(message)
         }
     }
 

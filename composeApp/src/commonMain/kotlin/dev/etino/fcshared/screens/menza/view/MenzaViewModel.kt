@@ -83,7 +83,7 @@ class MenzaViewModel(
     private fun getImageUrlApproximately(location: MenzaLocation) {
         val minuteAgo = LocalDateTime.now()
             .toInstant(TimeZone.currentSystemDefault())
-            .minus(1, DateTimeUnit.MINUTE)
+            .minus(2, DateTimeUnit.MINUTE)
             .toLocalDateTime(TimeZone.currentSystemDefault())
         val filename = LocalDateTime.Format {
             year()

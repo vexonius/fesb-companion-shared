@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,6 +67,7 @@ fun HomeTabCompose(
     navigate: (NavKey) -> Unit,
 ) {
 
+    val snackbarHostState: SnackbarHostState = SnackbarHostState()
     val weather = homeViewModel.weatherDisplay
     val notes = homeViewModel.notes
     val events = homeViewModel.events
@@ -83,9 +85,16 @@ fun HomeTabCompose(
             else -> {}
         }
     }
+    val message = homeViewModel.showSnackbar.collectAsState().value?.let { stringResource(it) }
+    LaunchedEffect(message) {
+        message?.let {
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
 
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = homeViewModel.snackbarHostState) },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(0.dp),
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxHeight()) {

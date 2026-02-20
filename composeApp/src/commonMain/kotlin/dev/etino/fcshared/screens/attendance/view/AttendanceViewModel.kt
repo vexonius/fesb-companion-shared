@@ -1,12 +1,13 @@
 package dev.etino.fcshared.screens.attendance.view
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.etino.fcshared.networking.NetworkServiceResult
 import dev.etino.fcshared.attendance.models.AttendanceEntry
 import dev.etino.fcshared.attendance.repository.AttendanceRepositoryInterface
+import dev.etino.fcshared.networking.NetworkServiceResult
 import dev.etino.fcshared.screens.attendance.ShownSemester
+import fesb_companion_shared.composeapp.generated.resources.Res
+import fesb_companion_shared.composeapp.generated.resources.general_error
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +18,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
@@ -62,11 +65,14 @@ class AttendanceViewModel(
         _shownSemester.value = semester
     }
 
-    val snackbarHostState = SnackbarHostState()
+    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
+    val showSnackbar: StateFlow<StringResource?> = _showSnackbar
 
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        viewModelScope.launch(Dispatchers.Main) { snackbarHostState.showSnackbar("Došlo je do pogreške") }
+        viewModelScope.launch(Dispatchers.Main) {
+            _showSnackbar.update { Res.string.general_error }
+        }
     }
 
     init {
@@ -84,7 +90,7 @@ class AttendanceViewModel(
                 }
 
                 is NetworkServiceResult.AttendanceParseResult.Failure -> {
-                    snackbarHostState.showSnackbar("Došlo je do pogreške")
+                    _showSnackbar.update { Res.string.general_error }
                 }
             }
         }

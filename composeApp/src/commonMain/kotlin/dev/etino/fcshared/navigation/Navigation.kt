@@ -54,7 +54,6 @@ val topLevelRoutes = listOf(
 )
 
 
-
 @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun Application(loggedIn: Boolean) {
@@ -64,13 +63,14 @@ fun Application(loggedIn: Boolean) {
     )
 
     val navigator = remember { Navigator(navigationState) }
-
+    val timetableViewModel = koinViewModel<TimetableViewModel>()
     Scaffold(
         bottomBar = {
             MainBottomBar(
                 navigate = navigator::navigate,
                 topLevelRoute = navigationState.topLevelRoute,
-                topLevelRoutes = topLevelRoutes
+                topLevelRoutes = topLevelRoutes,
+                timetableViewModel = timetableViewModel,
             )
         }
     ) { paddingValues ->
@@ -107,7 +107,12 @@ fun Application(loggedIn: Boolean) {
                 }
             }
             entry<Home> { key ->
-                HomeTabCompose(koinViewModel<HomeViewModel>(), koinViewModel<MenzaViewModel>(),paddingValues, navigator::navigate)
+                HomeTabCompose(
+                    koinViewModel<HomeViewModel>(),
+                    koinViewModel<MenzaViewModel>(),
+                    paddingValues,
+                    navigator::navigate
+                )
             }
             entry<Studomat> { key ->
                 Scaffold { ihatethis ->
@@ -121,10 +126,10 @@ fun Application(loggedIn: Boolean) {
                 }
             }
             entry<TimeTable> { key ->
-                TimetableCompose(koinViewModel<TimetableViewModel>(), paddingValues)
+                TimetableCompose(timetableViewModel, paddingValues)
             }
             entry<Settings> { key ->
-                SettingsCompose(koinViewModel<SettingsViewModel>(), paddingValues)
+                SettingsCompose(koinViewModel<SettingsViewModel>(), paddingValues, navigator::navigate)
             }
         }
         NavDisplay(

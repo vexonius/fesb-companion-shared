@@ -12,30 +12,29 @@ import dev.etino.fcshared.login.user.UserRepositoryInterface
 import dev.etino.fcshared.timetable.Event
 import dev.etino.fcshared.timetable.MonthData
 import dev.etino.fcshared.timetable.repository.interfaces.TimeTableRepositoryInterface
+import fesb_companion_shared.composeapp.generated.resources.Res
+import fesb_companion_shared.composeapp.generated.resources.general_error
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.YearMonth
 import kotlinx.datetime.format.char
+import org.jetbrains.compose.resources.StringResource
 
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class TimetableViewModel(
     private val timeTableRepository: TimeTableRepositoryInterface,
     private val userRepository: UserRepositoryInterface,
-    //private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
 
-    val snackbarHostState = SnackbarHostState()
     //val internetAvailable: LiveData<Boolean> = InternetConnectionObserver.get()
 
     private val _currentEventShown = MutableStateFlow<Event?>(null)
@@ -44,10 +43,9 @@ class TimetableViewModel(
     private var _events = MutableStateFlow<List<Event>>(emptyList())//timeTableRepository.events.first())
     var events: StateFlow<List<Event>> = _events
 
-    /*val eventsGlowing: MutableLiveData<Boolean> = MutableLiveData(
-        sharedPreferences[SPKey.EVENTS_GLOW, false]
-    )
-*/
+    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
+    val showSnackbar: StateFlow<StringResource?> = _showSnackbar
+
     /*private val _daysInPeriods = MutableStateFlow<Map<LocalDate, TimeTableInfo>>(mutableMapOf())
     val daysInPeriods: StateFlow<Map<LocalDate, TimeTableInfo>> = _daysInPeriods*/
 
@@ -68,20 +66,21 @@ class TimetableViewModel(
     )
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        viewModelScope.launch(Dispatchers.Main) { snackbarHostState.showSnackbar("Došlo je do pogreške") }
+        viewModelScope.launch(Dispatchers.Main) {
+            _showSnackbar.update { Res.string.general_error }
+        }
     }
 
     init {
         //fetchTimetableAgenda()
     }
 
-        fun resetToCurrentWeek() {
+    fun resetToCurrentWeek() {
         viewModelScope.launch(Dispatchers.IO + handler) {
             timeTableRepository.events.collect { _events.value = it }
         }
         _mondayOfSelectedWeek.value =
             LocalDate.now().let { it.minusDays(it.dayOfWeek.ordinal - DayOfWeek.MONDAY.ordinal) }
-        //eventsGlowing.postValue(sharedPreferences[SPKey.EVENTS_GLOW, false])
     }
 
     fun fetchUserTimetable() {

@@ -8,6 +8,10 @@ import androidx.lifecycle.viewModelScope
 import dev.etino.fcshared.SPKey
 import dev.etino.fcshared.login.user.UserRepositoryInterface
 import dev.etino.fcshared.login.user.models.UserRepositoryResult
+import fesb_companion_shared.composeapp.generated.resources.Res
+import fesb_companion_shared.composeapp.generated.resources.login_error_empty_credentials
+import fesb_companion_shared.composeapp.generated.resources.login_error_generic
+import fesb_companion_shared.composeapp.generated.resources.login_error_invalid_credentials
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -17,6 +21,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 @InternalCoroutinesApi
@@ -37,11 +42,11 @@ class LoginViewModel(
         private set
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        _showSnackbar.update { LoginSnackbar.GENERIC_ERROR }
+        _showSnackbar.update { Res.string.login_error_generic }
     }
 
-    private val _showSnackbar = MutableStateFlow<LoginSnackbar?>(null)
-    val showSnackbar : StateFlow<LoginSnackbar?> = _showSnackbar
+    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
+    val showSnackbar : StateFlow<StringResource?> = _showSnackbar
 
     init{
         checkIfFirstTimeInApp()
@@ -74,7 +79,7 @@ class LoginViewModel(
          }*/
 
         if (username.isNullOrEmpty() || password.isNullOrEmpty()) {
-            _showSnackbar.update { LoginSnackbar.EMPTY_CREDENTIALS }
+            _showSnackbar.update { Res.string.login_error_empty_credentials }
             return
         } else if (isEmailValid(username)) {
             username = username.substringBefore("@")
@@ -88,7 +93,7 @@ class LoginViewModel(
                 }
 
                 is UserRepositoryResult.LoginResult.Failure -> {
-                    _showSnackbar.update { LoginSnackbar.INVALID_CREDENTIALS }
+                    _showSnackbar.update { Res.string.login_error_invalid_credentials }
                 }
             }
             showLoading.value = false
@@ -129,11 +134,4 @@ class LoginViewModel(
         return true //fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
     }
 
-}
-
-
-enum class LoginSnackbar{
-    INVALID_CREDENTIALS,
-    EMPTY_CREDENTIALS,
-    GENERIC_ERROR,
 }

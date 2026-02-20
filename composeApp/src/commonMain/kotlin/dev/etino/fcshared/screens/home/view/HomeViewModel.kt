@@ -1,6 +1,5 @@
 package dev.etino.fcshared.screens.home.view
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kizitonwose.calendar.core.now
@@ -11,6 +10,9 @@ import dev.etino.fcshared.home.repository.WeatherRepositoryInterface
 import dev.etino.fcshared.login.user.UserRepositoryInterface
 import dev.etino.fcshared.timetable.Event
 import dev.etino.fcshared.timetable.repository.interfaces.TimeTableRepositoryInterface
+import fesb_companion_shared.composeapp.generated.resources.Res
+import fesb_companion_shared.composeapp.generated.resources.general_error
+import fesb_companion_shared.composeapp.generated.resources.weather_error
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -25,6 +27,7 @@ import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format.char
 import kotlinx.datetime.minus
+import org.jetbrains.compose.resources.StringResource
 
 @InternalCoroutinesApi
 class HomeViewModel(
@@ -35,8 +38,6 @@ class HomeViewModel(
 ) : ViewModel() {
 
     // val internetAvailable: LiveData<Boolean> = InternetConnectionObserver.get()
-
-    val snackbarHostState: SnackbarHostState = SnackbarHostState()
     private val _weatherDisplay = MutableStateFlow<WeatherDisplay?>(null)
     private val _notes = MutableStateFlow<List<Note>?>(null)
     val nameOfUser = MutableStateFlow<String?>(null)
@@ -48,16 +49,12 @@ class HomeViewModel(
             started = SharingStarted.WhileSubscribed(),
             initialValue = emptyList()
         )
+    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
+    val showSnackbar: StateFlow<StringResource?> = _showSnackbar
 
     private val handler = CoroutineExceptionHandler { _, exception ->
         viewModelScope.launch(Dispatchers.Main) {
-            snackbarHostState.showSnackbar(
-                "getApplication<Application>().applicationContext.getString( R.string.general_error)"
-
-                //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            )
+            _showSnackbar.update { Res.string.general_error }
         }
     }
 
@@ -73,10 +70,7 @@ class HomeViewModel(
             try {
                 weatherRepository.fetchWeatherDetails()?.let { _weatherDisplay.update { it } }
             } catch (e: Exception) {
-                snackbarHostState.showSnackbar("getApplication<Application>().applicationContext.getString(R.string.weather_error)")
-                //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                _showSnackbar.update { Res.string.weather_error }
             }
         }
     }
@@ -159,12 +153,6 @@ class HomeViewModel(
                     else it.toString()
                 }
             }
-        }
-    }
-
-    fun showSnackbar(message: String) {
-        viewModelScope.launch(Dispatchers.Main + handler) {
-            snackbarHostState.showSnackbar(message)
         }
     }
 }

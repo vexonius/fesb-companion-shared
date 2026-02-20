@@ -9,21 +9,21 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,12 +32,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation3.runtime.NavKey
 import dev.etino.fcshared.compose.AppTheme
+import dev.etino.fcshared.navigation.Login
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.about_app
 import fesb_companion_shared.composeapp.generated.resources.category_user
 import fesb_companion_shared.composeapp.generated.resources.contribute
-import fesb_companion_shared.composeapp.generated.resources.customizations
 import fesb_companion_shared.composeapp.generated.resources.data_privacy
 import fesb_companion_shared.composeapp.generated.resources.developer_names
 import fesb_companion_shared.composeapp.generated.resources.developers
@@ -64,101 +65,110 @@ val listItemStartPadding = 16.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsCompose(viewModel: SettingsViewModel = koinViewModel(), paddingValues: PaddingValues) {
-        Scaffold(
-            Modifier.padding(paddingValues),
-            contentWindowInsets = WindowInsets(),
-        ) { contentPadding ->
-            BottomSheetScaffold(
-                containerColor = MaterialTheme.colorScheme.surface,
-                modifier = Modifier.fillMaxSize().padding(contentPadding),
-                sheetPeekHeight = 0.dp,
-                sheetContent = {
-                    if (viewModel.displayLicences.collectAsState().value) {
-                        ModalBottomSheet(onDismissRequest = { viewModel.hideLicensesDialog() }) {
+fun SettingsCompose(
+    viewModel: SettingsViewModel = koinViewModel(),
+    paddingValues: PaddingValues,
+    navigate: (NavKey) -> Unit,
+) {
+    LaunchedEffect(viewModel.routeToLogin.collectAsState().value) {
+        if (viewModel.routeToLogin.value) {
+            navigate(Login)
+        }
+    }
+    Scaffold(
+        Modifier.padding(paddingValues),
+        contentWindowInsets = WindowInsets(),
+    ) { contentPadding ->
+        BottomSheetScaffold(
+            containerColor = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.fillMaxSize().padding(contentPadding),
+            sheetPeekHeight = 0.dp,
+            sheetContent = {
+                if (viewModel.displayLicences.collectAsState().value) {
+                    ModalBottomSheet(onDismissRequest = { viewModel.hideLicensesDialog() }) {
 
-                            LazyColumn {
-                                item {
-                                    LicenceItem(
-                                        title = stringResource(Res.string.ok_http_title),
-                                        supportText = stringResource(Res.string.ok_http_desc)
-                                    )
-                                }
-                                item {
-                                    LicenceItem(
-                                        title = stringResource(Res.string.jsoup_title),
-                                        supportText = stringResource(Res.string.jsoup_desc)
-                                    )
-                                }
-                                item {
-                                    LicenceItem(
-                                        title = stringResource(Res.string.privacy_policy_title),
-                                        supportText = stringResource(Res.string.privacy_policy_desc)
-                                    )
-                                }
-
+                        LazyColumn {
+                            item {
+                                LicenceItem(
+                                    title = stringResource(Res.string.ok_http_title),
+                                    supportText = stringResource(Res.string.ok_http_desc)
+                                )
                             }
+                            item {
+                                LicenceItem(
+                                    title = stringResource(Res.string.jsoup_title),
+                                    supportText = stringResource(Res.string.jsoup_desc)
+                                )
+                            }
+                            item {
+                                LicenceItem(
+                                    title = stringResource(Res.string.privacy_policy_title),
+                                    supportText = stringResource(Res.string.privacy_policy_desc)
+                                )
+                            }
+
                         }
                     }
-                })
-            {
-                Column(
-                    Modifier
-                        .padding(it)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    CategoryTitle(title = stringResource(Res.string.category_user))
-                    SettingsItem(
-                        title = stringResource(Res.string.logout),
-                        supportText = stringResource(
-                            Res.string.logged_in_as,
-                            viewModel.username.collectAsState().value ?: ""
-                        ),
-                        onClick = {
-                            viewModel.logout()
-                        }
-                    )
-                    CategoryTitle(title = stringResource(Res.string.contribute))
-                    SettingsItem(
-                        title = stringResource(Res.string.send_feedback),
-                        supportText = stringResource(Res.string.help_improve_app),
-                        onClick = {
-                            //router.sendEmail(viewModel.getSupportEmailModalModel())
-                        }
-                    )
-                    SettingsItem(
-                        title = stringResource(Res.string.report_bug),
-                        supportText = stringResource(Res.string.help_stabilize_app),
-                        onClick = {
-                            //router.sendEmail(viewModel.getBugReportEmailModalModel())
-                        }
-                    )
-                    CategoryTitle(title = stringResource(Res.string.about_app))
-                    SettingsItem(
-                        title = stringResource(Res.string.version),
-                        supportText = viewModel.version.collectAsState().value
-                    )
-                    SettingsItem(
-                        title = stringResource(Res.string.developers),
-                        supportText = stringResource(Res.string.developer_names)
-                    )
-                    SettingsItem(
-                        title = stringResource(Res.string.data_privacy),
-                        supportText = null,
-                        onClick = {
-                           // router.openCustomTab(SettingsViewModel.Companion.pivacyUrl)
-                        }
-                    )
-                    SettingsItem(
-                        title = stringResource(Res.string.library_licenses),
-                        supportText = null,
-                        onClick = {
-                            viewModel.displayLicensesDialog()
-                        }
-                    )
                 }
+            })
+        {
+            Column(
+                Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                CategoryTitle(title = stringResource(Res.string.category_user))
+                SettingsItem(
+                    title = stringResource(Res.string.logout),
+                    supportText = stringResource(
+                        Res.string.logged_in_as,
+                        viewModel.username.collectAsState().value ?: ""
+                    ),
+                    onClick = {
+                        viewModel.logout()
+                    }
+                )
+                CategoryTitle(title = stringResource(Res.string.contribute))
+                SettingsItem(
+                    title = stringResource(Res.string.send_feedback),
+                    supportText = stringResource(Res.string.help_improve_app),
+                    onClick = {
+                        //router.sendEmail(viewModel.getSupportEmailModalModel())
+                    }
+                )
+                SettingsItem(
+                    title = stringResource(Res.string.report_bug),
+                    supportText = stringResource(Res.string.help_stabilize_app),
+                    onClick = {
+                        //router.sendEmail(viewModel.getBugReportEmailModalModel())
+                    }
+                )
+                CategoryTitle(title = stringResource(Res.string.about_app))
+                SettingsItem(
+                    title = stringResource(Res.string.version),
+                    supportText = viewModel.version.collectAsState().value
+                )
+                SettingsItem(
+                    title = stringResource(Res.string.developers),
+                    supportText = stringResource(Res.string.developer_names)
+                )
+                SettingsItem(
+                    title = stringResource(Res.string.data_privacy),
+                    supportText = null,
+                    onClick = {
+                        // router.openCustomTab(SettingsViewModel.Companion.pivacyUrl)
+                    }
+                )
+                SettingsItem(
+                    title = stringResource(Res.string.library_licenses),
+                    supportText = null,
+                    onClick = {
+                        viewModel.displayLicensesDialog()
+                    }
+                )
             }
         }
+    }
 }
 
 @Composable

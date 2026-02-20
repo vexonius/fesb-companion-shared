@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
+import dev.etino.fcshared.screens.timetable.TimetableViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.jetbrains.compose.resources.painterResource
@@ -20,10 +21,10 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun MainBottomBar(
-    navigate:(NavKey)->Unit,
+    navigate: (NavKey) -> Unit,
     topLevelRoute: NavKey,
     topLevelRoutes: List<TopLevelRoute>,
-    //timetableViewModel: TimetableViewModel
+    timetableViewModel: TimetableViewModel
 ) {
     val bottomBarHiddenRoutes = listOf(Login, Settings)
     if (!bottomBarHiddenRoutes.contains(topLevelRoute)) {
@@ -56,7 +57,7 @@ fun MainBottomBar(
                         } else if (currentDestination == topLevelRoute.route) {
                             when (topLevelRoute.route) {
                                 TimeTable -> {
-                                    //timetableViewModel.showWeekChooseMenu()
+                                    timetableViewModel.showWeekChooseMenu()
                                 }
                             }
                         }
