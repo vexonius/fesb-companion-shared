@@ -59,6 +59,21 @@ fun MenzaCompose(menzaViewModel: MenzaViewModel, paddingValues: PaddingValues) {
         LaunchedEffect(state.settledPage) {
             menzaViewModel.updateMenzaUrl(menzaLocations[state.settledPage])
         }
+        val indicatorScrollState = rememberLazyListState()
+
+        LaunchedEffect(key1 = state.currentPage, block = {
+            val currentPage = state.currentPage
+            val size = indicatorScrollState.layoutInfo.visibleItemsInfo.size
+            val lastVisibleIndex =
+                indicatorScrollState.layoutInfo.visibleItemsInfo.last().index
+            val firstVisibleItemIndex = indicatorScrollState.firstVisibleItemIndex
+
+            if (currentPage > lastVisibleIndex - 1) {
+                indicatorScrollState.animateScrollToItem(currentPage - size + 2)
+            } else if (currentPage <= firstVisibleItemIndex + 1) {
+                indicatorScrollState.animateScrollToItem((currentPage - 1).coerceAtLeast(0))
+            }
+        })
         Column {
             Row(
                 horizontalArrangement = Arrangement.Center, modifier = Modifier
@@ -66,12 +81,11 @@ fun MenzaCompose(menzaViewModel: MenzaViewModel, paddingValues: PaddingValues) {
                     .background(MaterialTheme.colorScheme.background)
                     .padding(0.dp, 24.dp, 0.dp, 24.dp)
             ) {
-                val indicatorScrollState = rememberLazyListState()
                 LazyRow(
                     state = indicatorScrollState,
                     modifier = Modifier
                         .height(50.dp)
-                        .width(((6 + 16) * 2 + 3 * (10 + 16)).dp), // I'm hard computing it to simplify
+                        .width(((6 + 16) * 2 + 5 * (10 + 16)).dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -82,28 +96,30 @@ fun MenzaCompose(menzaViewModel: MenzaViewModel, paddingValues: PaddingValues) {
                             val firstVisibleIndex by remember { derivedStateOf { indicatorScrollState.firstVisibleItemIndex } }
                             val lastVisibleIndex = indicatorScrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
                             val size by animateDpAsState(
-                                targetValue = if (iteration == currentPage) {
-                                    10.dp
-                                } else if (iteration in firstVisibleIndex + 1..<lastVisibleIndex) {
-                                    10.dp
-                                } else {
-                                    6.dp
+                                targetValue = when (iteration) {
+                                    currentPage -> {
+                                        10.dp
+                                    }
+                                    in firstVisibleIndex + 1..<lastVisibleIndex -> {
+                                        10.dp
+                                    }
+                                    else -> {
+                                        6.dp
+                                    }
                                 }
                             )
                             Box(
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .background(color, CircleShape)
-                                    .size(
-                                        size
-                                    )
+                                    .size(size)
                             )
                         }
                     }
                 }
             }
             HorizontalPager(state, pageSpacing = 16.dp) {
-                val meni = menzas?.get(it)
+                val meni = menzas?.getOrNull(it)
                 val imgUrl = if (imageUrl?.first == meni?.first) imageUrl?.second else null
                 ImageMeniView(menzaViewModel, imgUrl, meni)
             }

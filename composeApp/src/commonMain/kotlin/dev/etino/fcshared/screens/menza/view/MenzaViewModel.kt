@@ -40,15 +40,15 @@ class MenzaViewModel(
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
         //Log.d("MenzaViewModel", "CoroutineExceptionHandler got $exception")
-        print(exception)
+        println(exception)
     }
 
     private val _images = MutableStateFlow<Pair<MenzaLocation, Url?>?>(null)
     val images: StateFlow<Pair<MenzaLocation, Url?>?> = _images
     //val internetAvailable: StateFlow<Boolean> = InternetConnectionObserver.get()
 
-    private val _menza = MutableStateFlow<List<Pair<MenzaLocation, Menza?>>>(emptyList())
-    val menza: StateFlow<List<Pair<MenzaLocation, Menza?>>> = _menza
+    private val _menza = MutableStateFlow<List<Pair<MenzaLocation, Menza?>>?>(null)
+    val menza: StateFlow<List<Pair<MenzaLocation, Menza?>>?> = _menza
 
     val menzaOpened: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
@@ -68,7 +68,7 @@ class MenzaViewModel(
                     }
 
                     is MenzaResult.Failure -> {
-                        //snackbarHostState.showSnackbar("Greška prilikom dohvaćanja menze")
+                        println("Greška prilikom dohvaćanja menze")
                         null
                     }
                 }
@@ -85,7 +85,6 @@ class MenzaViewModel(
             .toInstant(TimeZone.currentSystemDefault())
             .minus(1, DateTimeUnit.MINUTE)
             .toLocalDateTime(TimeZone.currentSystemDefault())
-        val nowSecs = minuteAgo.second.div(5).times(5).toString().padStart(2, '0')
         val filename = LocalDateTime.Format {
             year()
             char('-')

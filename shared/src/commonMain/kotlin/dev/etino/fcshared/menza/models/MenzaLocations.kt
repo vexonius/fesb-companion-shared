@@ -46,8 +46,8 @@ val menzaLocations = listOf(
     MenzaLocation(
         name = "FESB",
         address = "Ruđera Boškovića 32, Split",
-        meniName = MenzaLocationType.FESB_VRH,
-        cameraName = "b8_27_eb_d1_4b_4a",
+        meniName = MenzaLocationType.FESB_STOP,
+        cameraName = "",//b8_27_eb_d1_4b_4a",
     ),
     //-------------------------curently closed
     /*MenzaLocation(
@@ -66,6 +66,7 @@ enum class MenzaLocationType(val string: String) {
     KAMPUS("kampus"),
     EFST("efst"),
     FGAG("fgag"),
-    FESB_VRH("fesb_vrh"),
-    // FESB_STOP("fesb_stop"), curently closed
+
+    // FESB_VRH("fesb_vrh"), curently closed
+    FESB_STOP("fesb_stop"),
 }

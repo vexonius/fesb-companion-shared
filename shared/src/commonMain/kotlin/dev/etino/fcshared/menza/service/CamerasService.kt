@@ -17,7 +17,7 @@ class CamerasService(private val client: HttpClient) : CamerasServiceInterface {
             url {
                 protocol = URLProtocol.HTTPS
                 host = "camerasfiles.dbtouch.com"
-                path("images", "path/")
+                path("images", "$path/")
             }
         }
 
