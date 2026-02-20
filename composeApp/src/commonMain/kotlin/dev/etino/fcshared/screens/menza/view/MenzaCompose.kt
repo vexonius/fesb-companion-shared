@@ -84,7 +84,7 @@ fun MenzaCompose(menzaViewModel: MenzaViewModel, paddingValues: PaddingValues) {
                 LazyRow(
                     state = indicatorScrollState,
                     modifier = Modifier
-                        .height(50.dp)
+                        .height(30.dp)
                         .width(((6 + 16) * 2 + 5 * (10 + 16)).dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
