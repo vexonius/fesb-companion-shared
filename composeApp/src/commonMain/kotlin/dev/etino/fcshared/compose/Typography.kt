@@ -25,7 +25,7 @@ val CustomTypography
         fontWeight = FontWeight.Bold,
         fontSize = 32.sp,
         lineHeight = 39.sp,
-        color = Color.White
+        color = Color.White,
     ),
     displayMedium = TextStyle( // Heading 2
         fontFamily = InterFont,

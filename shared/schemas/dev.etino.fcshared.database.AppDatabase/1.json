@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1ab42fb3026c9d6b7294cf41c182c313",
+    "identityHash": "8db120393b26baf9c2ef8ff27e78bd75",
     "entities": [
       {
         "tableName": "UserRoom",
@@ -229,11 +229,157 @@
             "id"
           ]
         }
+      },
+      {
+        "tableName": "ReceiptRoom",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `restaurant` TEXT, `date` TEXT, `dateString` TEXT, `time` TEXT, `receiptAmountInCents` INTEGER, `subsidizedAmountInCents` INTEGER, `paidAmountInCents` INTEGER, `authorised` TEXT, `href` TEXT, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "restaurant",
+            "columnName": "restaurant",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "dateString",
+            "columnName": "dateString",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "receiptAmountInCents",
+            "columnName": "receiptAmountInCents",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "subsidizedAmountInCents",
+            "columnName": "subsidizedAmountInCents",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "paidAmountInCents",
+            "columnName": "paidAmountInCents",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "authorised",
+            "columnName": "authorised",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "href",
+            "columnName": "href",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "StudentDataRoom",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `imageUrl` TEXT, `nameSurname` TEXT NOT NULL, `rightsLevel` TEXT NOT NULL, `dailySupportInCents` INTEGER NOT NULL, `oib` TEXT NOT NULL, `jmbag` TEXT NOT NULL, `cardNumber` TEXT NOT NULL, `rightsFrom` TEXT NOT NULL, `rightsTo` TEXT NOT NULL, `balanceInCents` INTEGER NOT NULL, `spentTodayInCents` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "nameSurname",
+            "columnName": "nameSurname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rightsLevel",
+            "columnName": "rightsLevel",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dailySupportInCents",
+            "columnName": "dailySupportInCents",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "oib",
+            "columnName": "oib",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "jmbag",
+            "columnName": "jmbag",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cardNumber",
+            "columnName": "cardNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rightsFrom",
+            "columnName": "rightsFrom",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rightsTo",
+            "columnName": "rightsTo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "balanceInCents",
+            "columnName": "balanceInCents",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spentTodayInCents",
+            "columnName": "spentTodayInCents",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ab42fb3026c9d6b7294cf41c182c313')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8db120393b26baf9c2ef8ff27e78bd75')"
     ]
   }
 }

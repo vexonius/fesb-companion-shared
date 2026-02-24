@@ -4,6 +4,7 @@ import dev.etino.fcshared.attendance.services.AttendanceService
 import dev.etino.fcshared.attendance.services.AttendanceServiceInterface
 import dev.etino.fcshared.home.services.WeatherService
 import dev.etino.fcshared.home.services.WeatherServiceInterface
+import dev.etino.fcshared.iksica.services.IksicaService
 import dev.etino.fcshared.login.services.UserService
 import dev.etino.fcshared.login.services.UserServiceInterface
 import dev.etino.fcshared.timetable.TimetableClient
@@ -23,27 +24,30 @@ import org.koin.dsl.module
 
 @OptIn(InternalCoroutinesApi::class)
 val networkModule = module {
-    single<HttpClient> { client }
+    single<CustomCookieStorage> { CustomCookieStorage() }
+    single<HttpClient> { provideClient(get()) }
     single<TimetableClient> { TimetableClientImpl(get()) }
     single<UserServiceInterface> { UserService(get()) }
     single<AttendanceServiceInterface> { AttendanceService(get()) }
     single<WeatherServiceInterface> { WeatherService(get()) }
 }
 
-val client = HttpClient(CIO) {
-    expectSuccess = false
+fun provideClient(cookieJar: CustomCookieStorage): HttpClient {
+    return HttpClient(CIO) {
+        expectSuccess = false
 
-    install(HttpRedirect) {
-        checkHttpMethod = false
-    }
-    install(HttpSend) {
+        install(HttpRedirect) {
+            checkHttpMethod = false
+        }
+        install(HttpSend) {
 
-    }
-    install(HttpCookies) {
-        storage = CustomCookieStorage()
-    }
-    install(HttpTimeout) {
-        requestTimeoutMillis = 10_000
+        }
+        install(HttpCookies) {
+            storage = cookieJar
+        }
+        install(HttpTimeout) {
+            requestTimeoutMillis = 10_000
+        }
     }
 }
 
@@ -64,5 +68,18 @@ class CustomCookieStorage(
     override fun close() {
         defaultStorage.close()
     }
+    suspend fun isISSPTokenValid(): Boolean {
+        val cookies = get(IksicaService.targetUrl)
+        val authCookies = cookies.filter { it.name == authCookieISSP }
 
+        return authCookies.isNotEmpty()
+    }
+    companion object {
+
+        const val authCookieFESB = "Fesb.AuthCookie"
+        const val authCookieISSP = ".AspNetCore.saml2"
+        const val authCookieISVU = "JSESSIONID"
+        const val expirationTime = 3600000L
+
+    }
 }

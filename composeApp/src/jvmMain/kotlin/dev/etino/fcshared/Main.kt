@@ -8,6 +8,7 @@ import dev.etino.fcshared.compose.AppTheme
 import dev.etino.fcshared.navigation.Application
 import dev.etino.fcshared.screens.attendance.di.attendanceModule
 import dev.etino.fcshared.screens.home.di.homeModule
+import dev.etino.fcshared.screens.iksica.di.iksicaModule
 import dev.etino.fcshared.screens.login.di.loginModule
 import dev.etino.fcshared.screens.menza.di.menzaModule
 import dev.etino.fcshared.screens.settings.di.settingsModule
@@ -30,6 +31,7 @@ fun main() = application {
             homeModule,
             settingsModule,
             menzaModule,
+            iksicaModule,
         )
     }
     Window(

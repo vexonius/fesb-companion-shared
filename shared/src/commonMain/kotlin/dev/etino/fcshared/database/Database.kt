@@ -9,6 +9,9 @@ import dev.etino.fcshared.timetable.dao.TimeTableDao
 import dev.etino.fcshared.attendance.dao.AttendanceDao
 import dev.etino.fcshared.attendance.models.AttendanceEntry
 import dev.etino.fcshared.home.models.NoteRoom
+import dev.etino.fcshared.iksica.dao.IksicaDao
+import dev.etino.fcshared.iksica.models.ReceiptRoom
+import dev.etino.fcshared.iksica.models.StudentDataRoom
 import dev.etino.fcshared.login.dao.UserDao
 import dev.etino.fcshared.login.user.models.UserRoom
 import dev.etino.fcshared.timetable.EventRoom
@@ -19,9 +22,9 @@ import dev.etino.fcshared.timetable.EventRoom
         AttendanceEntry::class,
         EventRoom::class,
         NoteRoom::class,
-        /*
-        StudentDataRoom::class,
         ReceiptRoom::class,
+        StudentDataRoom::class,
+        /*
         StudomatSubject::class,
         StudomatYearInfo::class*/
     ],
@@ -33,8 +36,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun attendanceDao(): AttendanceDao
     abstract fun timetableDao(): TimeTableDao
     abstract fun noteDao(): NoteDao
-    /*
     abstract fun iksicaDao(): IksicaDao
+    /*
     abstract fun studomatDao(): StudomatDao*/
 }
 

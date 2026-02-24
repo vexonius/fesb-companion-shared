@@ -20,6 +20,8 @@ import dev.etino.fcshared.screens.attendance.compose.AttendanceCompose
 import dev.etino.fcshared.screens.attendance.view.AttendanceViewModel
 import dev.etino.fcshared.screens.home.view.HomeTabCompose
 import dev.etino.fcshared.screens.home.view.HomeViewModel
+import dev.etino.fcshared.screens.iksica.compose.IksicaCompose
+import dev.etino.fcshared.screens.iksica.view.IksicaViewModel
 import dev.etino.fcshared.screens.login.compose.LoginCompose
 import dev.etino.fcshared.screens.login.view.LoginViewModel
 import dev.etino.fcshared.screens.menza.view.MenzaViewModel
@@ -97,15 +99,7 @@ fun Application(loggedIn: Boolean) {
                 AttendanceCompose(koinViewModel<AttendanceViewModel>(), paddingValues)
             }
             entry<Iksica> { key ->
-                Scaffold { ihatethis ->
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(ihatethis),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) { Text(key.toString()) }
-                }
+                IksicaCompose(koinViewModel<IksicaViewModel>(), paddingValues)
             }
             entry<Home> { key ->
                 HomeTabCompose(

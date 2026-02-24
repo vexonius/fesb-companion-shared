@@ -19,6 +19,7 @@ interface UserDao {
     suspend fun getUser(): UserRoom
 
     @Query("DELETE FROM userroom")
+
     suspend fun deleteAllUserData()
 
     @Query("SELECT * FROM userroom LIMIT 1")

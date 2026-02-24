@@ -13,6 +13,7 @@ import dev.etino.fcshared.navigation.Application
 import dev.etino.fcshared.networking.networkModule
 import dev.etino.fcshared.screens.attendance.di.attendanceModule
 import dev.etino.fcshared.screens.home.di.homeModule
+import dev.etino.fcshared.screens.iksica.di.iksicaModule
 import dev.etino.fcshared.screens.login.di.loginModule
 import dev.etino.fcshared.screens.menza.di.menzaModule
 import dev.etino.fcshared.screens.settings.di.settingsModule
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
                 homeModule,
                 settingsModule,
                 menzaModule,
+                iksicaModule,
             )
         }
         val datastore: DataStore<Preferences> by inject(DataStore::class.java)
