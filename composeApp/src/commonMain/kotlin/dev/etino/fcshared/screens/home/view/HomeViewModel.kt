@@ -10,6 +10,8 @@ import dev.etino.fcshared.home.repository.WeatherRepositoryInterface
 import dev.etino.fcshared.login.user.UserRepositoryInterface
 import dev.etino.fcshared.timetable.Event
 import dev.etino.fcshared.timetable.repository.interfaces.TimeTableRepositoryInterface
+import dev.jordond.connectivity.Connectivity
+import dev.jordond.connectivity.ConnectivityProvider
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.general_error
 import fesb_companion_shared.composeapp.generated.resources.weather_error
@@ -19,6 +21,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -35,9 +38,17 @@ class HomeViewModel(
     private val weatherRepository: WeatherRepositoryInterface,
     private val timeTableRepository: TimeTableRepositoryInterface,
     private val userRepository: UserRepositoryInterface,
+    private val connectivity: Connectivity
 ) : ViewModel() {
 
-    // val internetAvailable: LiveData<Boolean> = InternetConnectionObserver.get()
+    val internetAvailable: StateFlow<Boolean> =
+        connectivity.statusUpdates
+            .map { it.isConnected }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                initialValue = false
+            )
     private val _weatherDisplay = MutableStateFlow<WeatherDisplay?>(null)
     private val _notes = MutableStateFlow<List<Note>?>(null)
     val nameOfUser = MutableStateFlow<String?>(null)
@@ -65,7 +76,7 @@ class HomeViewModel(
     }
 
     private fun getForecast() {
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value) return
         viewModelScope.launch(Dispatchers.Default + handler) {
             try {
                 weatherRepository.fetchWeatherDetails()?.let { _weatherDisplay.update { it } }
@@ -98,7 +109,7 @@ class HomeViewModel(
     }
 
     fun fetchDailyTimetable() {
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value) return
         val date = LocalDate.now()
         val startDate: LocalDate =
             date.minus((date.dayOfWeek.ordinal - DayOfWeek.MONDAY.ordinal).toLong(), DateTimeUnit.DAY)

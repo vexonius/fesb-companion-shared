@@ -11,12 +11,16 @@ import dev.etino.fcshared.studomat.repository.StudomatRepository
 import dev.etino.fcshared.studomat.repository.models.StudomatRepositoryResult
 import fesb_companion_shared.composeapp.generated.resources.*
 import com.multiplatform.webview.cookie.Cookie
+import dev.jordond.connectivity.Connectivity
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -24,10 +28,18 @@ import org.jetbrains.compose.resources.StringResource
 
 class StudomatViewModel(
     private val repository: StudomatRepository,
-    private val cookieStorage: CustomCookieStorage
+    private val cookieStorage: CustomCookieStorage,
+    private val connectivity: Connectivity
 ) : ViewModel() {
 
-    //val internetAvailable: StateFlow<Boolean> = InternetConnectionObserver.get()
+    val internetAvailable: StateFlow<Boolean> =
+        connectivity.statusUpdates
+            .map { it.isConnected }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                initialValue = false
+            )
 
     val studomatCookie: MutableStateFlow<Cookie?> = MutableStateFlow(null)
 
@@ -61,7 +73,7 @@ class StudomatViewModel(
      * Fetches student info and year names and the links for year pages from studomat
      */
     fun getStudomatData(pulldownTriggered: Boolean = false, getSubjects: Boolean = true) {
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value) return
         viewModelScope.launch(Dispatchers.Default + coroutineExceptionHandler) {
             if (pulldownTriggered) isRefreshing.update { true }
             when (val result = repository.getStudomatDataAndYears()) {
@@ -85,7 +97,7 @@ class StudomatViewModel(
         freshYears: List<StudomatYearInfo>,
         pulldownTriggered: Boolean = false
     ) {
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value) return
         viewModelScope.launch(Dispatchers.Default + coroutineExceptionHandler) {
             if (pulldownTriggered) isRefreshing.update { true }
             val allYearsTemp = mutableListOf<StudomatYear>()

@@ -97,7 +97,6 @@ fun IksicaCompose(iksicaViewModel: IksicaViewModel, innerPaddingValues: PaddingV
 
     LaunchedEffect(lifecycleState) {
         if (lifecycleState == Lifecycle.State.RESUMED) iksicaViewModel.getReceipts()
-
     }
 
     DisposableEffect(lifecycleState) {

@@ -19,5 +19,5 @@ val menzaModule = module {
     single<CamerasServiceInterface> { CamerasService(get()) }
     single<MenzaRepositoryInterface> { MenzaRepository(get()) }
     single<CamerasRepositoryInterface> { CamerasRepository(get()) }
-    viewModel { MenzaViewModel(get(), get()) }
+    viewModel { MenzaViewModel(get(), get(), get()) }
 }

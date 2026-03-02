@@ -14,7 +14,7 @@ import org.koin.dsl.module
 val timetableModule = module {
     single<TimeTableDao> { getTimeTableDao(get()) }
     single<TimeTableRepositoryInterface> { TimeTableRepository(get(), get()) }
-    viewModel { TimetableViewModel(get(), get()) }
+    viewModel { TimetableViewModel(get(), get(),get()) }
 }
 
 fun getTimeTableDao(db: AppDatabase): TimeTableDao {

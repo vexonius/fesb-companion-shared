@@ -10,21 +10,21 @@ import dev.etino.fcshared.studomat.models.StudomatYearInfo
 @Dao
 interface StudomatDao {
     @Query("DELETE FROM studomatyearinfo")
-    fun deleteYears()
+    suspend fun deleteYears()
 
     @Query("DELETE FROM StudomatSubject WHERE year = :year")
-    fun deleteAll(year: String)
+    suspend fun deleteAll(year: String)
 
     @Insert(onConflict = REPLACE)
-    fun insertYears(years: List<StudomatYearInfo>)
+    suspend fun insertYears(years: List<StudomatYearInfo>)
 
     @Insert(onConflict = REPLACE)
-    fun insert(subjects: List<StudomatSubject>)
+    suspend fun insert(subjects: List<StudomatSubject>)
 
     @Query("SELECT * FROM studomatyearinfo")
-    fun readYears(): List<StudomatYearInfo>
+    suspend fun readYears(): List<StudomatYearInfo>
 
     @Query("SELECT * FROM StudomatSubject")
-    fun read(): List<StudomatSubject>
+    suspend fun read(): List<StudomatSubject>
 
 }

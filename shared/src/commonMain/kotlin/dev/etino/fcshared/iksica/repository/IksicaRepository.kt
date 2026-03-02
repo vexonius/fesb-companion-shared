@@ -65,7 +65,7 @@ class IksicaRepository(
         val model = iksicaDao.readData()
         if (model == null) return null
 
-        val receipts = iksicaDao.readReceipts()?.map { Receipt(it) }
+        val receipts = iksicaDao.readReceipts().map { Receipt(it) }
 
         return IksicaData(StudentData(model), receipts)
     }

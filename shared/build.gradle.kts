@@ -33,29 +33,27 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ktor.client.core)
+            implementation(libs.kotlinx.datetime)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.koin.core)
             implementation(libs.ui)
             implementation(libs.ui.util)
-            implementation("io.ktor:ktor-client-cio:3.4.0")
-            // Required core library
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.logging)
             implementation(libs.ksoup)
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
-            implementation(libs.kotlinx.datetime)
-
-            implementation("androidx.datastore:datastore:1.2.0")
-            // The Preferences DataStore library
-            implementation("androidx.datastore:datastore-preferences:1.2.0")
-            implementation("io.ktor:ktor-client-logging:3.4.0")
+            implementation(libs.androidx.datastore)
+            implementation(libs.androidx.datastore.preferences)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
         }
         iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
+            //implementation(libs.ktor.client.darwin)
+            implementation(libs.connectivity.device)
         }
     }
 }

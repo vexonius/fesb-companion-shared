@@ -6,6 +6,7 @@ import dev.etino.fcshared.iksica.models.IksicaData
 import dev.etino.fcshared.iksica.models.IksicaResult
 import dev.etino.fcshared.iksica.models.Receipt
 import dev.etino.fcshared.iksica.repository.IksicaRepositoryInterface
+import dev.jordond.connectivity.Connectivity
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.error_fetching_receipts_iksica
 import fesb_companion_shared.composeapp.generated.resources.error_general_iksica
@@ -14,7 +15,10 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -22,11 +26,19 @@ import org.jetbrains.compose.resources.StringResource
 @InternalCoroutinesApi
 class IksicaViewModel(
     private val repository: IksicaRepositoryInterface,
+    private val connectivity: Connectivity
 ) : ViewModel() {
 
     private val _showSnackbar = MutableStateFlow<StringResource?>(null)
     val showSnackbar: StateFlow<StringResource?> = _showSnackbar
-    //val internetAvailable: StateFlow<Boolean> = InternetConnectionObserver.get()
+    val internetAvailable: StateFlow<Boolean> =
+        connectivity.statusUpdates
+            .map { it.isConnected }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                initialValue = false
+            )
 
     private val _iksicaData = MutableStateFlow<IksicaData?>(null)
     val iksicaData: StateFlow<IksicaData?> = _iksicaData
@@ -45,6 +57,7 @@ class IksicaViewModel(
 
     init {
         loadReceiptsFromCache()
+        getReceipts()
     }
 
     private fun loadReceiptsFromCache() {
@@ -62,7 +75,7 @@ class IksicaViewModel(
     }
 
     fun getReceipts() {
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value) return
         _iksicaData.value?.let { _viewState.value = IksicaViewState.Fetching(it) }
         viewModelScope.launch(Dispatchers.Default + coroutineExceptionHandler) {
             when (val result = repository.getCardDataAndReceipts()) {
@@ -85,7 +98,7 @@ class IksicaViewModel(
             hideReceiptDetails()
             return
         }
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value) return
         viewModelScope.launch(Dispatchers.Default + coroutineExceptionHandler) {
             _receiptSelected.update({ IksicaReceiptState.Fetching })
             when (val details = repository.getReceipt(receipt.url)) {

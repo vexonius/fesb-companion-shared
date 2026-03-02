@@ -32,7 +32,7 @@ val iksicaModule = module {
     single<IksicaServiceInterface> { IksicaService(get(named("ISSPPortalClient"))) }
     single<IksicaRepositoryInterface> { IksicaRepository(get(), get()) }
     single<IksicaDao> { getIksicaDao(get()) }
-    viewModel { IksicaViewModel(get()) }
+    viewModel { IksicaViewModel(get(),get()) }
 }
 
 fun provideISSPPortalClient(

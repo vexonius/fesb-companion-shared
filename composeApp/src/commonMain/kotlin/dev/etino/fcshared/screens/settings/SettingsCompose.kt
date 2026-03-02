@@ -57,7 +57,7 @@ import fesb_companion_shared.composeapp.generated.resources.report_bug
 import fesb_companion_shared.composeapp.generated.resources.send_feedback
 import fesb_companion_shared.composeapp.generated.resources.version
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 val leftPadding = 10.dp
@@ -69,9 +69,11 @@ fun SettingsCompose(
     viewModel: SettingsViewModel = koinViewModel(),
     paddingValues: PaddingValues,
     navigate: (NavKey) -> Unit,
+    goBack: () -> Unit,
 ) {
     LaunchedEffect(viewModel.routeToLogin.collectAsState().value) {
         if (viewModel.routeToLogin.value) {
+            goBack()
             navigate(Login)
         }
     }

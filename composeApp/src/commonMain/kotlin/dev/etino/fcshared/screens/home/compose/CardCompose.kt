@@ -10,15 +10,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.compose.lust
+import dev.etino.fcshared.compose.meniColor
 import dev.etino.fcshared.screens.home.view.HomeViewModel
 import dev.etino.fcshared.screens.home.view.sidePadding
-import dev.etino.fcshared.compose.meniColor
 import dev.etino.fcshared.screens.iksica.angledGradientBackground
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.menza_desc
@@ -31,25 +32,26 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(InternalCoroutinesApi::class)
 @Composable
-fun CardsCompose(openMenza: ()-> Unit, homeViewModel: HomeViewModel) {
+fun CardsCompose(openMenza: () -> Unit, homeViewModel: HomeViewModel, showSnackbar: (String) -> Unit) {
     Row(Modifier.padding(horizontal = sidePadding)) {
         Box(
             Modifier
                 .weight(0.5f)
         ) {
             val noInternetMenza = stringResource(Res.string.no_internet_menza)
+            val internetAvailable = homeViewModel.internetAvailable.collectAsState().value
             CardCompose(
                 stringResource(Res.string.menza_title),
                 stringResource(Res.string.menza_desc),
                 meniColor,
                 meniColor,
                 onClick = {
-                    openMenza()
-                    /*if (homeViewModel.internetAvailable.value == true) {
+                    if (internetAvailable) {
                         openMenza()
                     } else {
-                        homeViewModel.showSnackbar(message = noInternetMenza)
-                    }*/
+                        showSnackbar(noInternetMenza)
+
+                    }
                 })
         }
         Box(

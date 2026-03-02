@@ -29,7 +29,7 @@ import dev.etino.fcshared.iksica.models.StudentData
 import dev.etino.fcshared.screens.iksica.formatBalance
 import fesb_companion_shared.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable

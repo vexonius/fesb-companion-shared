@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 @InternalCoroutinesApi
 class LoginViewModel(
@@ -66,8 +65,8 @@ class LoginViewModel(
     }*/
 
     fun tryUserLogin() {
-        var username = username.value?.trim()?.lowercase()
-        val password = password.value?.trim()
+        var username = username.value.trim().lowercase()
+        val password = password.value.trim()
 
         /* if (username == "test" && password == "testpassword12421") {
              setTestMode(true)
@@ -78,7 +77,7 @@ class LoginViewModel(
              loggedIn.postValue(Unit)
          }*/
 
-        if (username.isNullOrEmpty() || password.isNullOrEmpty()) {
+        if (username.isEmpty() || password.isEmpty()) {
             _showSnackbar.update { Res.string.login_error_empty_credentials }
             return
         } else if (isEmailValid(username)) {
@@ -118,6 +117,15 @@ class LoginViewModel(
             }
         }
     }
+    fun clearViewModel() {
+        loggedIn.value = false
+        username.value = ""
+        password.value = ""
+        showLoading.value = false
+        passwordHidden.value = true
+        firstTimeInApp.value = false
+    }
+
 
     fun checkIfLoggedIn() {
         viewModelScope.launch {

@@ -48,13 +48,13 @@ class StudomatRepository(
         }
     }
 
-    fun insert(year: StudomatYear) {
+    suspend fun insert(year: StudomatYear) {
         year.subjects.firstOrNull()?.year?.let { studomatDao.deleteAll(it) }
         studomatDao.insert(year.subjects)
         studomatDao.insertYears(listOf(year.yearInfo))
     }
 
-    fun readData(): List<StudomatYear> {
+    suspend fun readData(): List<StudomatYear> {
         val years = studomatDao.readYears().sortedBy { it.academicYear }
         val subjects = studomatDao.read().sortedByNameAndSemester().groupBy { it.year  }
         return years.mapNotNull { yearInfo ->

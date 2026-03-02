@@ -1,6 +1,5 @@
 package dev.etino.fcshared.screens.timetable
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
@@ -12,6 +11,7 @@ import dev.etino.fcshared.login.user.UserRepositoryInterface
 import dev.etino.fcshared.timetable.Event
 import dev.etino.fcshared.timetable.MonthData
 import dev.etino.fcshared.timetable.repository.interfaces.TimeTableRepositoryInterface
+import dev.jordond.connectivity.Connectivity
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.general_error
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -19,7 +19,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -33,10 +36,17 @@ import org.jetbrains.compose.resources.StringResource
 class TimetableViewModel(
     private val timeTableRepository: TimeTableRepositoryInterface,
     private val userRepository: UserRepositoryInterface,
+    private val connectivity: Connectivity
 ) : ViewModel() {
 
-    //val internetAvailable: LiveData<Boolean> = InternetConnectionObserver.get()
-
+    val internetAvailable: StateFlow<Boolean> =
+        connectivity.statusUpdates
+            .map { it.isConnected }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                initialValue = false
+            )
     private val _currentEventShown = MutableStateFlow<Event?>(null)
     val currentEventShown: StateFlow<Event?> = _currentEventShown
 
@@ -84,7 +94,8 @@ class TimetableViewModel(
     }
 
     fun fetchUserTimetable() {
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value)
+            return
         val today = LocalDate.now()
         val startDate: LocalDate = today.minusDays(today.dayOfWeek.ordinal - DayOfWeek.MONDAY.ordinal)
         val endDate: LocalDate = today.minusDays(today.dayOfWeek.ordinal - DayOfWeek.SATURDAY.ordinal)
@@ -92,7 +103,7 @@ class TimetableViewModel(
     }
 
     fun fetchUserTimetable(date: LocalDate) {
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value) return
         val startDate: LocalDate = date.minusDays(date.dayOfWeek.ordinal - DayOfWeek.MONDAY.ordinal)
         val endDate: LocalDate = date.minusDays(date.dayOfWeek.ordinal - DayOfWeek.SATURDAY.ordinal)
         _mondayOfSelectedWeek.value = startDate
@@ -105,7 +116,7 @@ class TimetableViewModel(
         shownWeekMonday: LocalDate,
         shouldCache: Boolean = false
     ) {
-        //if (internetAvailable.value == false) return
+        if (!internetAvailable.value) return
         val dateFormatter = LocalDate.Format {
             monthNumber()
             char('-')

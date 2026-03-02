@@ -44,7 +44,7 @@ import fesb_companion_shared.composeapp.generated.resources.tab_attendance
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Preview
 @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun AttendanceCompose(attendanceViewModel: AttendanceViewModel, innerPaddingValues: PaddingValues) {

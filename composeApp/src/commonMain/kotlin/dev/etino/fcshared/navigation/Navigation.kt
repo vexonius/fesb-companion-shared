@@ -1,17 +1,10 @@
 package dev.etino.fcshared.navigation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -31,6 +24,7 @@ import dev.etino.fcshared.screens.studomat.compose.StudomatCompose
 import dev.etino.fcshared.screens.studomat.view.StudomatViewModel
 import dev.etino.fcshared.screens.timetable.TimetableViewModel
 import dev.etino.fcshared.screens.timetable.compose.TimetableCompose
+import dev.jordond.connectivity.Connectivity
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.icon_attendance
 import fesb_companion_shared.composeapp.generated.resources.icon_home
@@ -46,6 +40,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 data class TopLevelRoute(val nameId: StringResource, val route: NavKey, val iconId: DrawableResource)
@@ -66,6 +61,9 @@ fun Application(loggedIn: Boolean) {
         startRoute = if (!loggedIn) Login else Home,
         topLevelRoutes = topLevelRoutes.map { it.route }.plus(Login).toSet()
     )
+    val connectivity = koinInject<Connectivity>()
+    val internetAvailable =
+        connectivity.statusUpdates.collectAsState(Connectivity.Status.Connected(false)).value.isConnected
 
     val navigator = remember { Navigator(navigationState) }
     val timetableViewModel = koinViewModel<TimetableViewModel>()
@@ -82,15 +80,19 @@ fun Application(loggedIn: Boolean) {
                 topLevelRoutes = topLevelRoutes,
                 timetableViewModel = timetableViewModel,
             )
+        },
+        floatingActionButton = {
+            if (!internetAvailable) NoInternetIcon()
         }
     ) { paddingValues ->
-        val entryProvider:(NavKey) -> NavEntry<NavKey> = entryProvider {
+        val entryProvider: (NavKey) -> NavEntry<NavKey> = entryProvider {
             entry<Login> {
                 val loginViewModel = koinViewModel<LoginViewModel>()
 
                 LaunchedEffect(loginViewModel.loggedIn.collectAsState().value) {
                     if (loginViewModel.loggedIn.value) {
                         navigator.navigate(Home)
+                        loginViewModel.clearViewModel()
                     }
                 }
                 LoginCompose(
@@ -123,7 +125,7 @@ fun Application(loggedIn: Boolean) {
                 TimetableCompose(timetableViewModel, paddingValues)
             }
             entry<Settings> {
-                SettingsCompose(koinViewModel<SettingsViewModel>(), paddingValues, navigator::navigate)
+                SettingsCompose(koinViewModel<SettingsViewModel>(), paddingValues, navigator::navigate, navigator::goBack)
             }
         }
         NavDisplay(
