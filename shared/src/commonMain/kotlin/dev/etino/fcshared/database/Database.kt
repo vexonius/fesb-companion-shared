@@ -4,6 +4,9 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
+import dev.etino.fcshared.studomat.dao.StudomatDao
+import dev.etino.fcshared.studomat.models.StudomatSubject
+import dev.etino.fcshared.studomat.models.StudomatYearInfo
 import dev.etino.fcshared.home.dao.NoteDao
 import dev.etino.fcshared.timetable.dao.TimeTableDao
 import dev.etino.fcshared.attendance.dao.AttendanceDao
@@ -24,9 +27,8 @@ import dev.etino.fcshared.timetable.EventRoom
         NoteRoom::class,
         ReceiptRoom::class,
         StudentDataRoom::class,
-        /*
         StudomatSubject::class,
-        StudomatYearInfo::class*/
+        StudomatYearInfo::class
     ],
     version = 1
 )
@@ -37,8 +39,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun timetableDao(): TimeTableDao
     abstract fun noteDao(): NoteDao
     abstract fun iksicaDao(): IksicaDao
-    /*
-    abstract fun studomatDao(): StudomatDao*/
+    abstract fun studomatDao(): StudomatDao
 }
 
 // The Room compiler generates the `actual` implementations.

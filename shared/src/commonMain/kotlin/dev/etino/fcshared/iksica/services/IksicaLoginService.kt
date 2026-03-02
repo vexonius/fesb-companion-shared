@@ -47,7 +47,7 @@ class IksicaLoginService(
             return NetworkServiceResult.IksicaResult.Failure(Throwable("Failed to get AuthState"))
         }
 
-        authState = response.request.url.encodedQuery ?: ""// .queryParameter("AuthState") ?: ""
+        authState = response.request.url.encodedQuery
         currentUrl = response.request.url
 
         return NetworkServiceResult.IksicaResult.Success("Success")

@@ -49,7 +49,6 @@ class IksicaRepository(
                 }
                 IksicaResult.ReceiptResult.Failure(Throwable("Receipt fetching error" + result.throwable.message))
             }
-            else -> IksicaResult.ReceiptResult.Failure(Throwable("Receipt fetching error"))
         }
     }
 
@@ -83,7 +82,6 @@ class IksicaRepository(
                 //Log.e(TAG, result.throwable.message ?: "AspNetSessionSAML fetching error")
                 throw Exception(result.throwable.message ?: "AspNetSessionSAML fetching error")
             }
-            else -> throw Exception("AspNetSessionSAML fetching error")
         }
     }
 
@@ -106,7 +104,6 @@ class IksicaRepository(
 
                 return IksicaResult.ReceiptsResult.Failure(Throwable("Receipts fetching error: " + result.throwable.message))
             }
-            else -> return IksicaResult.ReceiptsResult.Failure(Throwable("Receipts fetching error: "))
         }
     }
 

@@ -72,6 +72,7 @@ kotlin {
             implementation(libs.coil.compose.core)
             implementation(libs.coil.network.ktor3)
                     //implementation(libs.ui.tooling.preview)
+            api("io.github.kevinnzou:compose-webview-multiplatform:2.0.3")
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)

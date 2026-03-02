@@ -90,7 +90,7 @@ fun MenzaCompose(menzaViewModel: MenzaViewModel, paddingValues: PaddingValues) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     repeat(pageCount) { iteration ->
-                        val color = if (state.currentPage == iteration) Color.DarkGray else Color.LightGray
+                        val color = if (state.currentPage == iteration) Color.White else Color.LightGray
                         item(key = "item$iteration") {
                             val currentPage = state.currentPage
                             val firstVisibleIndex by remember { derivedStateOf { indicatorScrollState.firstVisibleItemIndex } }
@@ -100,11 +100,13 @@ fun MenzaCompose(menzaViewModel: MenzaViewModel, paddingValues: PaddingValues) {
                                     currentPage -> {
                                         10.dp
                                     }
+
                                     in firstVisibleIndex + 1..<lastVisibleIndex -> {
-                                        10.dp
+                                        7.dp
                                     }
+
                                     else -> {
-                                        6.dp
+                                        4.dp
                                     }
                                 }
                             )

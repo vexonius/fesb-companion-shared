@@ -16,10 +16,10 @@ fun parseTimetable(body: String): List<Event> {
     elements.let {
         for (e in elements) {
             val id = e.attr("data-id").toInt()
-            val startdate = e.attr("data-startsdate").toString()
+            val startdate = e.attr("data-startsdate")
             val starth = e.attr("data-startshour").toInt()
             val startmin = e.attr("data-startsmin").toInt()
-            val enddate = e.attr("data-endsdate").toString()
+            val enddate = e.attr("data-endsdate")
             val endh = e.attr("data-endshour").toInt()
             val endmin = e.attr("data-endsmin").toInt()
             val type = TimetableType.setType(e.selectFirst("span.groupCategory")?.text()?.split(",")?.get(0) ?: "")

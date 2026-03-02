@@ -27,6 +27,8 @@ import dev.etino.fcshared.screens.login.view.LoginViewModel
 import dev.etino.fcshared.screens.menza.view.MenzaViewModel
 import dev.etino.fcshared.screens.settings.SettingsCompose
 import dev.etino.fcshared.screens.settings.SettingsViewModel
+import dev.etino.fcshared.screens.studomat.compose.StudomatCompose
+import dev.etino.fcshared.screens.studomat.view.StudomatViewModel
 import dev.etino.fcshared.screens.timetable.TimetableViewModel
 import dev.etino.fcshared.screens.timetable.compose.TimetableCompose
 import fesb_companion_shared.composeapp.generated.resources.Res
@@ -67,6 +69,11 @@ fun Application(loggedIn: Boolean) {
 
     val navigator = remember { Navigator(navigationState) }
     val timetableViewModel = koinViewModel<TimetableViewModel>()
+    val iksicaViewModel: IksicaViewModel = koinViewModel()
+    val homeViewModel: HomeViewModel = koinViewModel()
+    val attendanceViewModel: AttendanceViewModel = koinViewModel()
+    val studomatViewModel: StudomatViewModel = koinViewModel()
+
     Scaffold(
         bottomBar = {
             MainBottomBar(
@@ -78,7 +85,7 @@ fun Application(loggedIn: Boolean) {
         }
     ) { paddingValues ->
         val entryProvider:(NavKey) -> NavEntry<NavKey> = entryProvider {
-            entry<Login> { key ->
+            entry<Login> {
                 val loginViewModel = koinViewModel<LoginViewModel>()
 
                 LaunchedEffect(loginViewModel.loggedIn.collectAsState().value) {
@@ -96,34 +103,26 @@ fun Application(loggedIn: Boolean) {
                 )
             }
             entry<Attendance> {
-                AttendanceCompose(koinViewModel<AttendanceViewModel>(), paddingValues)
+                AttendanceCompose(attendanceViewModel, paddingValues)
             }
-            entry<Iksica> { key ->
-                IksicaCompose(koinViewModel<IksicaViewModel>(), paddingValues)
+            entry<Iksica> {
+                IksicaCompose(iksicaViewModel, paddingValues)
             }
-            entry<Home> { key ->
+            entry<Home> {
                 HomeTabCompose(
-                    koinViewModel<HomeViewModel>(),
+                    homeViewModel,
                     koinViewModel<MenzaViewModel>(),
                     paddingValues,
                     navigator::navigate
                 )
             }
-            entry<Studomat> { key ->
-                Scaffold { ihatethis ->
-                    Column(
-                        Modifier
-                            .fillMaxSize()
-                            .padding(ihatethis),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) { Text(key.toString()) }
-                }
+            entry<Studomat> {
+                StudomatCompose(studomatViewModel, paddingValues)
             }
-            entry<TimeTable> { key ->
+            entry<TimeTable> {
                 TimetableCompose(timetableViewModel, paddingValues)
             }
-            entry<Settings> { key ->
+            entry<Settings> {
                 SettingsCompose(koinViewModel<SettingsViewModel>(), paddingValues, navigator::navigate)
             }
         }

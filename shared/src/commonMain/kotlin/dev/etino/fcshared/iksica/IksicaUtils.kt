@@ -76,14 +76,14 @@ fun parseRacuni(doc: String): List<Receipt> {
         if (cols.size >= 6) {
             racuni.add(
                 Receipt(
-                    cols[0].text() ?: "",
+                    cols[0].text(),
                     date,
-                    cols[1].text() ?: "",
-                    cols[2].text() ?: "",
+                    cols[1].text(),
+                    cols[2].text(),
                     cols[3].text().dropLast(2).toCentsOrNull() ?: 0,
                     cols[4].text().dropLast(2).toCentsOrNull() ?: 0,
                     ((cols[3].text().dropLast(2).toCentsOrNull() ?: 0) - (cols[4].text().dropLast(2).toCentsOrNull() ?: 0)) ,
-                    cols[5].text() ?: "",
+                    cols[5].text(),
                     cols[6].selectFirst("a")?.attr("href") ?: ""
                 )
             )
@@ -114,7 +114,7 @@ fun parseDetaljeRacuna(doc: String): MutableList<ReceiptItem> {
     rows?.forEach { row ->
         val cols = row.select("td")
         val item = ReceiptItem(
-            cols[0].text() ?: "",
+            cols[0].text(),
             cols[1].text().toIntOrNull() ?: 0,
             cols[2].text().toCentsOrNull() ?: 0,
             cols[3].text().toCentsOrNull() ?: 0,

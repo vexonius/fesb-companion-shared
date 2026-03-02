@@ -16,7 +16,6 @@ import dev.etino.fcshared.login.services.UserServiceInterface
 class UserRepository(
     private val userService: UserServiceInterface,
     private val userDao: UserDao,
-    //private val sharedPreferences: SharedPreferences,
     private val datastore: DataStore<Preferences>,
     private val appDatabase: AppDatabase,
 ) : UserRepositoryInterface {
@@ -54,6 +53,8 @@ class UserRepository(
         appDatabase.noteDao().deleteAll()
         appDatabase.timetableDao().deleteAll()
         appDatabase.attendanceDao().deleteAll()
+        appDatabase.iksicaDao().deleteAll()
+        appDatabase.studomatDao().deleteYears()
         datastore.edit { it[SPKey.LOGGED_IN.key] = false }
     }
 }

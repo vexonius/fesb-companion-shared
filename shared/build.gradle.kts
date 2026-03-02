@@ -49,6 +49,7 @@ kotlin {
             implementation("androidx.datastore:datastore:1.2.0")
             // The Preferences DataStore library
             implementation("androidx.datastore:datastore-preferences:1.2.0")
+            implementation("io.ktor:ktor-client-logging:3.4.0")
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)

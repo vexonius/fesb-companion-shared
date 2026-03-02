@@ -13,6 +13,7 @@ import dev.etino.fcshared.screens.iksica.di.iksicaModule
 import dev.etino.fcshared.screens.login.di.loginModule
 import dev.etino.fcshared.screens.menza.di.menzaModule
 import dev.etino.fcshared.screens.settings.di.settingsModule
+import dev.etino.fcshared.screens.studomat.di.studomatModule
 import dev.etino.fcshared.screens.timetable.di.timetableModule
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -33,6 +34,7 @@ fun MainViewController(): UIViewController {
             settingsModule,
             menzaModule,
             iksicaModule,
+            studomatModule,
         )
     }
 
