@@ -3,9 +3,12 @@ package dev.etino.fcshared.timetable
 import androidx.compose.ui.graphics.toArgb
 import com.fleeksoft.ksoup.Ksoup
 import com.fleeksoft.ksoup.nodes.Element
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.plus
+import kotlinx.serialization.json.Json
 
 fun parseTimetable(body: String): List<Event> {
     val events = ArrayList<Event>()
@@ -79,7 +82,6 @@ fun makeAcronym(name: String): String {
     return name
 }
 
-// TODO: Improve sometime in the future
 val periodColors = mapOf(
     "Bijela" to 1,
     "Siva" to 2,
@@ -91,33 +93,32 @@ val periodColors = mapOf(
     "Narančasta" to 8,
 )
 
-// TODO: Improve parsing or replace with API in the future
-/*fun parseTimetableInfo(json: String): Map<LocalDate, TimeTableInfo> {
+private val json = Json {
+    ignoreUnknownKeys = true
+    isLenient = true
+    explicitNulls = false
+}
 
-    val gson = GsonBuilder()
-        .registerTypeAdapter(Long::class.java, ColorDeserializer())
-        .registerTypeAdapter(LocalDate::class.java, LocalDateDeserializer())
-        .create()
-
+fun parseTimetableInfo(data: String): Map<LocalDate, TimeTableInfo> {
     val daysInPeriods: MutableMap<LocalDate, TimeTableInfo> = mutableMapOf()
 
-    gson.fromJson(json, Array<TimeTableInfo>::class.java)
-        .filter { it.startDate.isBefore(it.endDate.plusDays(1)) }
+    json.decodeFromString<List<TimeTableInfo>>(data)
+        .filter { it.startDate < it.endDate.plus(1, DateTimeUnit.DAY) }
         .forEach { period ->
             var date = period.startDate
-            while (date.isBefore(period.endDate.plusDays(1))) {
+            while (date < period.endDate.plus(1, DateTimeUnit.DAY)) {
                 val day = daysInPeriods[date]
-                val savedColorImportance = periodColors.getOrDefault(day?.category, 0)
-                val checkingColorImportance = periodColors.getOrDefault(period.category, 0)
+                val savedColorImportance = periodColors.getOrElse(day?.category ?: "", { 0 })
+                val checkingColorImportance = periodColors.getOrElse(period.category, { 0 })
                 val isMoreImportant = checkingColorImportance > savedColorImportance
                 if (day == null || isMoreImportant) {
                     daysInPeriods[date] = period
                 }
-                date = date.plusDays(1)
+                date = date.plus(1, DateTimeUnit.DAY)
             }
         }
     return daysInPeriods.toMap()
-}*/
+}
 
 private fun parseRecurring(element: Element?): Recurring {
     return when {

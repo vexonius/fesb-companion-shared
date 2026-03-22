@@ -20,4 +20,3 @@ fun TimetableType.color(): Color {
         TimetableType.OTHER -> accentBlue
     }
 }
-

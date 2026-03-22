@@ -1,26 +1,33 @@
 package dev.etino.fcshared.timetable
 
-/*
-import com.google.gson.annotations.SerializedName
-import kotlinx.datetime.LocalDate
 
+import dev.etino.fcshared.ColorSerializer
+import dev.etino.fcshared.TimetableDateSerializer
+import kotlinx.datetime.LocalDate
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class TimeTableInfo(
-    @SerializedName("Id")
+    @SerialName("Id")
     var id: Int = 0,
-    @SerializedName("Name")
+    @SerialName("Name")
     var name: String = "",
-    @SerializedName("StartDate")
+    @Serializable(with = TimetableDateSerializer::class)
+    @SerialName("StartDate")
     var startDate: LocalDate,
-    @SerializedName("EndDate")
+    @Serializable(with = TimetableDateSerializer::class)
+    @SerialName("EndDate")
     var endDate: LocalDate,
-    @SerializedName("StartDateText")
+    @SerialName("StartDateText")
     var startDateText: String = "",
-    @SerializedName("EndDateText")
+    @SerialName("EndDateText")
     var endDateText: String = "",
-    @SerializedName("Category")
+    @SerialName("Category")
     var category: String = "",
-    @SerializedName("ColorCode")
+    @Serializable(with = ColorSerializer::class)
+    @SerialName("ColorCode")
     var colorCode: Long = 0x00FFFFFF,
-    @SerializedName("IsWorking")
+    @SerialName("IsWorking")
     var isWorking: Boolean = false,
-)*/
+)

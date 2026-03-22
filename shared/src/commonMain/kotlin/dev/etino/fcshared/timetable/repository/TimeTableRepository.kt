@@ -6,7 +6,9 @@ import dev.etino.fcshared.timetable.repository.interfaces.TimeTableRepositoryInt
 import dev.etino.fcshared.networking.NetworkServiceResult
 import dev.etino.fcshared.timetable.Event
 import dev.etino.fcshared.timetable.EventRoom
+import dev.etino.fcshared.timetable.TimeTableInfo
 import dev.etino.fcshared.timetable.TimetableClient
+import dev.etino.fcshared.timetable.parseTimetableInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -60,20 +62,19 @@ class TimeTableRepository(
         }
     }
 
-    /*override suspend fun fetchTimeTableCalendar(startDate: String, endDate: String): Map<LocalDate, TimeTableInfo> {
+    override suspend fun fetchTimeTableCalendar(startDate: String, endDate: String): Map<LocalDate, TimeTableInfo> {
         val params: HashMap<String, String> = hashMapOf(
             "FromDate" to startDate,
             "ToDate" to endDate
         )
 
-        *//*return when (val result = timetableService.fetchTimetableCalendar(params = params)) {
+        return when (val result = timetableService.fetchTimetableCalendar(params = params)) {
             is NetworkServiceResult.TimeTableResult.Success -> parseTimetableInfo(result.data)
             is NetworkServiceResult.TimeTableResult.Failure -> {
                 throw Exception("TimetableInfo fetching error")
             }
-        }*//*
-        return emptyMap()
-    }*/
+        }
+    }
 
     override suspend fun getCachedEvents(): List<Event> {
         return timeTableDao.getEvents().map { Event(it) }
