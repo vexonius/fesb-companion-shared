@@ -16,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import dev.etino.fcshared.compose.lust
 import dev.etino.fcshared.compose.meniColor
 import dev.etino.fcshared.features.home.view.HomeViewModel
 import dev.etino.fcshared.features.home.view.sidePadding
@@ -25,8 +24,6 @@ import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.menza_desc
 import fesb_companion_shared.composeapp.generated.resources.menza_title
 import fesb_companion_shared.composeapp.generated.resources.no_internet_menza
-import fesb_companion_shared.composeapp.generated.resources.ugovori_desc
-import fesb_companion_shared.composeapp.generated.resources.ugovori_title
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.jetbrains.compose.resources.stringResource
 
@@ -54,7 +51,7 @@ fun CardsCompose(openMenza: () -> Unit, homeViewModel: HomeViewModel, showSnackb
                     }
                 })
         }
-        Box(
+        /*Box(
             Modifier
                 .weight(0.5f)
         ) {
@@ -67,7 +64,7 @@ fun CardsCompose(openMenza: () -> Unit, homeViewModel: HomeViewModel, showSnackb
                     homeViewModel.launchStudentskiUgovoriApp()
                 }
             )
-        }
+        }*/
     }
 }
 

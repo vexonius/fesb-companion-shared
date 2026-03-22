@@ -4,13 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
+import dev.etino.fcshared.application.Application
+import dev.etino.fcshared.application.ApplicationWrapper
 import dev.etino.fcshared.compose.AppTheme
-import dev.etino.fcshared.navigation.Application
-import dev.etino.fcshared.networking.networkModule
 import dev.etino.fcshared.features.attendance.di.attendanceModule
 import dev.etino.fcshared.features.home.di.homeModule
 import dev.etino.fcshared.features.iksica.di.iksicaModule
@@ -19,14 +16,11 @@ import dev.etino.fcshared.features.menza.di.menzaModule
 import dev.etino.fcshared.features.settings.di.settingsModule
 import dev.etino.fcshared.features.studomat.di.studomatModule
 import dev.etino.fcshared.features.timetable.di.timetableModule
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
+import dev.etino.fcshared.networking.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
-import org.koin.java.KoinJavaComponent.inject
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +32,7 @@ class MainActivity : ComponentActivity() {
             modules(
                 attendanceModule,
                 loginModule,
-                dbModule,
+                androidKoinModuleDB,
                 networkModule,
                 timetableModule,
                 homeModule,
@@ -48,15 +42,9 @@ class MainActivity : ComponentActivity() {
                 studomatModule,
             )
         }
-        val datastore: DataStore<Preferences> by inject(DataStore::class.java)
-        val loggedIn =  runBlocking{
-            datastore.data.map { it[SPKey.LOGGED_IN.key] ?: false }.first()
-        }
 
         setContent {
-            AppTheme() {
-                Application(loggedIn)
-            }
+            ApplicationWrapper()
         }
     }
 }
@@ -64,7 +52,7 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    AppTheme() {
-        Application(true)
+    AppTheme {
+        Application {}
     }
 }

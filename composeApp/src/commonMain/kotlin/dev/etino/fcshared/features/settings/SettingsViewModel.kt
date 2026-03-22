@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.etino.fcshared.login.user.UserRepositoryInterface
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,8 +37,10 @@ class SettingsViewModel(
     fun logout() {
         viewModelScope.launch(Dispatchers.Default) {
             userRepository.deleteAllUserData()
-            routeToLogin.emit(true)
             datastore.edit { it.clear() }
+            routeToLogin.emit(true)
+            delay(500)
+            routeToLogin.emit(false)
         }
     }
 
@@ -77,7 +80,7 @@ class SettingsViewModel(
     }*/
 
     companion object {
-        const val pivacyUrl = "https://privacy.etino.dev"
+        const val privacyUrl = "https://privacy.etino.dev"
         const val feedbackRecipientAddress = "support@fesbcompanion.xyz"
     }
 

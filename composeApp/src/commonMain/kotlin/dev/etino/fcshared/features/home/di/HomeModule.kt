@@ -7,7 +7,6 @@ import dev.etino.fcshared.home.repository.WeatherRepository
 import dev.etino.fcshared.home.repository.WeatherRepositoryInterface
 import dev.etino.fcshared.features.home.view.HomeViewModel
 import dev.etino.fcshared.database.AppDatabase
-import dev.jordond.connectivity.Connectivity
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -15,7 +14,6 @@ import org.koin.dsl.module
 @OptIn(InternalCoroutinesApi::class)
 val homeModule = module {
     single<NoteDao> { getNoteDao(get()) }
-    single<Connectivity> { getConnectivity() }
     single<NoteRepositoryInterface> { NoteRepository(get()) }
     single<WeatherRepositoryInterface> { WeatherRepository(get()) }
     viewModel { HomeViewModel( get(), get(), get(), get(), get()) }
@@ -24,9 +22,4 @@ val homeModule = module {
 
 fun getNoteDao(db: AppDatabase): NoteDao {
     return db.noteDao()
-}
-fun getConnectivity(): Connectivity {
-    val connectivity = Connectivity()
-    connectivity.start()
-    return connectivity
 }

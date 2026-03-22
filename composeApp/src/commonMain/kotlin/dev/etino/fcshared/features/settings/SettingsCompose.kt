@@ -23,18 +23,16 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation3.runtime.NavKey
 import dev.etino.fcshared.compose.AppTheme
-import dev.etino.fcshared.navigation.Login
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.about_app
 import fesb_companion_shared.composeapp.generated.resources.category_user
@@ -57,7 +55,6 @@ import fesb_companion_shared.composeapp.generated.resources.report_bug
 import fesb_companion_shared.composeapp.generated.resources.send_feedback
 import fesb_companion_shared.composeapp.generated.resources.version
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 val leftPadding = 10.dp
@@ -68,15 +65,7 @@ val listItemStartPadding = 16.dp
 fun SettingsCompose(
     viewModel: SettingsViewModel = koinViewModel(),
     paddingValues: PaddingValues,
-    navigate: (NavKey) -> Unit,
-    goBack: () -> Unit,
 ) {
-    LaunchedEffect(viewModel.routeToLogin.collectAsState().value) {
-        if (viewModel.routeToLogin.value) {
-            goBack()
-            navigate(Login)
-        }
-    }
     Scaffold(
         Modifier.padding(paddingValues),
         contentWindowInsets = WindowInsets(),
@@ -124,7 +113,7 @@ fun SettingsCompose(
                     title = stringResource(Res.string.logout),
                     supportText = stringResource(
                         Res.string.logged_in_as,
-                        viewModel.username.collectAsState().value ?: ""
+                        viewModel.username.collectAsState().value
                     ),
                     onClick = {
                         viewModel.logout()

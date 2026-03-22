@@ -4,12 +4,9 @@ import dev.etino.fcshared.iksica.services.IksicaService
 import dev.etino.fcshared.studomat.services.StudomatService
 import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.CookiesStorage
-import io.ktor.client.plugins.cookies.fillDefaults
-import io.ktor.client.plugins.cookies.matches
 import io.ktor.http.Cookie
 import io.ktor.http.Url
 import io.ktor.util.date.GMTDate
-import io.ktor.util.date.getTimeMillis
 import kotlin.time.Clock
 
 
@@ -23,7 +20,6 @@ class CustomCookieStorage(
     }
 
     override suspend fun addCookie(requestUrl: Url, cookie: Cookie) {
-        println(cookie)
         val moddedCookie =
             if (!(cookie.name == authCookieISSP || cookie.name == authCookieISVU)) {
                 cookie

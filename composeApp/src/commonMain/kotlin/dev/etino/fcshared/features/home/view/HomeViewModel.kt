@@ -144,15 +144,15 @@ class HomeViewModel(
         }
     }
 
-    fun launchStudentskiUgovoriApp() {
-        /*val context = getApplication<Application>().applicationContext
+    /*fun launchStudentskiUgovoriApp() {
+        vacontext = getApplication<Application>().applicationContext
         val appPackageName = "com.ugovori.studentskiugovori"
         val intent = context.packageManager.getLaunchIntentForPackage(appPackageName) ?: Intent(
             Intent.ACTION_VIEW,
             "https://play.google.com/store/apps/details?id=$appPackageName".toUri()
         )
-        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))*/
-    }
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    }*/
 
     fun loadUsersName() {
         viewModelScope.launch(Dispatchers.Default + handler) {

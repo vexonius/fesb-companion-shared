@@ -23,6 +23,11 @@ data object TimeTable : NavKey
 
 @Serializable
 data object Login : NavKey
+@Serializable
+data object Application : NavKey
+
+@Serializable
+data object Splash : NavKey
 
 @Serializable
 data object Settings : NavKey

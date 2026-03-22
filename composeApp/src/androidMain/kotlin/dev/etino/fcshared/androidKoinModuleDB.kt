@@ -6,19 +6,22 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.room.Room
 import dev.etino.fcshared.database.AppDatabase
+import dev.jordond.connectivity.Connectivity
 import kotlinx.coroutines.InternalCoroutinesApi
 import okio.Path.Companion.toPath
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 @OptIn(InternalCoroutinesApi::class)
-val dbModule = module {
+val androidKoinModuleDB = module {
     factory<AppDatabase> { getRoomDatabase(get()) }
     single<DataStore<Preferences>> {
         createDataStore {
             androidContext().filesDir.resolve(dataStoreFileName).absolutePath
         }
     }
+
+    single<Connectivity> { getConnectivity() }
 }
 
 fun getRoomDatabase(context: Context): AppDatabase {
@@ -42,3 +45,9 @@ fun createDataStore(producePath: () -> String): DataStore<Preferences> =
     )
 
 internal const val dataStoreFileName = "FesbCompanion.preferences_pb"
+
+fun getConnectivity(): Connectivity {
+    val connectivity = Connectivity()
+    connectivity.start()
+    return connectivity
+}

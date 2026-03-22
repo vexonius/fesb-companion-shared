@@ -8,6 +8,7 @@ import dev.etino.fcshared.login.services.UserService
 import dev.etino.fcshared.login.services.UserServiceInterface
 import dev.etino.fcshared.timetable.TimetableClient
 import dev.etino.fcshared.timetable.TimetableClientImpl
+import dev.jordond.connectivity.Connectivity
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpRedirect
 import io.ktor.client.plugins.HttpSend
@@ -21,12 +22,13 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.dsl.module
 
 @OptIn(InternalCoroutinesApi::class)
-val networkModule1 = module {
+val iosNetworkModule = module {
     single<HttpClient> { client }
     single<TimetableClient> { TimetableClientImpl(get()) }
     single<UserServiceInterface> { UserService(get()) }
     single<AttendanceServiceInterface> { AttendanceService(get()) }
     single<WeatherServiceInterface> { WeatherService(get()) }
+    single<Connectivity> { getConnectivity() }
 }
 
 val client = HttpClient() {
@@ -64,4 +66,10 @@ class CustomCookieStorage(
         defaultStorage.close()
     }
 
+}
+
+fun getConnectivity(): Connectivity {
+    val connectivity = Connectivity()
+    connectivity.start()
+    return connectivity
 }
