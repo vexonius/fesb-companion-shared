@@ -16,7 +16,7 @@ import dev.etino.fcshared.features.menza.di.menzaModule
 import dev.etino.fcshared.features.settings.di.settingsModule
 import dev.etino.fcshared.features.studomat.di.studomatModule
 import dev.etino.fcshared.features.timetable.di.timetableModule
-import dev.etino.fcshared.networking.networkModule
+import dev.etino.fcshared.networking.servicesModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 attendanceModule,
                 loginModule,
                 androidKoinModuleDB,
-                networkModule,
+                servicesModule,
                 timetableModule,
                 homeModule,
                 settingsModule,

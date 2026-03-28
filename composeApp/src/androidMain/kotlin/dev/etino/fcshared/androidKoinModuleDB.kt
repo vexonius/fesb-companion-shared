@@ -6,7 +6,14 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.room.Room
 import dev.etino.fcshared.database.AppDatabase
+import dev.etino.fcshared.networking.CustomCookieStorage
 import dev.jordond.connectivity.Connectivity
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpRedirect
+import io.ktor.client.plugins.HttpSend
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.cookies.HttpCookies
 import kotlinx.coroutines.InternalCoroutinesApi
 import okio.Path.Companion.toPath
 import org.koin.android.ext.koin.androidContext
@@ -22,6 +29,26 @@ val androidKoinModuleDB = module {
     }
 
     single<Connectivity> { getConnectivity() }
+    single<HttpClient> { provideAndroidClient(get()) }
+}
+
+fun provideAndroidClient(cookieJar: CustomCookieStorage): HttpClient {
+    return HttpClient(CIO) {
+        expectSuccess = false
+
+        install(HttpRedirect) {
+            checkHttpMethod = false
+        }
+        install(HttpSend) {
+
+        }
+        install(HttpCookies) {
+            storage = cookieJar
+        }
+        install(HttpTimeout) {
+            requestTimeoutMillis = 30_000
+        }
+    }
 }
 
 fun getRoomDatabase(context: Context): AppDatabase {

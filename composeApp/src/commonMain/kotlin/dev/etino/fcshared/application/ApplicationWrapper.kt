@@ -35,16 +35,16 @@ fun ApplicationWrapper() {
     val datastore: DataStore<Preferences> = koinInject()
     val backStack = remember { mutableStateListOf<Any>(Splash) }
 
-    fun replaceScreen(key: NavKey) {
+    fun replaceScreenWith(key: NavKey) {
         backStack.removeLastOrNull()
         backStack.add(key)
     }
 
     LaunchedEffect(Unit) {
         if (datastore.data.map { it[SPKey.LOGGED_IN.key] ?: false }.first()) {
-            replaceScreen(Application)
+            replaceScreenWith(Application)
         } else {
-            replaceScreen(Login)
+            replaceScreenWith(Login)
         }
     }
 
@@ -63,7 +63,7 @@ fun ApplicationWrapper() {
 
                         LaunchedEffect(loginViewModel.loggedIn.collectAsState().value) {
                             if (loginViewModel.loggedIn.value) {
-                                replaceScreen(Application)
+                                replaceScreenWith(Application)
                             }
                         }
                         LoginCompose(
@@ -76,7 +76,7 @@ fun ApplicationWrapper() {
                         )
                     }
                     entry<Application> {
-                        Application { replaceScreen(Login) }
+                        Application { replaceScreenWith(Login) }
                     }
                     entry<Splash> {
                         SplashScreen()

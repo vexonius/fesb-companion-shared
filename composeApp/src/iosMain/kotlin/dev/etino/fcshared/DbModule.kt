@@ -8,7 +8,6 @@ import androidx.room.RoomDatabase
 import dev.etino.fcshared.database.AppDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.InternalCoroutinesApi
 import okio.Path.Companion.toPath
 import org.koin.dsl.module

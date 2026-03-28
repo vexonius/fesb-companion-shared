@@ -10,9 +10,13 @@ import io.ktor.util.date.GMTDate
 import kotlin.time.Clock
 
 
-class CustomCookieStorage(
-    private val defaultStorage: CookiesStorage = AcceptAllCookiesStorage()
-) : CookiesStorage {
+class CustomCookieStorage() : CookiesStorage {
+    private var defaultStorage: CookiesStorage = AcceptAllCookiesStorage()
+
+    fun clearCookies(){
+        defaultStorage.close()
+        defaultStorage = AcceptAllCookiesStorage()
+    }
 
     override suspend fun get(requestUrl: Url): List<Cookie> {
         val stored = defaultStorage.get(requestUrl)

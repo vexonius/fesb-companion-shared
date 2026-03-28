@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 @OptIn(InternalCoroutinesApi::class)
 val settingsModule = module {
-    viewModel { SettingsViewModel( get(), get()) }
+    viewModel { SettingsViewModel( get(), get(), get()) }
 }
 
 

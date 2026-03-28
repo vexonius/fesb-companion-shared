@@ -11,6 +11,7 @@ import dev.etino.fcshared.features.menza.di.menzaModule
 import dev.etino.fcshared.features.settings.di.settingsModule
 import dev.etino.fcshared.features.studomat.di.studomatModule
 import dev.etino.fcshared.features.timetable.di.timetableModule
+import dev.etino.fcshared.networking.servicesModule
 import org.koin.core.context.startKoin
 
 fun main() = application {
@@ -20,6 +21,7 @@ fun main() = application {
             loginModule,
             dbModule,
             jvmNetworkModule,
+            servicesModule,
             timetableModule,
             homeModule,
             settingsModule,

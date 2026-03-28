@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.etino.fcshared.login.user.UserRepositoryInterface
+import dev.etino.fcshared.networking.CustomCookieStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val userRepository: UserRepositoryInterface,
     private val datastore: DataStore<Preferences>,
+    private val cookieStorage: CustomCookieStorage,
 ) : ViewModel() {
 
     val username: MutableStateFlow<String> = MutableStateFlow("")
@@ -38,6 +40,7 @@ class SettingsViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             userRepository.deleteAllUserData()
             datastore.edit { it.clear() }
+            cookieStorage.clearCookies()
             routeToLogin.emit(true)
             delay(500)
             routeToLogin.emit(false)

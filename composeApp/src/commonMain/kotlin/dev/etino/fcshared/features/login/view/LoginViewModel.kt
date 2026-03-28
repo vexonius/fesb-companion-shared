@@ -6,6 +6,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.etino.fcshared.SPKey
+import dev.etino.fcshared.database.AppDatabase
+import dev.etino.fcshared.features.login.*
 import dev.etino.fcshared.login.user.UserRepositoryInterface
 import dev.etino.fcshared.login.user.models.UserRepositoryResult
 import fesb_companion_shared.composeapp.generated.resources.Res
@@ -26,7 +28,8 @@ import org.jetbrains.compose.resources.StringResource
 @InternalCoroutinesApi
 class LoginViewModel(
     private val repository: UserRepositoryInterface,
-    private val datastore: DataStore<Preferences>
+    private val datastore: DataStore<Preferences>,
+    private val db : AppDatabase,
 ) : ViewModel() {
 
     var username = MutableStateFlow("")
@@ -52,8 +55,7 @@ class LoginViewModel(
         checkIfLoggedIn()
     }
 
-    /*private fun addTestData() {
-        val db : AppDatabase by inject(AppDatabase::class.java)
+    private fun addTestData() {
         viewModelScope.launch(Dispatchers.Default + handler) {
             db.studomatDao().insert(studomatSubjectTestData)
             db.studomatDao().insertYears(studomatYearInfoTestData)
@@ -62,20 +64,20 @@ class LoginViewModel(
             db.iksicaDao().insert(studentDataTestData)
             db.iksicaDao().insert(receiptsTestData)
         }
-    }*/
+    }
 
     fun tryUserLogin() {
         var username = username.value.trim().lowercase()
         val password = password.value.trim()
 
-        /* if (username == "test" && password == "testpassword12421") {
+        if (username == "test" && password == "testpassword12421") {
              setTestMode(true)
              viewModelScope.launch(Dispatchers.Default + handler) {
                  repository.insertDummyUser()
              }
              addTestData()
-             loggedIn.postValue(Unit)
-         }*/
+             loggedIn.value = true
+        }
 
         if (username.isEmpty() || password.isEmpty()) {
             _showSnackbar.update { Res.string.login_error_empty_credentials }
@@ -117,6 +119,7 @@ class LoginViewModel(
             }
         }
     }
+
     fun clearViewModel() {
         loggedIn.value = false
         username.value = ""
@@ -125,7 +128,6 @@ class LoginViewModel(
         passwordHidden.value = true
         firstTimeInApp.value = false
     }
-
 
     fun checkIfLoggedIn() {
         viewModelScope.launch {
@@ -138,8 +140,12 @@ class LoginViewModel(
         }
     }
 
-    private fun isEmailValid(email: String): Boolean {
-        return true //fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+
+    fun isEmailValid(email: String): Boolean {
+        val emailRegex = Regex(
+            "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$"
+        )
+        return emailRegex.matches(email)
     }
 
 }

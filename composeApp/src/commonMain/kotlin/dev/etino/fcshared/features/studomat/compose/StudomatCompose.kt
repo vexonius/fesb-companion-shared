@@ -59,7 +59,6 @@ fun StudomatCompose(studomatViewModel: StudomatViewModel, innerPaddingValues: Pa
         studomatViewModel.getStudomatData(pulldownTriggered = true)
     })
     val openedWebview = remember { mutableStateOf(false) }
-    val cookieJar = koinInject<CustomCookieStorage>()
 
     val lifecycleState = LocalLifecycleOwner.current.lifecycle.currentStateAsState().value
     LaunchedEffect(lifecycleState) {
