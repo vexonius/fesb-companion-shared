@@ -14,7 +14,7 @@ import org.koin.dsl.module
 val attendanceModule = module {
     single<AttendanceRepositoryInterface> { AttendanceRepository(get(),get()) }
     single<AttendanceDao> { getAttendanceDao(get()) }
-    viewModel { AttendanceViewModel(get()) }
+    viewModel { AttendanceViewModel(get(), get()) }
 }
 
 fun getAttendanceDao(db: AppDatabase): AttendanceDao {

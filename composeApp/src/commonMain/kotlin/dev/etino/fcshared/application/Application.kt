@@ -37,9 +37,10 @@ import dev.etino.fcshared.navigation.TimeTable
 import dev.etino.fcshared.navigation.rememberNavigationState
 import dev.etino.fcshared.navigation.toEntries
 import dev.etino.fcshared.navigation.topLevelRoutes
-import dev.jordond.connectivity.Connectivity
+import dev.etino.fcshared.networking.ConnectivityObserver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.StateFlow
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -51,11 +52,7 @@ fun Application(routeToLogin: () -> Unit) {
         startRoute = Home,
         topLevelRoutes = topLevelRoutes.map { it.route }.toSet()
     )
-    val connectivity: Connectivity = koinInject()
-    val internetAvailable =
-        connectivity.statusUpdates.collectAsState(
-            initial = Connectivity.Status.Connected(false)
-        ).value.isConnected
+    val internetAvailable: StateFlow<Boolean> = koinInject<ConnectivityObserver>().isConnected
 
     val navigator = remember { Navigator(navigationState) }
     val timetableViewModel: TimetableViewModel = koinViewModel()
@@ -74,7 +71,7 @@ fun Application(routeToLogin: () -> Unit) {
             )
         },
         floatingActionButton = {
-            if (!internetAvailable) NoInternetIcon()
+            if (!internetAvailable.value) NoInternetIcon()
         }
     ) { paddingValues ->
         val entryProvider: (NavKey) -> NavEntry<NavKey> = entryProvider {
@@ -109,6 +106,7 @@ fun Application(routeToLogin: () -> Unit) {
                 SettingsCompose(
                     viewModel = settingsViewModel,
                     paddingValues = paddingValues,
+                    goBack = navigator::goBack
                 )
             }
         }

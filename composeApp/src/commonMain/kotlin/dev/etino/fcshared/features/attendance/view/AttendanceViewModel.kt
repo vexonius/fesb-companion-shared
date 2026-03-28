@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dev.etino.fcshared.attendance.models.AttendanceEntry
 import dev.etino.fcshared.attendance.repository.AttendanceRepositoryInterface
 import dev.etino.fcshared.features.attendance.ShownSemester
+import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.networking.NetworkServiceResult
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.general_error
@@ -27,12 +28,15 @@ import kotlin.time.Clock
 @ExperimentalCoroutinesApi
 @InternalCoroutinesApi
 class AttendanceViewModel(
-    private val repository: AttendanceRepositoryInterface
+    private val repository: AttendanceRepositoryInterface,
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
     private var lastFetch = 0L
     private val has60SecondPassed: Boolean
         get() = Clock.System.now().toEpochMilliseconds() - lastFetch > 60000
+
+    val internetAvailable: StateFlow<Boolean> = connectivityObserver.isConnected
 
     // Full list of attendance
     private val _attendanceListFull = MutableStateFlow<List<List<AttendanceEntry>>>(emptyList())
@@ -58,15 +62,6 @@ class AttendanceViewModel(
         }
     }
 
-    // --- Functions to update state ---
-    fun setAttendanceList(list: List<List<AttendanceEntry>>) {
-        _attendanceListFull.value = list
-    }
-
-    fun setShownSemester(semester: ShownSemester?) {
-        _shownSemester.value = semester
-    }
-
     private val _showSnackbar = MutableStateFlow<StringResource?>(null)
     val showSnackbar: StateFlow<StringResource?> = _showSnackbar
 
@@ -84,6 +79,7 @@ class AttendanceViewModel(
 
     fun fetchAttendance() {
         if (!has60SecondPassed) return
+        if (!internetAvailable.value) return
         viewModelScope.launch(context = Dispatchers.Default + handler) {
             lastFetch = Clock.System.now().toEpochMilliseconds()
             when (val attendance = repository.fetchAttendance()) {

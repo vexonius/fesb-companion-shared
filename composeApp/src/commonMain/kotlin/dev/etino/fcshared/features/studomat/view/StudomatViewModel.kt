@@ -2,6 +2,8 @@ package dev.etino.fcshared.features.studomat.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.multiplatform.webview.cookie.Cookie
+import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.networking.CustomCookieStorage
 import dev.etino.fcshared.studomat.data.sortedByNameAndSemester
 import dev.etino.fcshared.studomat.models.Student
@@ -9,18 +11,15 @@ import dev.etino.fcshared.studomat.models.StudomatYear
 import dev.etino.fcshared.studomat.models.StudomatYearInfo
 import dev.etino.fcshared.studomat.repository.StudomatRepository
 import dev.etino.fcshared.studomat.repository.models.StudomatRepositoryResult
-import fesb_companion_shared.composeapp.generated.resources.*
-import com.multiplatform.webview.cookie.Cookie
-import dev.jordond.connectivity.Connectivity
+import fesb_companion_shared.composeapp.generated.resources.Res
+import fesb_companion_shared.composeapp.generated.resources.studomar_error
+import fesb_companion_shared.composeapp.generated.resources.studomat_error_general
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -29,17 +28,11 @@ import org.jetbrains.compose.resources.StringResource
 class StudomatViewModel(
     private val repository: StudomatRepository,
     private val cookieStorage: CustomCookieStorage,
-    private val connectivity: Connectivity
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
-    val internetAvailable: StateFlow<Boolean> =
-        connectivity.statusUpdates
-            .map { it.isConnected }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Eagerly,
-                initialValue = false
-            )
+    val internetAvailable: StateFlow<Boolean> = connectivityObserver.isConnected
+
 
     val studomatCookie: MutableStateFlow<Cookie?> = MutableStateFlow(null)
 

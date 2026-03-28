@@ -8,11 +8,11 @@ import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.core.plusMonths
 import dev.etino.fcshared.login.user.UserRepositoryInterface
+import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.timetable.Event
 import dev.etino.fcshared.timetable.MonthData
 import dev.etino.fcshared.timetable.TimeTableInfo
 import dev.etino.fcshared.timetable.repository.interfaces.TimeTableRepositoryInterface
-import dev.jordond.connectivity.Connectivity
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.general_error
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -20,10 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DayOfWeek
@@ -37,17 +34,11 @@ import org.jetbrains.compose.resources.StringResource
 class TimetableViewModel(
     private val timeTableRepository: TimeTableRepositoryInterface,
     private val userRepository: UserRepositoryInterface,
-    private val connectivity: Connectivity
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
-    val internetAvailable: StateFlow<Boolean> =
-        connectivity.statusUpdates
-            .map { it.isConnected }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Eagerly,
-                initialValue = false
-            )
+    val internetAvailable: StateFlow<Boolean> = connectivityObserver.isConnected
+
     private val _currentEventShown = MutableStateFlow<Event?>(null)
     val currentEventShown: StateFlow<Event?> = _currentEventShown
 

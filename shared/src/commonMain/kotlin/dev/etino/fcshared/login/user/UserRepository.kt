@@ -49,14 +49,14 @@ class UserRepository(
     }
 
     override suspend fun deleteAllUserData() {
-        appDatabase.userDao().deleteAllUserData()
-        appDatabase.noteDao().deleteAll()
-        appDatabase.timetableDao().deleteAll()
         appDatabase.attendanceDao().deleteAll()
+        appDatabase.timetableDao().deleteAll()
+        appDatabase.noteDao().deleteAll()
         appDatabase.iksicaDao().deleteAllReceipts()
         appDatabase.iksicaDao().deleteStudent()
-        appDatabase.studomatDao().deleteYears()
         appDatabase.studomatDao().deleteAllSubjects()
+        appDatabase.studomatDao().deleteYears()
+        appDatabase.userDao().deleteAllUserData()
         datastore.edit { it[SPKey.LOGGED_IN.key] = false }
     }
 }

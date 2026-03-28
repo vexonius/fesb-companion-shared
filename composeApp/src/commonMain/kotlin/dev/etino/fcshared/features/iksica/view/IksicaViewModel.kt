@@ -6,7 +6,7 @@ import dev.etino.fcshared.iksica.models.IksicaData
 import dev.etino.fcshared.iksica.models.IksicaResult
 import dev.etino.fcshared.iksica.models.Receipt
 import dev.etino.fcshared.iksica.repository.IksicaRepositoryInterface
-import dev.jordond.connectivity.Connectivity
+import dev.etino.fcshared.networking.ConnectivityObserver
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.error_fetching_receipts_iksica
 import fesb_companion_shared.composeapp.generated.resources.error_general_iksica
@@ -15,10 +15,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -26,19 +23,12 @@ import org.jetbrains.compose.resources.StringResource
 @InternalCoroutinesApi
 class IksicaViewModel(
     private val repository: IksicaRepositoryInterface,
-    private val connectivity: Connectivity
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
     private val _showSnackbar = MutableStateFlow<StringResource?>(null)
     val showSnackbar: StateFlow<StringResource?> = _showSnackbar
-    val internetAvailable: StateFlow<Boolean> =
-        connectivity.statusUpdates
-            .map { it.isConnected }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Eagerly,
-                initialValue = false
-            )
+    val internetAvailable: StateFlow<Boolean> = connectivityObserver.isConnected
 
     private val _iksicaData = MutableStateFlow<IksicaData?>(null)
     val iksicaData: StateFlow<IksicaData?> = _iksicaData

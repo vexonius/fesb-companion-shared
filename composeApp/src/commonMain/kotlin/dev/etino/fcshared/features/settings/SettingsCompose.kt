@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -22,11 +24,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import dev.etino.fcshared.compose.AppTheme
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.about_app
+import fesb_companion_shared.composeapp.generated.resources.arrow_back_24px
 import fesb_companion_shared.composeapp.generated.resources.category_user
 import fesb_companion_shared.composeapp.generated.resources.contribute
 import fesb_companion_shared.composeapp.generated.resources.data_privacy
@@ -53,7 +58,9 @@ import fesb_companion_shared.composeapp.generated.resources.privacy_policy_desc
 import fesb_companion_shared.composeapp.generated.resources.privacy_policy_title
 import fesb_companion_shared.composeapp.generated.resources.report_bug
 import fesb_companion_shared.composeapp.generated.resources.send_feedback
+import fesb_companion_shared.composeapp.generated.resources.settings
 import fesb_companion_shared.composeapp.generated.resources.version
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -65,10 +72,29 @@ val listItemStartPadding = 16.dp
 fun SettingsCompose(
     viewModel: SettingsViewModel = koinViewModel(),
     paddingValues: PaddingValues,
+    goBack: ()->Unit,
 ) {
     Scaffold(
         Modifier.padding(paddingValues),
         contentWindowInsets = WindowInsets(),
+        topBar = {
+            TopAppBar(
+                modifier = Modifier.padding(horizontal = 4.dp),
+                title = { Text(stringResource(Res.string.settings), style = MaterialTheme.typography.displaySmall) },
+                navigationIcon = {
+                    Icon(
+                        painterResource(Res.drawable.arrow_back_24px),
+                        "Nazad",
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                            .clip(CircleShape)
+                            .clickable{
+                            goBack()
+                        }.padding(8.dp)
+                    )
+                },
+                windowInsets = WindowInsets()
+            )
+        }
     ) { contentPadding ->
         BottomSheetScaffold(
             containerColor = MaterialTheme.colorScheme.surface,

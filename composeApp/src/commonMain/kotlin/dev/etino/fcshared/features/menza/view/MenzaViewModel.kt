@@ -8,8 +8,8 @@ import dev.etino.fcshared.menza.models.MenzaLocation
 import dev.etino.fcshared.menza.models.menzaLocations
 import dev.etino.fcshared.menza.repository.CamerasRepositoryInterface
 import dev.etino.fcshared.menza.repository.MenzaRepositoryInterface
+import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.now
-import dev.jordond.connectivity.Connectivity
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import io.ktor.http.Url
@@ -19,10 +19,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -40,7 +37,7 @@ import kotlinx.datetime.toLocalDateTime
 class MenzaViewModel(
     private val menzaRepository: MenzaRepositoryInterface,
     private val camerasRepository: CamerasRepositoryInterface,
-    private val connectivity: Connectivity
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -50,14 +47,7 @@ class MenzaViewModel(
 
     private val _images = MutableStateFlow<Pair<MenzaLocation, Url?>?>(null)
     val images: StateFlow<Pair<MenzaLocation, Url?>?> = _images
-    val internetAvailable: StateFlow<Boolean> =
-        connectivity.statusUpdates
-            .map { it.isConnected }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Eagerly,
-                initialValue = false
-            )
+    val internetAvailable: StateFlow<Boolean> = connectivityObserver.isConnected
 
     private val _menza = MutableStateFlow<List<Pair<MenzaLocation, Menza?>>?>(null)
     val menza: StateFlow<List<Pair<MenzaLocation, Menza?>>?> = _menza

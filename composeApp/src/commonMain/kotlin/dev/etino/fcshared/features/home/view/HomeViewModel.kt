@@ -8,9 +8,9 @@ import dev.etino.fcshared.home.models.WeatherDisplay
 import dev.etino.fcshared.home.repository.NoteRepositoryInterface
 import dev.etino.fcshared.home.repository.WeatherRepositoryInterface
 import dev.etino.fcshared.login.user.UserRepositoryInterface
+import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.timetable.Event
 import dev.etino.fcshared.timetable.repository.interfaces.TimeTableRepositoryInterface
-import dev.jordond.connectivity.Connectivity
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.general_error
 import fesb_companion_shared.composeapp.generated.resources.weather_error
@@ -20,7 +20,6 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -37,17 +36,11 @@ class HomeViewModel(
     private val weatherRepository: WeatherRepositoryInterface,
     private val timeTableRepository: TimeTableRepositoryInterface,
     private val userRepository: UserRepositoryInterface,
-    private val connectivity: Connectivity
+    connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
-    val internetAvailable: StateFlow<Boolean> =
-        connectivity.statusUpdates
-            .map { it.isConnected }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Eagerly,
-                initialValue = false
-            )
+    val internetAvailable: StateFlow<Boolean> = connectivityObserver.isConnected
+
     private val _weatherDisplay = MutableStateFlow<WeatherDisplay?>(null)
     private val _notes = MutableStateFlow<List<Note>?>(null)
     val nameOfUser = MutableStateFlow<String?>(null)

@@ -117,10 +117,10 @@
     <string name="contribute">SUDJELUJ U RAZVOJU APLIKACIJE</string>
     <string name="send_feedback">Pošalji povratne informacije</string>
     <string name="feedback_email_subject">[FEEDBACK] FESB Companion</string>
-    <string name="help_improve_app">Pomogni učiniti ovu aplikaciju još boljom</string>
+    <string name="help_improve_app">Pomogni učiniti ovu aplikaciju još boljom. Javi se na support@fesbcompanion.xyz</string>
     <string name="report_bug_email_subject">[BUG REPORT] FESB Companion</string>
     <string name="report_bug">Prijavi bug</string>
-    <string name="help_stabilize_app">Pomozi učiniti aplikaciju stabilnijom slanjem bug reporta</string>
+    <string name="help_stabilize_app">Pomozi učiniti aplikaciju stabilnijom slanjem bug reporta. Javi se na support@fesbcompanion.xyz</string>
     <string name="make_events_glow">Uključi event glow</string>
     <string name="make_event_glow_description">Postavi glow iza termina u rasporedu</string>
     <string name="customizations">Preference</string>
