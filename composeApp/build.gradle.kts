@@ -76,6 +76,7 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.connectivity.device)
+            implementation(libs.ktor.client.darwin)
         }
     }
 }

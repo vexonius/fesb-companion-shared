@@ -10,7 +10,7 @@ import dev.etino.fcshared.studomat.services.StudomatLoginService
 import dev.etino.fcshared.studomat.services.StudomatLoginServiceInterface
 import dev.etino.fcshared.studomat.services.StudomatService
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.HttpRedirect
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
@@ -23,20 +23,21 @@ import org.koin.dsl.module
 
 val studomatModule = module {
     single<ISVULoginInterceptor> { ISVULoginInterceptor(get(), get()) }
-    single<HttpClient>(named("loginclientStudomat")) { provideISVULoginClient(get()) }
+    single<HttpClient>(named("loginclientStudomat")) { provideISVULoginClient(get(), get()) }
     single<StudomatLoginServiceInterface> { StudomatLoginService(get(named("loginclientStudomat"))) }
-    single<HttpClient>(named("clientStudomat")) { provideISVUPortalClient(get(), get()) }
+    single<HttpClient>(named("clientStudomat")) { provideISVUPortalClient(get(), get(), get()) }
     single { StudomatService(get(named("clientStudomat")), get()) }
     single { StudomatRepository(get(), get()) }
     single { getStudomatDao(get()) }
-    viewModel { StudomatViewModel(get(),get(),get()) }
+    viewModel { StudomatViewModel(get(), get(), get()) }
 }
 
 fun provideISVUPortalClient(
     cookieStorage: CustomCookieStorage,
-    isvuLoginInterceptor: ISVULoginInterceptor
+    isvuLoginInterceptor: ISVULoginInterceptor,
+    engineFactory: HttpClientEngineFactory<*>
 ): HttpClient {
-    val client = HttpClient(CIO) {
+    val client = HttpClient(engineFactory) {
         expectSuccess = false
         install(HttpRedirect) {
             checkHttpMethod = false
@@ -58,8 +59,11 @@ fun provideISVUPortalClient(
     return client
 }
 
-fun provideISVULoginClient(cookieStorage: CustomCookieStorage): HttpClient {
-    val client = HttpClient(CIO) {
+fun provideISVULoginClient(
+    cookieStorage: CustomCookieStorage,
+    engineFactory: HttpClientEngineFactory<*>
+): HttpClient {
+    val client = HttpClient(engineFactory) {
         expectSuccess = false
         followRedirects = false
         install(HttpCookies) {

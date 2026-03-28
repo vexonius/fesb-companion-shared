@@ -9,6 +9,7 @@ import dev.etino.fcshared.database.AppDatabase
 import dev.etino.fcshared.networking.CustomCookieStorage
 import dev.jordond.connectivity.Connectivity
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpRedirect
 import io.ktor.client.plugins.HttpSend
@@ -30,6 +31,7 @@ val androidKoinModuleDB = module {
 
     single<Connectivity> { getConnectivity() }
     single<HttpClient> { provideAndroidClient(get()) }
+    single<HttpClientEngineFactory<*>> { CIO }
 }
 
 fun provideAndroidClient(cookieJar: CustomCookieStorage): HttpClient {

@@ -12,7 +12,7 @@ import dev.etino.fcshared.iksica.services.IksicaServiceInterface
 import dev.etino.fcshared.networking.CustomCookieStorage
 import dev.etino.fcshared.features.iksica.view.IksicaViewModel
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.HttpRedirect
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
@@ -28,7 +28,7 @@ import org.koin.dsl.module
 val iksicaModule = module {
     single<ISSPLoginInterceptor> { ISSPLoginInterceptor(get(), get()) }
     single<IksicaLoginServiceInterface> { IksicaLoginService(get(), null, "", "") }
-    single<HttpClient>(named("ISSPPortalClient")) { provideISSPPortalClient(get(), get()) }
+    single<HttpClient>(named("ISSPPortalClient")) { provideISSPPortalClient(get(), get(), get()) }
     single<IksicaServiceInterface> { IksicaService(get(named("ISSPPortalClient"))) }
     single<IksicaRepositoryInterface> { IksicaRepository(get(), get()) }
     single<IksicaDao> { getIksicaDao(get()) }
@@ -37,9 +37,10 @@ val iksicaModule = module {
 
 fun provideISSPPortalClient(
     cookieStorage: CustomCookieStorage,
-    isspLoginInterceptor: ISSPLoginInterceptor
+    isspLoginInterceptor: ISSPLoginInterceptor,
+    engineFactory: HttpClientEngineFactory<*>
 ): HttpClient {
-    val client = HttpClient(CIO) {
+    val client = HttpClient(engineFactory) {
         expectSuccess = false
 
         install(HttpRedirect) {

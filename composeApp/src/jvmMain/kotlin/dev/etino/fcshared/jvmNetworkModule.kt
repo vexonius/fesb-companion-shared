@@ -4,6 +4,7 @@ import dev.etino.fcshared.networking.CustomCookieStorage
 import dev.jordond.connectivity.Connectivity
 import dev.jordond.connectivity.ConnectivityProvider
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpRedirect
 import io.ktor.client.plugins.HttpSend
@@ -18,6 +19,7 @@ import javax.net.ssl.X509TrustManager
 @OptIn(InternalCoroutinesApi::class)
 val jvmNetworkModule = module {
     single<HttpClient> { provideJvmClient(get()) }
+    single<HttpClientEngineFactory<*>> { CIO }
     single<Connectivity> { getConnectivity() }
 }
 
