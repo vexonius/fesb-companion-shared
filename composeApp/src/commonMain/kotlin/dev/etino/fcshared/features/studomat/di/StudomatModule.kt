@@ -1,9 +1,9 @@
 package dev.etino.fcshared.features.studomat.di
 
 import dev.etino.fcshared.database.AppDatabase
+import dev.etino.fcshared.features.studomat.view.StudomatViewModel
 import dev.etino.fcshared.networking.CustomCookieStorage
 import dev.etino.fcshared.networking.interceptors.ISVULoginInterceptor
-import dev.etino.fcshared.features.studomat.view.StudomatViewModel
 import dev.etino.fcshared.studomat.dao.StudomatDao
 import dev.etino.fcshared.studomat.repository.StudomatRepository
 import dev.etino.fcshared.studomat.services.StudomatLoginService
@@ -16,7 +16,6 @@ import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.plugin
-import kotlinx.coroutines.runBlocking
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -52,7 +51,7 @@ fun provideISVUPortalClient(
     client.plugin(HttpSend).intercept { request ->
 
         if (!cookieStorage.isISVUTokenValid()) {
-            runBlocking { isvuLoginInterceptor.refreshSession() }
+            isvuLoginInterceptor.refreshSession()
         }
         execute(request)
     }

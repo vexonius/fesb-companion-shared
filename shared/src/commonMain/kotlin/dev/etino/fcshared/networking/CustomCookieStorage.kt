@@ -1,6 +1,7 @@
 package dev.etino.fcshared.networking
 
 import dev.etino.fcshared.iksica.services.IksicaService
+import dev.etino.fcshared.login.services.UserService
 import dev.etino.fcshared.studomat.services.StudomatService
 import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.CookiesStorage
@@ -13,7 +14,7 @@ import kotlin.time.Clock
 class CustomCookieStorage() : CookiesStorage {
     private var defaultStorage: CookiesStorage = AcceptAllCookiesStorage()
 
-    fun clearCookies(){
+    fun clearCookies() {
         defaultStorage.close()
         defaultStorage = AcceptAllCookiesStorage()
     }
@@ -38,6 +39,18 @@ class CustomCookieStorage() : CookiesStorage {
 
     override fun close() {
         defaultStorage.close()
+    }
+
+    suspend fun isFESBTokenValid(): Boolean {
+        val cookies = get(UserService.targetUrl)
+        val authCookies = cookies
+            .filter {
+                it.name == authCookieFESB &&
+                        it.expires != null &&
+                        it.expires!! > GMTDate()
+            }
+
+        return authCookies.isNotEmpty()
     }
 
     suspend fun isISVUTokenValid(): Boolean {

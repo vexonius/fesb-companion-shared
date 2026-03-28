@@ -1,7 +1,7 @@
 package dev.etino.fcshared.features.iksica.di
 
-import dev.etino.fcshared.networking.interceptors.ISSPLoginInterceptor
 import dev.etino.fcshared.database.AppDatabase
+import dev.etino.fcshared.features.iksica.view.IksicaViewModel
 import dev.etino.fcshared.iksica.dao.IksicaDao
 import dev.etino.fcshared.iksica.repository.IksicaRepository
 import dev.etino.fcshared.iksica.repository.IksicaRepositoryInterface
@@ -10,7 +10,7 @@ import dev.etino.fcshared.iksica.services.IksicaLoginServiceInterface
 import dev.etino.fcshared.iksica.services.IksicaService
 import dev.etino.fcshared.iksica.services.IksicaServiceInterface
 import dev.etino.fcshared.networking.CustomCookieStorage
-import dev.etino.fcshared.features.iksica.view.IksicaViewModel
+import dev.etino.fcshared.networking.interceptors.ISSPLoginInterceptor
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.HttpRedirect
@@ -19,7 +19,6 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.plugin
 import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -32,7 +31,7 @@ val iksicaModule = module {
     single<IksicaServiceInterface> { IksicaService(get(named("ISSPPortalClient"))) }
     single<IksicaRepositoryInterface> { IksicaRepository(get(), get()) }
     single<IksicaDao> { getIksicaDao(get()) }
-    viewModel { IksicaViewModel(get(),get()) }
+    viewModel { IksicaViewModel(get(), get()) }
 }
 
 fun provideISSPPortalClient(
@@ -59,7 +58,7 @@ fun provideISSPPortalClient(
     client.plugin(HttpSend).intercept { request ->
 
         if (!cookieStorage.isISSPTokenValid() && request.url.pathSegments.contains("student")) {
-            runBlocking { isspLoginInterceptor.refreshSession() }
+            isspLoginInterceptor.refreshSession()
         }
         execute(request)
     }
