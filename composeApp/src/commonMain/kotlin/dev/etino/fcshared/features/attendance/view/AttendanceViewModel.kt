@@ -4,13 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.etino.fcshared.attendance.models.AttendanceEntry
 import dev.etino.fcshared.attendance.repository.AttendanceRepositoryInterface
-import dev.etino.fcshared.networking.NetworkServiceResult
 import dev.etino.fcshared.features.attendance.ShownSemester
+import dev.etino.fcshared.networking.NetworkServiceResult
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.general_error
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -77,6 +78,7 @@ class AttendanceViewModel(
     }
 
     init {
+        loadFromDb()
         fetchAttendance()
     }
 
@@ -97,6 +99,11 @@ class AttendanceViewModel(
         }
     }
 
+    private fun loadFromDb() {
+        viewModelScope.launch(context = Dispatchers.IO + handler) {
+            _attendanceListFull.value = repository.readAttendance()
+        }
+    }
 
     fun showSemester(semester: ShownSemester) {
         _shownSemester.value = if (_shownSemester.value == semester) null else semester

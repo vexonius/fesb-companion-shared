@@ -11,6 +11,8 @@ import dev.etino.fcshared.studomat.models.StudomatYearInfo
 interface StudomatDao {
     @Query("DELETE FROM studomatyearinfo")
     suspend fun deleteYears()
+    @Query("DELETE FROM StudomatSubject")
+    suspend fun deleteAllSubjects()
 
     @Query("DELETE FROM StudomatSubject WHERE year = :year")
     suspend fun deleteAll(year: String)

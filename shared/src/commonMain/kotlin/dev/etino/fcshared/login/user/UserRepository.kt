@@ -5,13 +5,13 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import dev.etino.fcshared.SPKey
+import dev.etino.fcshared.database.AppDatabase
+import dev.etino.fcshared.login.dao.UserDao
+import dev.etino.fcshared.login.services.UserServiceInterface
 import dev.etino.fcshared.login.user.models.User
 import dev.etino.fcshared.login.user.models.UserRepositoryResult
 import dev.etino.fcshared.login.user.models.UserRoom
-import dev.etino.fcshared.login.dao.UserDao
 import dev.etino.fcshared.networking.NetworkServiceResult
-import dev.etino.fcshared.database.AppDatabase
-import dev.etino.fcshared.login.services.UserServiceInterface
 
 class UserRepository(
     private val userService: UserServiceInterface,
@@ -53,8 +53,10 @@ class UserRepository(
         appDatabase.noteDao().deleteAll()
         appDatabase.timetableDao().deleteAll()
         appDatabase.attendanceDao().deleteAll()
-        appDatabase.iksicaDao().deleteAll()
+        appDatabase.iksicaDao().deleteAllReceipts()
+        appDatabase.iksicaDao().deleteStudent()
         appDatabase.studomatDao().deleteYears()
+        appDatabase.studomatDao().deleteAllSubjects()
         datastore.edit { it[SPKey.LOGGED_IN.key] = false }
     }
 }

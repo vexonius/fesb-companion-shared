@@ -51,6 +51,7 @@ class IksicaViewModel(
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         viewModelScope.launch(Dispatchers.Main) {
+            println(throwable.message)
             _showSnackbar.update { Res.string.error_general_iksica }
         }
     }

@@ -11,7 +11,10 @@ import dev.etino.fcshared.iksica.models.StudentDataRoom
 @Dao
 interface IksicaDao {
     @Query("DELETE FROM receiptroom")
-    suspend fun deleteAll()
+    suspend fun deleteAllReceipts()
+
+    @Query("DELETE FROM studentdataroom")
+    suspend fun deleteStudent()
 
     @Insert(onConflict = REPLACE)
     suspend fun insert(studentData: StudentDataRoom)

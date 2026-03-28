@@ -1,23 +1,25 @@
 package dev.etino.fcshared.attendance.repository
 
 
+import dev.etino.fcshared.attendance.ParseAttendance
+import dev.etino.fcshared.attendance.dao.AttendanceDao
 import dev.etino.fcshared.attendance.models.AttendanceEntry
 import dev.etino.fcshared.attendance.services.AttendanceServiceInterface
 import dev.etino.fcshared.networking.NetworkServiceResult
-import dev.etino.fcshared.attendance.ParseAttendance
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
 
 class AttendanceRepository(
     private val attendanceService: AttendanceServiceInterface,
+    private val attendanceDao: AttendanceDao,
     private val parseAttendance: ParseAttendance = ParseAttendance()
 ) : AttendanceRepositoryInterface {
 
     override suspend fun fetchAttendance(): NetworkServiceResult.AttendanceParseResult {
         when (val list = attendanceService.fetchAllAttendance()) {
             is NetworkServiceResult.AttendanceFetchResult.Success -> {
-                val attendanceList: List<List<AttendanceEntry>> = runBlocking {
+                val attendanceList: List<List<AttendanceEntry>> = coroutineScope {
                     parseAttendance.parseAttendList(list.data).map {
                         async {
                             //Log.d("AttendanceRepository", "Fetching attendance for ${it.first.text()}")
@@ -44,6 +46,7 @@ class AttendanceRepository(
                         Throwable("Error while fetching attendance data")
                     )
                 } else {
+                    insertAttendance(attendanceList.flatten())
                     NetworkServiceResult.AttendanceParseResult.Success(
                         attendanceList.sortedByClassAndSemester()
                     )
@@ -56,6 +59,19 @@ class AttendanceRepository(
                 )
             }
         }
+    }
+
+    override suspend fun insertAttendance(attendance: List<AttendanceEntry>) {
+        attendanceDao.deleteAll()
+        attendanceDao.insert(attendance)
+    }
+
+    override suspend fun readAttendance(): List<List<AttendanceEntry>> {
+        val test = attendanceDao.read()
+            .groupBy { it.subject }.values
+            .toList()
+            .sortedByClassAndSemester()
+        return test
     }
 }
 

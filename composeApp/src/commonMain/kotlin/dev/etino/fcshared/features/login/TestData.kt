@@ -426,7 +426,7 @@ val studentDataTestData = StudentDataRoom(
 val receiptsTestData = listOf(
     ReceiptRoom(
         restaurant = "Menza FESB",
-        date = "01.10.2025",
+        date = "2025-10-01",
         dateString = "1. listopada 2025.",
         time = "12:15",
         authorised = "Ivan Horvat",
@@ -438,7 +438,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Menza Kampus",
-        date = "02.10.2025",
+        date = "2025-10-02",
         dateString = "2. listopada 2025.",
         time = "13:05",
         authorised = "Ana Kovač",
@@ -450,7 +450,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Restoran Studentski Dom",
-        date = "03.10.2025",
+        date = "2025-10-03",
         dateString = "3. listopada 2025.",
         time = "18:40",
         authorised = "Petar Marić",
@@ -462,7 +462,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Menza FESB",
-        date = "04.10.2025",
+        date = "2025-10-04",
         dateString = "4. listopada 2025.",
         time = "11:55",
         authorised = "Luka Babić",
@@ -474,7 +474,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Menza Kampus",
-        date = "05.10.2025",
+        date = "2025-10-05",
         dateString = "5. listopada 2025.",
         time = "14:20",
         authorised = "Marija Jurić",
@@ -486,7 +486,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Restoran Studentski Dom",
-        date = "06.10.2025",
+        date = "2025-10-06",
         dateString = "6. listopada 2025.",
         time = "19:15",
         authorised = "Nikola Vuković",
@@ -498,7 +498,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Menza FESB",
-        date = "07.10.2025",
+        date = "2025-10-07",
         dateString = "7. listopada 2025.",
         time = "12:45",
         authorised = "Karla Radić",
@@ -510,7 +510,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Menza Kampus",
-        date = "08.10.2025",
+        date = "2025-10-08",
         dateString = "8. listopada 2025.",
         time = "13:30",
         authorised = "Mateo Novak",
@@ -522,7 +522,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Restoran Studentski Dom",
-        date = "09.10.2025",
+        date = "2025-10-09",
         dateString = "9. listopada 2025.",
         time = "20:05",
         authorised = "Ema Perić",
@@ -534,7 +534,7 @@ val receiptsTestData = listOf(
     ),
     ReceiptRoom(
         restaurant = "Menza FESB",
-        date = "10.10.2025",
+        date = "2025-10-10",
         dateString = "10. listopada 2025.",
         time = "12:10",
         authorised = "Domagoj Živković",

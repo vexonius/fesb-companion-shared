@@ -1,9 +1,9 @@
 package dev.etino.fcshared.features.home.compose
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,28 +29,26 @@ import org.jetbrains.compose.resources.stringResource
 
 @OptIn(InternalCoroutinesApi::class)
 @Composable
-fun CardsCompose(openMenza: () -> Unit, homeViewModel: HomeViewModel, showSnackbar: (String) -> Unit) {
+fun CardsCompose(
+    openMenza: () -> Unit,
+    homeViewModel: HomeViewModel,
+    showSnackbar: (String) -> Unit
+) {
     Row(Modifier.padding(horizontal = sidePadding)) {
-        Box(
-            Modifier
-                .weight(0.5f)
-        ) {
-            val noInternetMenza = stringResource(Res.string.no_internet_menza)
-            val internetAvailable = homeViewModel.internetAvailable.collectAsState().value
-            CardCompose(
-                stringResource(Res.string.menza_title),
-                stringResource(Res.string.menza_desc),
-                meniColor,
-                meniColor,
-                onClick = {
-                    if (internetAvailable) {
-                        openMenza()
-                    } else {
-                        showSnackbar(noInternetMenza)
-
-                    }
-                })
-        }
+        val noInternetMenza = stringResource(Res.string.no_internet_menza)
+        val internetAvailable = homeViewModel.internetAvailable.collectAsState().value
+        CardCompose(
+            stringResource(Res.string.menza_title),
+            stringResource(Res.string.menza_desc),
+            meniColor,
+            meniColor,
+            onClick = {
+                if (internetAvailable) {
+                    openMenza()
+                } else {
+                    showSnackbar(noInternetMenza)
+                }
+            })
         /*Box(
             Modifier
                 .weight(0.5f)
@@ -69,13 +67,20 @@ fun CardsCompose(openMenza: () -> Unit, homeViewModel: HomeViewModel, showSnackb
 }
 
 @Composable
-fun CardCompose(title: String, description: String, color1: Color, color2: Color, onClick: () -> Unit = { }) {
+fun CardCompose(
+    title: String,
+    description: String,
+    color1: Color,
+    color2: Color,
+    onClick: () -> Unit = { }
+) {
     Column(
         modifier = Modifier
             .padding(horizontal = 5.dp)
             .clip(RoundedCornerShape(10.dp))
             .clickable { onClick() }
-            .height(200.dp)
+            .height(140.dp)
+            .fillMaxWidth()
             .angledGradientBackground(
                 colors = listOf(color1, color2),
                 degrees = 60f,

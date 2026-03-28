@@ -57,13 +57,12 @@ class IksicaRepository(
     }
 
     override suspend fun insert(model: List<Receipt>) {
-        iksicaDao.deleteAll()
+        iksicaDao.deleteAllReceipts()
         iksicaDao.insert(model.map { ReceiptRoom(it) })
     }
 
     override suspend fun getCache(): IksicaData? {
-        val model = iksicaDao.readData()
-        if (model == null) return null
+        val model = iksicaDao.readData() ?: return null
 
         val receipts = iksicaDao.readReceipts().map { Receipt(it) }
 

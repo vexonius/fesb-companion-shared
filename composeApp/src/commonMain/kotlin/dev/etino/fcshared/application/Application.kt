@@ -1,5 +1,9 @@
 package dev.etino.fcshared.application
 
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -111,6 +115,18 @@ fun Application(routeToLogin: () -> Unit) {
         NavDisplay(
             entries = navigationState.toEntries(entryProvider),
             onBack = { navigator.goBack() },
+            transitionSpec = {
+                ContentTransform(
+                    targetContentEnter = fadeIn(tween(300)),
+                    initialContentExit = fadeOut(tween(300))
+                )
+            },
+            popTransitionSpec = {
+                ContentTransform(
+                    targetContentEnter = fadeIn(tween(300)),
+                    initialContentExit = fadeOut(tween(300))
+                )
+            }
         )
     }
 }

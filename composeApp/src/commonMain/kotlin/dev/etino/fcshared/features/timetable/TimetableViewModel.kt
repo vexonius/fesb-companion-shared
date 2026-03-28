@@ -89,7 +89,7 @@ class TimetableViewModel(
 
     fun resetToCurrentWeek() {
         viewModelScope.launch(Dispatchers.Default + handler) {
-            timeTableRepository.events.collect { _events.value = it }
+            _events.value = timeTableRepository.getCachedEvents()
         }
         _mondayOfSelectedWeek.value =
             LocalDate.now().let { it.minusDays(it.dayOfWeek.ordinal - DayOfWeek.MONDAY.ordinal) }

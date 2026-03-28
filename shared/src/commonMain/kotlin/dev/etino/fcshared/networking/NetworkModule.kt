@@ -24,6 +24,7 @@ import org.koin.dsl.module
 val servicesModule = module {
     single<TimetableClient> { TimetableClientImpl(get()) }
     single<UserServiceInterface> { UserService(get()) }
+    single<FESBLoginInterceptor> { FESBLoginInterceptor(get(), get()) }
     single<AttendanceServiceInterface> { AttendanceService(get(named("FESBPortalClient"))) }
     single<WeatherServiceInterface> { WeatherService(get()) }
     single<CustomCookieStorage> { CustomCookieStorage() }
