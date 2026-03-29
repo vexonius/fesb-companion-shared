@@ -34,25 +34,25 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import com.multiplatform.webview.web.rememberWebViewState
 import dev.etino.fcshared.compose.studomatBlue
-import dev.etino.fcshared.networking.CustomCookieStorage
 import dev.etino.fcshared.features.studomat.view.StudomatViewModel
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.tab_studomat
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun StudomatCompose(studomatViewModel: StudomatViewModel, innerPaddingValues: PaddingValues) {
-    val snackbarHostState = SnackbarHostState()
-    val message = studomatViewModel.showSnackbar.collectAsState().value?.let { stringResource(it) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
-
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(message)
+    LaunchedEffect(Unit) {
+        studomatViewModel.showSnackbar.collect { resId ->
+            snackbarHostState.showSnackbar(
+                message = getString(resId)
+            )
         }
     }
+
     val studomatData = studomatViewModel.studomatData.collectAsState().value
     val isRefreshing = studomatViewModel.isRefreshing.collectAsState().value
     val pullRefreshState = rememberPullRefreshState(isRefreshing, {
@@ -68,15 +68,17 @@ fun StudomatCompose(studomatViewModel: StudomatViewModel, innerPaddingValues: Pa
     }
 
     Scaffold(
-        modifier = Modifier.pullRefresh(pullRefreshState),
+        modifier = Modifier.pullRefresh(pullRefreshState)
+            .background(Brush.verticalGradient(listOf(studomatBlue, Color.Transparent)))
+            .padding(innerPaddingValues),
         contentWindowInsets = WindowInsets(),
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        containerColor = Color.Transparent
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Brush.verticalGradient(listOf(studomatBlue, Color.Transparent)))
-                .padding(innerPaddingValues)
+                //.background(Brush.verticalGradient(listOf(studomatBlue, Color.Transparent)))
                 .padding(innerPadding),
         ) {
             val webViewState =

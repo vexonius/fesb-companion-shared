@@ -18,8 +18,10 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -47,13 +49,18 @@ class StudomatViewModel(
 
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
-        _showSnackbar.update { Res.string.studomat_error_general }
+        showMessage(Res.string.studomat_error_general)
         isRefreshing.update { false }
     }
 
+    private val _showSnackbar = MutableSharedFlow<StringResource>()
+    val showSnackbar = _showSnackbar.asSharedFlow()
 
-    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
-    val showSnackbar: StateFlow<StringResource?> = _showSnackbar
+    fun showMessage(resId: StringResource) {
+        viewModelScope.launch {
+            _showSnackbar.emit(resId)
+        }
+    }
 
     init {
         viewModelScope.launch(Dispatchers.Default + coroutineExceptionHandler) {
@@ -77,7 +84,7 @@ class StudomatViewModel(
                 }
 
                 is StudomatRepositoryResult.StudentAndYearsResult.Failure -> {
-                    _showSnackbar.update { Res.string.studomar_error }
+                    showMessage(Res.string.studomar_error)
                 }
             }
         }
@@ -107,7 +114,7 @@ class StudomatViewModel(
                         }
 
                         is StudomatRepositoryResult.ChosenYearResult.Failure -> {
-                            _showSnackbar.update { Res.string.studomar_error }
+                            showMessage(Res.string.studomar_error)
                         }
                     }
                 }

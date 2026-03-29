@@ -85,24 +85,31 @@ import kotlinx.datetime.LocalTime
 import kotlinx.datetime.format
 import kotlinx.datetime.minusMonth
 import kotlinx.datetime.plusMonth
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-@OptIn(ExperimentalMaterial3Api::class, InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    InternalCoroutinesApi::class,
+    ExperimentalCoroutinesApi::class
+)
 @Composable
 fun TimetableCompose(timetableViewModel: TimetableViewModel, innerPaddingValues: PaddingValues) {
 
     val showDayEvent = timetableViewModel.currentEventShown
-    val shownWeekChooseMenu = timetableViewModel.shownWeekChooseMenu.collectAsState(initial = false).value
+    val shownWeekChooseMenu =
+        timetableViewModel.shownWeekChooseMenu.collectAsState(initial = false).value
     val lessonsToShow = timetableViewModel.events
     val shownWeek = timetableViewModel.mondayOfSelectedWeek
     val daysInPeriods = timetableViewModel.daysInPeriods.value ?: emptyMap()
     val monthData = timetableViewModel.monthData
-    val fetchUserTimetable = { selectedDate: LocalDate -> timetableViewModel.fetchUserTimetable(selectedDate) }
+    val fetchUserTimetable =
+        { selectedDate: LocalDate -> timetableViewModel.fetchUserTimetable(selectedDate) }
     val showEvent = { it: Event -> timetableViewModel.showEvent(it) }
     val showWeekChooseMenu = { it: Boolean -> timetableViewModel.showWeekChooseMenu(it) }
     val hideEvent = { timetableViewModel.hideEvent() }
-    val snackbarHostState = SnackbarHostState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val sheetStateEvent = rememberModalBottomSheetState()
     val sheetStateCalendar = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -120,10 +127,11 @@ fun TimetableCompose(timetableViewModel: TimetableViewModel, innerPaddingValues:
         }
     }
 
-    val message = timetableViewModel.showSnackbar.collectAsState().value?.let { stringResource(it) }
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(message)
+    LaunchedEffect(Unit) {
+        timetableViewModel.showSnackbar.collect { resId ->
+            snackbarHostState.showSnackbar(
+                message = getString(resId)
+            )
         }
     }
     Box(Modifier.padding(innerPaddingValues)) {
@@ -173,11 +181,16 @@ fun TimetableCompose(timetableViewModel: TimetableViewModel, innerPaddingValues:
             val subExists: Boolean = mapped.any { it.start.dayOfWeek.ordinal == 6 }
             val eventBefore8AM = mapped.minByOrNull { it.start.time }
             val eventExistsBefore8AM =
-                eventBefore8AM?.start?.time?.until(LocalTime(8, 0), DateTimeUnit.SECOND)?.let { it1 -> (it1 > 0) }
+                eventBefore8AM?.start?.time?.until(LocalTime(8, 0), DateTimeUnit.SECOND)
+                    ?.let { it1 -> (it1 > 0) }
             val eventAfter8PM = mapped.maxByOrNull { it.end.time }
-            val eventExistsAfter8PM = eventAfter8PM?.end?.time?.until(LocalTime(20, 0), DateTimeUnit.SECOND)?.let { it1 -> (it1 < 0) }
-            val minTime = if (eventExistsBefore8AM == true) eventBefore8AM.start.time else LocalTime(8, 0)
-            val maxTime = if (eventExistsAfter8PM == true) eventAfter8PM.end.time else LocalTime(20, 0)
+            val eventExistsAfter8PM =
+                eventAfter8PM?.end?.time?.until(LocalTime(20, 0), DateTimeUnit.SECOND)
+                    ?.let { it1 -> (it1 < 0) }
+            val minTime =
+                if (eventExistsBefore8AM == true) eventBefore8AM.start.time else LocalTime(8, 0)
+            val maxTime =
+                if (eventExistsAfter8PM == true) eventAfter8PM.end.time else LocalTime(20, 0)
 
             Schedule(
                 events = mapped,
@@ -292,7 +305,10 @@ fun BottomSheetCalendar(
                 .padding(24.dp, 16.dp)
         ) {
             TextButton(hideSheet) {
-                Text(stringResource(Res.string.cancelChoosingWeek), color = MaterialTheme.contentColors.tertiary)
+                Text(
+                    stringResource(Res.string.cancelChoosingWeek),
+                    color = MaterialTheme.contentColors.tertiary
+                )
             }
             TextButton({
                 selection?.let {

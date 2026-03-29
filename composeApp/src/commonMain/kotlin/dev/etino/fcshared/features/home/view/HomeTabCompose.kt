@@ -39,16 +39,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation3.runtime.NavKey
 import dev.etino.fcshared.compose.AppTheme
-import dev.etino.fcshared.home.models.Note
-import dev.etino.fcshared.home.models.WeatherDisplay
-import dev.etino.fcshared.navigation.Settings
-import dev.etino.fcshared.now
 import dev.etino.fcshared.features.home.compose.CardsCompose
 import dev.etino.fcshared.features.home.compose.NotesCompose
 import dev.etino.fcshared.features.home.compose.TodayTimetableCompose
 import dev.etino.fcshared.features.home.utils.getWeatherText
 import dev.etino.fcshared.features.menza.view.MenzaCompose
 import dev.etino.fcshared.features.menza.view.MenzaViewModel
+import dev.etino.fcshared.home.models.Note
+import dev.etino.fcshared.home.models.WeatherDisplay
+import dev.etino.fcshared.navigation.Settings
+import dev.etino.fcshared.now
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.hi_user
 import fesb_companion_shared.composeapp.generated.resources.settings_icon
@@ -56,6 +56,7 @@ import fesb_companion_shared.composeapp.generated.resources.weather_info
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -89,24 +90,23 @@ fun HomeTabCompose(
             else -> {}
         }
     }
-    val message = homeViewModel.showSnackbar.collectAsState().value?.let { stringResource(it) }
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(message)
+    LaunchedEffect(Unit) {
+        homeViewModel.showSnackbar.collect { resId ->
+            snackbarHostState.showSnackbar(message = getString(resId))
         }
     }
     Scaffold(
+        Modifier.padding(innerPaddingValues),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(0.dp),
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxHeight()) {
             if (menzaViewModel.menzaOpened.collectAsState().value) {
-                MenzaCompose(menzaViewModel, innerPaddingValues)
+                MenzaCompose(menzaViewModel)
                 return@Scaffold
             }
             LazyColumn(
                 Modifier
-                    .padding(innerPaddingValues)
                     .padding(paddingValues)
             ) {
                 item {

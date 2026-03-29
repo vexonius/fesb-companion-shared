@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,13 +38,13 @@ import kotlinx.coroutines.InternalCoroutinesApi
 
 @OptIn(ExperimentalMaterial3Api::class, InternalCoroutinesApi::class)
 @Composable
-fun MenzaCompose(menzaViewModel: MenzaViewModel, paddingValues: PaddingValues) {
+fun MenzaCompose(menzaViewModel: MenzaViewModel) {
 
     val lifecycleState = LocalLifecycleOwner.current.lifecycle.currentStateAsState().value
     val imageUrl = menzaViewModel.images.collectAsState().value
     val menzas = menzaViewModel.menza.collectAsState().value
 
-    Surface(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+    Surface(modifier = Modifier.fillMaxSize()) {
         val pageCount = menzaLocations.size
         val state = rememberPagerState(
             initialPage = (pageCount.div(2)),
@@ -79,7 +78,7 @@ fun MenzaCompose(menzaViewModel: MenzaViewModel, paddingValues: PaddingValues) {
                 horizontalArrangement = Arrangement.Center, modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background)
-                    .padding(0.dp, 24.dp, 0.dp, 24.dp)
+                    .padding(0.dp, 16.dp, 0.dp, 16.dp)
             ) {
                 LazyRow(
                     state = indicatorScrollState,

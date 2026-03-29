@@ -17,9 +17,11 @@ import fesb_companion_shared.composeapp.generated.resources.weather_error
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -52,12 +54,19 @@ class HomeViewModel(
             started = SharingStarted.WhileSubscribed(),
             initialValue = emptyList()
         )
-    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
-    val showSnackbar: StateFlow<StringResource?> = _showSnackbar
+    private val _showSnackbar = MutableSharedFlow<StringResource>()
+    val showSnackbar = _showSnackbar.asSharedFlow()
+
+    fun showMessage(resId: StringResource) {
+        viewModelScope.launch {
+            _showSnackbar.emit(resId)
+        }
+    }
+
 
     private val handler = CoroutineExceptionHandler { _, exception ->
         viewModelScope.launch(Dispatchers.Main) {
-            _showSnackbar.update { Res.string.general_error }
+            showMessage(Res.string.general_error)
         }
     }
 
@@ -73,14 +82,14 @@ class HomeViewModel(
             try {
                 weatherRepository.fetchWeatherDetails()?.let { _weatherDisplay.update { it } }
             } catch (e: Exception) {
-                _showSnackbar.update { Res.string.weather_error }
+                showMessage(Res.string.weather_error)
             }
         }
     }
 
     fun insert(note: Note) {
         if (_notes.value?.any { it.id == note.id } == true)
-            _notes.value?.map {
+            _notes.value?.forEach {
                 if (it.id == note.id) {
                     it.checked = note.checked
                 }
@@ -104,9 +113,15 @@ class HomeViewModel(
         if (!internetAvailable.value) return
         val date = LocalDate.now()
         val startDate: LocalDate =
-            date.minus((date.dayOfWeek.ordinal - DayOfWeek.MONDAY.ordinal).toLong(), DateTimeUnit.DAY)
+            date.minus(
+                (date.dayOfWeek.ordinal - DayOfWeek.MONDAY.ordinal).toLong(),
+                DateTimeUnit.DAY
+            )
         val endDate: LocalDate =
-            date.minus((date.dayOfWeek.ordinal - DayOfWeek.SATURDAY.ordinal).toLong(), DateTimeUnit.DAY)
+            date.minus(
+                (date.dayOfWeek.ordinal - DayOfWeek.SATURDAY.ordinal).toLong(),
+                DateTimeUnit.DAY
+            )
         fetchDailyTimetable(startDate, endDate)
     }
 

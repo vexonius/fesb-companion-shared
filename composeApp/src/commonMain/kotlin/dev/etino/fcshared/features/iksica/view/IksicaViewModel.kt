@@ -14,8 +14,10 @@ import fesb_companion_shared.composeapp.generated.resources.error_receipt_detail
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
@@ -26,8 +28,14 @@ class IksicaViewModel(
     connectivityObserver: ConnectivityObserver
 ) : ViewModel() {
 
-    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
-    val showSnackbar: StateFlow<StringResource?> = _showSnackbar
+    private val _showSnackbar = MutableSharedFlow<StringResource>()
+    val showSnackbar = _showSnackbar.asSharedFlow()
+
+    fun showMessage(resId: StringResource) {
+        viewModelScope.launch {
+            _showSnackbar.emit(resId)
+        }
+    }
     val internetAvailable: StateFlow<Boolean> = connectivityObserver.isConnected
 
     private val _iksicaData = MutableStateFlow<IksicaData?>(null)
@@ -42,7 +50,7 @@ class IksicaViewModel(
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         viewModelScope.launch(Dispatchers.Main) {
             println(throwable.message)
-            _showSnackbar.update { Res.string.error_general_iksica }
+            showMessage(Res.string.error_general_iksica)
         }
     }
 
@@ -78,7 +86,7 @@ class IksicaViewModel(
                 }
 
                 is IksicaResult.CardAndReceiptsResult.Failure -> {
-                    _showSnackbar.update { Res.string.error_fetching_receipts_iksica }
+                    showMessage(Res.string.error_fetching_receipts_iksica)
                 }
             }
         }
@@ -91,21 +99,21 @@ class IksicaViewModel(
         }
         if (!internetAvailable.value) return
         viewModelScope.launch(Dispatchers.Default + coroutineExceptionHandler) {
-            _receiptSelected.update({ IksicaReceiptState.Fetching })
+            _receiptSelected.update { IksicaReceiptState.Fetching }
             when (val details = repository.getReceipt(receipt.url)) {
                 is IksicaResult.ReceiptResult.Success -> {
-                    _receiptSelected.update({ IksicaReceiptState.Success(receipt.copy(receiptDetails = details.data)) })
+                    _receiptSelected.update { IksicaReceiptState.Success(receipt.copy(receiptDetails = details.data)) }
                 }
 
                 is IksicaResult.ReceiptResult.Failure -> {
-                    _receiptSelected.update({ IksicaReceiptState.Error(details.throwable.message.toString()) })
-                    _showSnackbar.update { Res.string.error_receipt_details_iksica }
+                    _receiptSelected.update { IksicaReceiptState.Error(details.throwable.message.toString()) }
+                    showMessage(Res.string.error_receipt_details_iksica)
                 }
             }
         }
     }
 
     fun hideReceiptDetails() {
-        _receiptSelected.update({ IksicaReceiptState.None })
+        _receiptSelected.update { IksicaReceiptState.None }
     }
 }

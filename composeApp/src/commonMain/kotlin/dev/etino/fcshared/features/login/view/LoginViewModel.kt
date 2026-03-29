@@ -7,7 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.etino.fcshared.SPKey
 import dev.etino.fcshared.database.AppDatabase
-import dev.etino.fcshared.features.login.*
+import dev.etino.fcshared.features.login.attendanceTestData
+import dev.etino.fcshared.features.login.eventsTestData
+import dev.etino.fcshared.features.login.receiptsTestData
+import dev.etino.fcshared.features.login.studentDataTestData
+import dev.etino.fcshared.features.login.studomatSubjectTestData
+import dev.etino.fcshared.features.login.studomatYearInfoTestData
 import dev.etino.fcshared.login.user.UserRepositoryInterface
 import dev.etino.fcshared.login.user.models.UserRepositoryResult
 import fesb_companion_shared.composeapp.generated.resources.Res
@@ -17,8 +22,9 @@ import fesb_companion_shared.composeapp.generated.resources.login_error_invalid_
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -44,11 +50,20 @@ class LoginViewModel(
         private set
 
     private val handler = CoroutineExceptionHandler { _, exception ->
-        _showSnackbar.update { Res.string.login_error_generic }
+        showMessage(Res.string.login_error_generic)
+        if (showLoading.value) {
+            showLoading.value = false
+        }
     }
 
-    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
-    val showSnackbar : StateFlow<StringResource?> = _showSnackbar
+    private val _showSnackbar = MutableSharedFlow<StringResource>()
+    val showSnackbar = _showSnackbar.asSharedFlow()
+
+    fun showMessage(resId: StringResource) {
+        viewModelScope.launch {
+            _showSnackbar.emit(resId)
+        }
+    }
 
     init{
         checkIfFirstTimeInApp()
@@ -80,7 +95,7 @@ class LoginViewModel(
         }
 
         if (username.isEmpty() || password.isEmpty()) {
-            _showSnackbar.update { Res.string.login_error_empty_credentials }
+            showMessage(Res.string.login_error_empty_credentials)
             return
         } else if (isEmailValid(username)) {
             username = username.substringBefore("@")
@@ -94,7 +109,7 @@ class LoginViewModel(
                 }
 
                 is UserRepositoryResult.LoginResult.Failure -> {
-                    _showSnackbar.update { Res.string.login_error_invalid_credentials }
+                    showMessage(Res.string.login_error_invalid_credentials)
                 }
             }
             showLoading.value = false
@@ -118,15 +133,6 @@ class LoginViewModel(
                 preferences[SPKey.FIRST_TIME.key] = false
             }
         }
-    }
-
-    fun clearViewModel() {
-        loggedIn.value = false
-        username.value = ""
-        password.value = ""
-        showLoading.value = false
-        passwordHidden.value = true
-        firstTimeInApp.value = false
     }
 
     fun checkIfLoggedIn() {

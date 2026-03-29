@@ -15,12 +15,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
 import kotlin.time.Clock
@@ -62,13 +63,18 @@ class AttendanceViewModel(
         }
     }
 
-    private val _showSnackbar = MutableStateFlow<StringResource?>(null)
-    val showSnackbar: StateFlow<StringResource?> = _showSnackbar
+    private val _showSnackbar = MutableSharedFlow<StringResource>()
+    val showSnackbar = _showSnackbar.asSharedFlow()
 
+    fun showMessage(resId: StringResource) {
+        viewModelScope.launch {
+            _showSnackbar.emit(resId)
+        }
+    }
 
     private val handler = CoroutineExceptionHandler { _, exception ->
         viewModelScope.launch(Dispatchers.Main) {
-            _showSnackbar.update { Res.string.general_error }
+            showMessage(Res.string.general_error)
         }
     }
 
@@ -89,7 +95,7 @@ class AttendanceViewModel(
                 }
 
                 is NetworkServiceResult.AttendanceParseResult.Failure -> {
-                    _showSnackbar.update { Res.string.general_error }
+                    showMessage(Res.string.general_error)
                 }
             }
         }

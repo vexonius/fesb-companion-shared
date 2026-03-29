@@ -16,20 +16,21 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -43,8 +44,9 @@ import fesb_companion_shared.composeapp.generated.resources.second_semester
 import fesb_companion_shared.composeapp.generated.resources.tab_attendance
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+
 @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 @Composable
 fun AttendanceCompose(attendanceViewModel: AttendanceViewModel, innerPaddingValues: PaddingValues) {
@@ -52,7 +54,7 @@ fun AttendanceCompose(attendanceViewModel: AttendanceViewModel, innerPaddingValu
     val items by attendanceViewModel.attendanceListFull.collectAsState(initial = emptyList())
 
     val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
-    val snackbarHostState = SnackbarHostState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(lifecycleState) {
         when (lifecycleState) {
@@ -64,14 +66,15 @@ fun AttendanceCompose(attendanceViewModel: AttendanceViewModel, innerPaddingValu
         }
     }
 
-    val message = attendanceViewModel.showSnackbar.collectAsState().value?.let { stringResource(it) }
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(message)
+    LaunchedEffect(Unit) {
+        attendanceViewModel.showSnackbar.collect { resId ->
+            snackbarHostState.showSnackbar(
+                message = getString(resId)
+            )
         }
     }
 
-    Box(Modifier.padding(innerPaddingValues)){
+    Box(Modifier.padding(innerPaddingValues)) {
         if (items.isNotEmpty()) {
             CreateAttendanceListView(attendanceViewModel, snackbarHostState)
         } else {
@@ -96,7 +99,10 @@ fun EmptyView() {
 
 @OptIn(InternalCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 @Composable
-fun CreateAttendanceListView(attendanceViewModel: AttendanceViewModel, snackbarHostState: SnackbarHostState) {
+fun CreateAttendanceListView(
+    attendanceViewModel: AttendanceViewModel,
+    snackbarHostState: SnackbarHostState
+) {
     val list by attendanceViewModel.attendance.collectAsState(initial = emptyList())
     val shownSemester by attendanceViewModel.shownSemester.collectAsState()
 

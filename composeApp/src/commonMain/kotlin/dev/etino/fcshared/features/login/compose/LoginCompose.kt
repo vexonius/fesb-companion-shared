@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.features.login.models.TextFieldModel
 import fesb_companion_shared.composeapp.generated.resources.Res
@@ -57,12 +59,13 @@ import fesb_companion_shared.composeapp.generated.resources.login_password
 import fesb_companion_shared.composeapp.generated.resources.login_safe_data
 import fesb_companion_shared.composeapp.generated.resources.visibility_hide
 import fesb_companion_shared.composeapp.generated.resources.visibility_show
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun LoginCompose(
@@ -71,34 +74,41 @@ fun LoginCompose(
     password: MutableStateFlow<String>,
     passwordHidden: MutableStateFlow<Boolean>,
     tryUserLogin: () -> Unit,
-    showSnackbar: StateFlow<StringResource?>,
+    showSnackbar: SharedFlow<StringResource>,
 ) {
-    val snackbarHostState = SnackbarHostState()
+    val snackbarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val showLoadingObserved = showLoading.collectAsState().value
-    val message = showSnackbar.collectAsState().value?.let { stringResource(it) }
 
     fun onDone() {
         keyboardController?.hide()
         tryUserLogin()
     }
 
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(message)
+    LaunchedEffect(Unit) {
+        showSnackbar.collect { resId ->
+            snackbarHostState.showSnackbar(
+                message = getString(resId)
+            )
         }
     }
 
     val usernameModel = TextFieldModel(
         text = username,
         label = stringResource(Res.string.login_email_or_username),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next
+        ),
         contentType = ContentType.Username + ContentType.EmailAddress
     )
     val passwordModel = TextFieldModel(
         text = password,
         label = stringResource(Res.string.login_password),
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done
+        ),
         keyboardActions = KeyboardActions(onDone = { onDone() }),
         textHidden = passwordHidden,
         trailingIcon = {
@@ -243,6 +253,6 @@ fun LoginComposePreview() {
         MutableStateFlow(""),
         MutableStateFlow(true),
         {},
-        MutableStateFlow(null)
+        MutableSharedFlow()
     )
 }

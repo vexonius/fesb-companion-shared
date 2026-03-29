@@ -21,15 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.etino.fcshared.menza.models.MenzaLocation
 import dev.etino.fcshared.menza.models.MealTime
 import dev.etino.fcshared.menza.models.MeniSpecial
 import dev.etino.fcshared.menza.models.Menu
 import dev.etino.fcshared.menza.models.Menza
+import dev.etino.fcshared.menza.models.MenzaLocation
 import fesb_companion_shared.composeapp.generated.resources.Res
 import fesb_companion_shared.composeapp.generated.resources.beverage
 import fesb_companion_shared.composeapp.generated.resources.dessert
@@ -51,7 +52,7 @@ import org.jetbrains.compose.resources.stringResource
 fun MeniComposeIksica(meni: Pair<MenzaLocation, Menza?>?) {
     val menzaLocation = meni?.first
     val menies = meni?.second
-    val screenHeight = LocalWindowInfo.current.containerSize.height.dp
+    val screenHeight = with(LocalDensity.current) { LocalWindowInfo.current.containerSize.height.toDp() }
 
     Column(
         horizontalAlignment = Alignment.Start,

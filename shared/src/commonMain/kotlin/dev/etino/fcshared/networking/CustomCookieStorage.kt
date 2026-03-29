@@ -1,5 +1,6 @@
 package dev.etino.fcshared.networking
 
+import androidx.compose.runtime.mutableStateOf
 import dev.etino.fcshared.iksica.services.IksicaService
 import dev.etino.fcshared.login.services.UserService
 import dev.etino.fcshared.studomat.services.StudomatService
@@ -7,12 +8,15 @@ import io.ktor.client.plugins.cookies.AcceptAllCookiesStorage
 import io.ktor.client.plugins.cookies.CookiesStorage
 import io.ktor.http.Cookie
 import io.ktor.http.Url
+import io.ktor.http.fullPath
 import io.ktor.util.date.GMTDate
 import kotlin.time.Clock
 
 
 class CustomCookieStorage() : CookiesStorage {
     private var defaultStorage: CookiesStorage = AcceptAllCookiesStorage()
+
+    private val studomatLoggedIn = mutableStateOf<Long>(0)
 
     fun clearCookies() {
         defaultStorage.close()
@@ -29,6 +33,10 @@ class CustomCookieStorage() : CookiesStorage {
             if (!(cookie.name == authCookieISSP || cookie.name == authCookieISVU)) {
                 cookie
             } else {
+                if (requestUrl.fullPath == "/studomat/login/saml2/sso/isvu" && cookie.name == authCookieISVU)
+                {
+                    studomatLoggedIn.value = GMTDate().timestamp
+                }
                 cookie.copy(
                     maxAge = (expirationTime / 1000).toInt(),
                     expires = GMTDate(Clock.System.now().toEpochMilliseconds() + expirationTime)
@@ -57,12 +65,13 @@ class CustomCookieStorage() : CookiesStorage {
         val cookies = get(StudomatService.targetUrl)
         val authCookies = cookies.filter { it.name == authCookieISVU }
 
-        return authCookies.isNotEmpty()
+        return authCookies.isNotEmpty() && (studomatLoggedIn.value + expirationTime) > GMTDate().timestamp
     }
 
     suspend fun clearISVUCookie() {
         val cookies = get(StudomatService.targetUrl)
         val authCookies = cookies.filter { it.name == authCookieISVU }
+        studomatLoggedIn.value = 0
         defaultStorage.addCookie(
             StudomatService.targetUrl,
             authCookies.first().copy(

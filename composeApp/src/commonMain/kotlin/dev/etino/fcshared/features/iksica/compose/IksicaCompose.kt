@@ -52,15 +52,20 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import dev.etino.fcshared.compose.contentColors
-import dev.etino.fcshared.iksica.models.IksicaData
-import dev.etino.fcshared.iksica.models.Receipt
 import dev.etino.fcshared.features.home.compose.noRippleClickable
 import dev.etino.fcshared.features.iksica.view.IksicaReceiptState
 import dev.etino.fcshared.features.iksica.view.IksicaViewModel
 import dev.etino.fcshared.features.iksica.view.IksicaViewState
-import fesb_companion_shared.composeapp.generated.resources.*
+import dev.etino.fcshared.iksica.models.IksicaData
+import dev.etino.fcshared.iksica.models.Receipt
+import fesb_companion_shared.composeapp.generated.resources.Res
+import fesb_companion_shared.composeapp.generated.resources.iksica_no_data
+import fesb_companion_shared.composeapp.generated.resources.iksica_no_receipts
+import fesb_companion_shared.composeapp.generated.resources.tab_iksica
+import fesb_companion_shared.composeapp.generated.resources.transactions
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(
@@ -85,13 +90,13 @@ fun IksicaCompose(iksicaViewModel: IksicaViewModel, innerPaddingValues: PaddingV
     val showPopup = remember { mutableStateOf(false) }
 
     val pullRefreshState = rememberPullRefreshState(isRefreshing, { iksicaViewModel.getReceipts() })
-    val snackbarHostState = SnackbarHostState()
-    val message = iksicaViewModel.showSnackbar.collectAsState().value?.let { stringResource(it) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
-
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(message)
+    LaunchedEffect(Unit) {
+        iksicaViewModel.showSnackbar.collect { resId ->
+            snackbarHostState.showSnackbar(
+                message = getString(resId)
+            )
         }
     }
 
@@ -112,6 +117,7 @@ fun IksicaCompose(iksicaViewModel: IksicaViewModel, innerPaddingValues: PaddingV
         sheetPeekHeight = 0.dp,
         modifier = Modifier
             .pullRefresh(pullRefreshState)
+            .padding(innerPaddingValues)
             .nestedScroll(TopAppBarDefaults.pinnedScrollBehavior().nestedScrollConnection),
         scaffoldState = scaffoldState,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -119,7 +125,7 @@ fun IksicaCompose(iksicaViewModel: IksicaViewModel, innerPaddingValues: PaddingV
             if (receiptSelected is IksicaReceiptState.Success)
                 BottomSheetIksica(receiptSelected.data) { iksicaViewModel.hideReceiptDetails() }
         }) {
-        Box(Modifier.fillMaxWidth().padding(innerPaddingValues)) {
+        Box(Modifier.fillMaxWidth()) {
             PullRefreshIndicator(
                 isRefreshing, pullRefreshState, Modifier
                     .align(Alignment.TopCenter)
@@ -195,7 +201,10 @@ fun PopulatedIksicaView(
                 val delta = available.y
                 if (listState.firstVisibleItemIndex == 0) {
                     sheetOffset.intValue =
-                        (sheetOffset.intValue + delta).coerceIn(sheetTopPadding, composableHeight.intValue.toFloat())
+                        (sheetOffset.intValue + delta).coerceIn(
+                            sheetTopPadding,
+                            composableHeight.intValue.toFloat()
+                        )
                             .toInt()
                 }
                 return Offset(

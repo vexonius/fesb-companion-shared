@@ -71,7 +71,7 @@ fun Application(routeToLogin: () -> Unit) {
             )
         },
         floatingActionButton = {
-            if (!internetAvailable.value) NoInternetIcon()
+            if (!internetAvailable.collectAsState().value) NoInternetIcon()
         }
     ) { paddingValues ->
         val entryProvider: (NavKey) -> NavEntry<NavKey> = entryProvider {
