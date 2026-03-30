@@ -50,7 +50,7 @@ fun parseMenza(jsonString: String): Menza? {
                 else if (mealTime == MealTime.DINNER) menza.meniesDinner.add(meni)
             } else if (type.contains("JELO PO IZBORU") && it.size >= 2) {
                 for (i in 1 until it.size) {
-                    val item = it.getOrNull(i) ?: ""
+                    val item = it.getOrNull(i)?.trim() ?: ""
                     val name = item.split(Regex(" (?=\\d)")).firstOrNull() ?: ""
                     if (!name.isNotEmpty()) return@forEach
 
