@@ -1,5 +1,6 @@
 package dev.etino.fcshared.features.iksica.di
 
+import dev.etino.fcshared.KoinNames
 import dev.etino.fcshared.database.AppDatabase
 import dev.etino.fcshared.features.iksica.view.IksicaViewModel
 import dev.etino.fcshared.iksica.dao.IksicaDao
@@ -27,8 +28,8 @@ import org.koin.dsl.module
 val iksicaModule = module {
     single<ISSPLoginInterceptor> { ISSPLoginInterceptor(get(), get()) }
     single<IksicaLoginServiceInterface> { IksicaLoginService(get(), null, "", "") }
-    single<HttpClient>(named("ISSPPortalClient")) { provideISSPPortalClient(get(), get(), get()) }
-    single<IksicaServiceInterface> { IksicaService(get(named("ISSPPortalClient"))) }
+    single<HttpClient>(named(KoinNames.ISSPPORTALCLIENT)) { provideISSPPortalClient(get(), get(), get()) }
+    single<IksicaServiceInterface> { IksicaService(get(named(KoinNames.ISSPPORTALCLIENT))) }
     single<IksicaRepositoryInterface> { IksicaRepository(get(), get()) }
     single<IksicaDao> { getIksicaDao(get()) }
     viewModel { IksicaViewModel(get(), get()) }

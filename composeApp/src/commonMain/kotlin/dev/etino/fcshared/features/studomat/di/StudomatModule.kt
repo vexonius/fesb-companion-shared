@@ -1,5 +1,6 @@
 package dev.etino.fcshared.features.studomat.di
 
+import dev.etino.fcshared.KoinNames
 import dev.etino.fcshared.database.AppDatabase
 import dev.etino.fcshared.features.studomat.view.StudomatViewModel
 import dev.etino.fcshared.networking.CustomCookieStorage
@@ -22,10 +23,10 @@ import org.koin.dsl.module
 
 val studomatModule = module {
     single<ISVULoginInterceptor> { ISVULoginInterceptor(get(), get()) }
-    single<HttpClient>(named("loginclientStudomat")) { provideISVULoginClient(get(), get()) }
-    single<StudomatLoginServiceInterface> { StudomatLoginService(get(named("loginclientStudomat"))) }
-    single<HttpClient>(named("clientStudomat")) { provideISVUPortalClient(get(), get(), get()) }
-    single { StudomatService(get(named("clientStudomat")), get()) }
+    single<HttpClient>(named(KoinNames.LOGINCLIENTSTUDOMAT)) { provideISVULoginClient(get(), get()) }
+    single<StudomatLoginServiceInterface> { StudomatLoginService(get(named(KoinNames.LOGINCLIENTSTUDOMAT))) }
+    single<HttpClient>(named(KoinNames.CLIENTSTUDOMAT)) { provideISVUPortalClient(get(), get(), get()) }
+    single { StudomatService(get(named(KoinNames.CLIENTSTUDOMAT)), get()) }
     single { StudomatRepository(get(), get()) }
     single { getStudomatDao(get()) }
     viewModel { StudomatViewModel(get(), get(), get()) }
