@@ -43,7 +43,7 @@ platform :ios do
 
     build_ios_app(
       scheme: "iosApp",                                            # Your Xcode scheme name
-      project: "iosApp/iosApp.xcodeproj",                         # Path to your .xcodeproj
+      project: "iosApp.xcodeproj",                         # Path to your .xcodeproj
       output_name: "iosApp.ipa",                                   # Name of the .ipa file generated
       output_directory: "iosApp/build",                           # Output directory for the .ipa
       export_options: {                                            # Export options for code signing
@@ -63,7 +63,7 @@ platform :ios do
     fetch_certificates_with_match(options.merge(match_type: "appstore"))  # Pull App Store signing certs/profiles.
 
     increment_version_number(
-      xcodeproj: "iosApp/iosApp.xcodeproj",
+      xcodeproj: "iosApp.xcodeproj",
       version_number: "1.0.0"
     )
 
@@ -75,7 +75,7 @@ platform :ios do
 
     # Increment the build number in Xcode project to one higher than the latest TestFlight build.
     increment_build_number(
-      xcodeproj: "iosApp/iosApp.xcodeproj",
+      xcodeproj: "iosApp.xcodeproj",
       build_number: latest_build_number + 1
     )
 
