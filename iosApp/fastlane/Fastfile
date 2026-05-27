@@ -1,104 +1,128 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
-default_platform(:ios)
 platform :ios do
-  desc "Get certificates"
-  lane :certificates do
-    sync_code_signing(
-      type: "adhoc",
-      app_identifier: ['com.tstudioz.fax.fme'],
-      force_for_new_devices: true,
-      readonly: true
-    )
+
+  # Shared Private Lane Helpers for reuse in the main lane
+  #############################
+  # Shared Private Lane Helpers
+  #############################
+
+  private_lane :setup_ci_if_needed do
+    unless ENV['CI']
+      UI.message("🖥️ Running locally, skipping CI-specific setup.")
+    else
+      setup_ci(
+        provider: "circleci"
+      )
+    end
   end
-  desc "Load ASC API Key information to use in subsequent lanes"
-  lane :load_asc_api_key do
+
+  private_lane :load_api_key do |options|
     app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_KEY_ID"],
-      issuer_id: ENV["APP_STORE_CONNECT_API_KEY_ISSUER_ID"],
-      key_content: ENV["APP_STORE_CONNECT_API_KEY_KEY"],
-      is_key_content_base64: true,
-      in_house: false # detecting this via ASC private key not currently supported
+      key_id: options[:appstore_key_id] || "HA469T6757",  # Your API Key ID
+      issuer_id: options[:appstore_issuer_id] || "8er9e361-9603-4c3e-b147-be3b1o816099",  # Your Issuer ID
+      key_filepath: options[:key_filepath] || "./secrets/Auth_Key.p8",  # Path to .p8 key file
+      duration: 1200  # Token validity (seconds)
     )
   end
 
-  desc "Bump build number based on most recent TestFlight build number"
-  lane :fetch_and_increment_build_number do
-   #fetch read your app identifier defined in your Appfile
-   app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
-   api_key = lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
-
-   current_version = get_version_number(
-     target: "example" # replace with your main target, required if you have more than one non-test target
-   )
-
-   latest_build_number = latest_testflight_build_number(
-     api_key: api_key,
-     version: current_version,
-     app_identifier: app_identifier
-   )
-   increment_build_number(
-     build_number: (latest_build_number + 1),
-   )
+  private_lane :fetch_certificates_with_match do |options|
+    match(
+      type: options[:match_type] || "appstore",  # Profile type (e.g. adhoc or appstore)
+      app_identifier: options[:app_identifier] || "com.example.9af3c1d2",  # Your app’s bundle ID
+      readonly: true,  # Don't generate new if not needed
+      git_url: options[:git_url] || "git@github.com:openMF/ios-provisioning-profile.git", # Certs repo
+      git_branch: options[:git_branch] || "master",
+      git_private_key: options[:git_private_key] || "./secrets/match_ci_key", # SSH key for repo
+      force_for_new_devices: true,  # Renew profile if new devices added
+      api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]  # Use API key for auth
+    )
   end
 
-  desc "Build the iOS app for release"
-  lane :build_release do |options|
-    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
+  private_lane :build_ios_project do |options|
+    app_identifier = options[:app_identifier] || "com.example.9af3c1d2"
+    provisioning_profile_name = options[:provisioning_profile_name] || "match appstore com.example.9af3c1d2"
 
-    profile_name = "match AdHoc com.tstudioz.fax.fme" # replace with the name of the profile to use for the build
-    output_name = "example-iOS" # specify the name of the .ipa file to generate
-    export_method = "adhoc" # specify the export method
-
-    match(type: "#{export_method}", force_for_new_devices: true)
-
-   # build the app
-   gym(
-     scheme: "example", # replace with name of your project’s scheme
-     output_name: output_name,
-     configuration: "Release",
-     export_options: {
-       method: export_method,
-       provisioningProfiles: {
-         app_identifier => profile_name # here you can add any additional bundle identifiers and their associated provisioning profiles if you’re also building an app extension or other bundle identifier
-       }
-     }
-   )
+    build_ios_app(
+      scheme: "iosApp",                                            # Your Xcode scheme name
+      project: "cmp-ios/iosApp.xcodeproj",                         # Path to your .xcodeproj
+      output_name: "iosApp.ipa",                                   # Name of the .ipa file generated
+      output_directory: "cmp-ios/build",                           # Output directory for the .ipa
+      export_options: {                                            # Export options for code signing
+        provisioningProfiles: {
+          app_identifier => provisioning_profile_name             # Specify the provisioning profile to use
+        }
+      },
+      xcargs: "CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=\"Apple Distribution\" DEVELOPMENT_TEAM=L432S2FZP5 PROVISIONING_PROFILE_SPECIFIER=\"#{provisioning_profile_name}\""
+      # ^ Extra Xcode build settings to force manual code signing with the specified provisioning profile.
+    )
   end
 
-  desc "Upload to TestFlight / ASC"
-  lane :upload_release do
-   api_key = lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+  desc "Upload iOS Application to App Store"
+  lane :release do |options|
+    setup_ci_if_needed  # If running on CI, perform any CI-specific setup.
+    load_api_key(options)  # Authenticate with App Store Connect API using the key.
+    fetch_certificates_with_match(options.merge(match_type: "appstore"))  # Pull App Store signing certs/profiles.
 
-   deliver(
-       api_key: api_key,
-       skip_screenshots: true,
-       skip_metadata: true,
-       skip_app_version_update: true,
-       force: true, # skips verification of HTML preview file (since this will be run from a CI machine)
-       run_precheck_before_submit: false # not supported through ASC API yet
-   )
-  end
-  desc "Build and upload to TestFlight"
-  lane :build_upload_testflight do
-    load_asc_api_key
-    setup_ci
-    certificates
-    fetch_and_increment_build_number
-    build_release
-    upload_release
+    increment_version_number(
+      xcodeproj: "cmp-ios/iosApp.xcodeproj",
+      version_number: "1.0.0"
+    )
+
+    # Fetch the most recent build number uploaded to TestFlight (to avoid duplicates).
+    latest_build_number = latest_testflight_build_number(
+      app_identifier: options[:app_identifier] || "com.example.9af3c1d2",
+      api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
+    )
+
+    # Increment the build number in Xcode project to one higher than the latest TestFlight build.
+    increment_build_number(
+      xcodeproj: "cmp-ios/iosApp.xcodeproj",
+      build_number: latest_build_number + 1
+    )
+
+    # Update certain Info.plist entries (example shown for usage descriptions).
+    update_plist(
+      plist_path: "cmp-ios/iosApp/Info.plist",
+      block: proc do |plist|
+        plist['NSContactsUsageDescription'] = 'This app requires access to your contacts to enable autofill and collaboration features.'
+        plist['NSLocationWhenInUseUsageDescription'] = 'This app does not use your location to suggest services near you.'
+        plist['NSBluetoothAlwaysUsageDescription'] = 'This app does not use Bluetooth to communicate with nearby devices.'
+      end
+    )
+
+    # Build the iOS app using the App Store provisioning profile (generates an IPA).
+    build_ios_project(
+      options.merge(provisioning_profile_name: "match AppStore com.example.9af3c1d2")
+    )
+
+    # Upload the build and metadata to App Store Connect, then submit for review and release.
+    deliver(
+      metadata_path: options[:metadata_path] || "./fastlane/metadata",  # Path to metadata folder
+      submit_for_review: true,        # Automatically submit the build for App Store review
+      automatic_release: true,        # Automatically release the app once approved (skip manual release)
+      api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],  # Use API key for App Store Connect
+      skip_app_version_update: true,  # Don’t attempt to create a new app version in App Store Connect
+      force: true,                    # Skip confirmation dialogs and HTML report checks
+      precheck_include_in_app_purchases: false,  # Skip automatic in-app purchase checks
+      overwrite_screenshots: true,    # Overwrite existing screenshots on App Store Connect
+      app_rating_config_path: options[:app_rating_config_path] || "./fastlane/age_rating.json",
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        add_id_info_limits_tracking: false,
+        add_id_info_serves_ads: false,
+        add_id_info_tracks_action: false,
+        add_id_info_tracks_install: false,
+        content_rights_has_rights: true,
+        content_rights_contains_third_party_content: false,
+        export_compliance_platform: 'ios',
+        export_compliance_compliance_required: false,
+        export_compliance_encryption_updated: false,
+        export_compliance_app_type: nil,
+        export_compliance_uses_encryption: false,
+        export_compliance_is_exempt: true,
+        export_compliance_contains_third_party_cryptography: false,
+        export_compliance_contains_proprietary_cryptography: false,
+        export_compliance_available_on_french_store: true
+      }
+    )
   end
 end
