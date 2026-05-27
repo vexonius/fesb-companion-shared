@@ -81,7 +81,7 @@ platform :ios do
 
     # Update certain Info.plist entries (example shown for usage descriptions).
     update_plist(
-      plist_path: "iosApp/iosApp/Info.plist",
+      plist_path: "iosApp/Info.plist",
       block: proc do |plist|
         plist['NSContactsUsageDescription'] = 'This app requires access to your contacts to enable autofill and collaboration features.'
         plist['NSLocationWhenInUseUsageDescription'] = 'This app does not use your location to suggest services near you.'
