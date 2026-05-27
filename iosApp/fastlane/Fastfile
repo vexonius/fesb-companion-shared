@@ -51,7 +51,7 @@ platform :ios do
           app_identifier => provisioning_profile_name             # Specify the provisioning profile to use
         }
       },
-      xcargs: "CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=\"Apple Distribution\" DEVELOPMENT_TEAM=L432S2FZP5 PROVISIONING_PROFILE_SPECIFIER=\"#{provisioning_profile_name}\""
+      xcargs: "CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=\"Apple Distribution\" DEVELOPMENT_TEAM=5S598DJMXN PROVISIONING_PROFILE_SPECIFIER=\"#{provisioning_profile_name}\""
       # ^ Extra Xcode build settings to force manual code signing with the specified provisioning profile.
     )
   end
