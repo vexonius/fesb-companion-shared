@@ -1,9 +1,9 @@
 git_branch("main")
-git_url("https://github.com/stipe-jurkovic/FCAppleAppKeys.git")
+git_url("git@github.com:stipe-jurkovic/FCAppleAppKeys.git")
 
 storage_mode("git")
 
-type("development") # The default type, can be: appstore, adhoc, enterprise or development
+type("appstore") # The default type, can be: appstore, adhoc, enterprise or development
 
 app_identifier(['com.tstudioz.fax.fme'])
 username("stipan0990@gmail.com") # Your Apple Developer Portal username
