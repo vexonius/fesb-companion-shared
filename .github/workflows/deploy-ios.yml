@@ -49,6 +49,7 @@ jobs:
           printf "Host github.com\n  IdentityFile ~/.ssh/match_ci_key\n  StrictHostKeyChecking no\n" >> ~/.ssh/config
 
       - name: Decode and save App Store Connect API key
+        working-directory: iosApp
         run: |
           mkdir -p secrets
           echo "$AUTH_KEY_BASE64" | base64 --decode > secrets/Auth_key.p8
