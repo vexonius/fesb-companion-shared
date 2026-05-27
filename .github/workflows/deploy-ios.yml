@@ -35,7 +35,7 @@ jobs:
           bundler-cache: true
 
       - name: Install Fastlane and dependencies
-        working-directory: ios
+        working-directory: iosApp
         run: |
           gem install bundler
           bundle install --jobs 4 --retry 3
@@ -54,7 +54,7 @@ jobs:
           echo "$AUTH_KEY_BASE64" | base64 --decode > secrets/Auth_key.p8
 
       - name: Run Fastlane release lane
-        working-directory: ios
+        working-directory: iosApp
         run: |
           bundle exec fastlane ios release \
             app_identifier:"$APP_IDENTIFIER" \
