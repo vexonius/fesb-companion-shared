@@ -21,6 +21,7 @@ kotlin {
         }
     }
     listOf(
+        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
@@ -79,6 +80,25 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
     }
+}
+dependencies {
+
+    // Android
+
+    add("kspAndroid", libs.androidx.room.compiler)
+
+    // JVM (Desktop)
+
+    //add("kspDesktop", libs.androidx.room.compiler)
+
+    // iOS
+
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+
+    add("kspIosX64", libs.androidx.room.compiler)
+
+    add("kspIosArm64", libs.androidx.room.compiler)
+
 }
 
 room {
