@@ -32,7 +32,7 @@ platform :ios do
       git_url: options[:git_url],
       git_branch: options[:git_branch],
       git_private_key: options[:git_private_key],
-      force_for_new_devices: true,  # Renew profile if new devices added
+      force_for_new_devices: false,  # Renew profile if new devices added
       api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]  # Use API key for auth
     )
   end
