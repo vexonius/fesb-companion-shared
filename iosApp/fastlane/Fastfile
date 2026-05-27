@@ -17,29 +17,29 @@ platform :ios do
 
   private_lane :load_api_key do |options|
     app_store_connect_api_key(
-      key_id: options[:appstore_key_id] || "HA469T6757",  # Your API Key ID
-      issuer_id: options[:appstore_issuer_id] || "8er9e361-9603-4c3e-b147-be3b1o816099",  # Your Issuer ID
-      key_filepath: options[:key_filepath] || "./secrets/Auth_Key.p8",  # Path to .p8 key file
+      key_id: options[:appstore_key_id],
+      issuer_id: options[:appstore_issuer_id],
+      key_filepath: options[:key_filepath],
       duration: 1200  # Token validity (seconds)
     )
   end
 
   private_lane :fetch_certificates_with_match do |options|
     match(
-      type: options[:match_type] || "appstore",  # Profile type (e.g. adhoc or appstore)
-      app_identifier: options[:app_identifier] || "com.example.9af3c1d2",  # Your app’s bundle ID
+      type: options[:match_type],
+      app_identifier: options[:app_identifier],
       readonly: true,  # Don't generate new if not needed
-      git_url: options[:git_url] || "git@github.com:openMF/ios-provisioning-profile.git", # Certs repo
-      git_branch: options[:git_branch] || "master",
-      git_private_key: options[:git_private_key] || "./secrets/match_ci_key", # SSH key for repo
+      git_url: options[:git_url],
+      git_branch: options[:git_branch],
+      git_private_key: options[:git_private_key],
       force_for_new_devices: true,  # Renew profile if new devices added
       api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]  # Use API key for auth
     )
   end
 
   private_lane :build_ios_project do |options|
-    app_identifier = options[:app_identifier] || "com.example.9af3c1d2"
-    provisioning_profile_name = options[:provisioning_profile_name] || "match appstore com.example.9af3c1d2"
+    app_identifier = options[:app_identifier]
+    provisioning_profile_name = options[:provisioning_profile_name]
 
     build_ios_app(
       scheme: "iosApp",                                            # Your Xcode scheme name
@@ -69,7 +69,7 @@ platform :ios do
 
     # Fetch the most recent build number uploaded to TestFlight (to avoid duplicates).
     latest_build_number = latest_testflight_build_number(
-      app_identifier: options[:app_identifier] || "com.example.9af3c1d2",
+      app_identifier: options[:app_identifier],
       api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY]
     )
 
@@ -96,7 +96,7 @@ platform :ios do
 
     # Upload the build and metadata to App Store Connect, then submit for review and release.
     deliver(
-      metadata_path: options[:metadata_path] || "./fastlane/metadata",  # Path to metadata folder
+      metadata_path: options[:metadata_path],  # Path to metadata folder
       submit_for_review: true,        # Automatically submit the build for App Store review
       automatic_release: true,        # Automatically release the app once approved (skip manual release)
       api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],  # Use API key for App Store Connect
@@ -104,7 +104,7 @@ platform :ios do
       force: true,                    # Skip confirmation dialogs and HTML report checks
       precheck_include_in_app_purchases: false,  # Skip automatic in-app purchase checks
       overwrite_screenshots: true,    # Overwrite existing screenshots on App Store Connect
-      app_rating_config_path: options[:app_rating_config_path] || "./fastlane/age_rating.json",
+      app_rating_config_path: options[:app_rating_config_path],
       submission_information: {
         add_id_info_uses_idfa: false,
         add_id_info_limits_tracking: false,
