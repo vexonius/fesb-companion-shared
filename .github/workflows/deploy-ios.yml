@@ -7,11 +7,11 @@ jobs:
     runs-on: macos-latest
 
     env:
-      APP_IDENTIFIER: 'org.your.bundle.id'
-      GIT_URL: 'git@github.com:your-org/your-app-certificates.git'
-      GIT_BRANCH: 'master'
+      APP_IDENTIFIER: 'com.tstudioz.fax.fme'
+      GIT_URL: 'git@github.com:stipe-jurkovic/FCAppleAppKeys.git'
+      GIT_BRANCH: 'main'
       MATCH_TYPE: 'appstore'
-      PROVISIONING_PROFILE_NAME: 'match AppStore org.your.bundle.id'
+      PROVISIONING_PROFILE_NAME: 'match AppStore com.tstudioz.fax.fme 1779911279'
       METADATA_PATH: './fastlane/metadata'
       APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
       APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
