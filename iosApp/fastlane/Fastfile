@@ -9,7 +9,9 @@ platform :ios do
     unless ENV['CI']
       UI.message("🖥️ Running locally, skipping CI-specific setup.")
     else
-      setup_ci(provider: "github_actions")
+      setup_ci(
+        provider: "circleci"
+      )
     end
   end
 
