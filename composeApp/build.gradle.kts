@@ -78,6 +78,9 @@ kotlin {
             implementation(libs.connectivity.device)
             implementation(libs.ktor.client.darwin)
         }
+        nativeMain.dependencies {
+            implementation(libs.androidx.room.runtime)
+        }
     }
 }
 dependencies {
