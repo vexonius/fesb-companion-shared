@@ -58,7 +58,12 @@ jobs:
         run: |
           mkdir -p secrets
           echo "$AUTH_KEY_BASE64" | base64 --decode > secrets/Auth_key.p8
-          
+      - name: Set Gradle + Kotlin memory settings
+        run: |
+          echo "org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=2g -Dfile.encoding=UTF-8" >> gradle.properties
+          echo "kotlin.daemon.jvm.options=-Xmx4g" >> gradle.properties
+          echo "kotlin.native.concurrent.numberOfWorkers=2" >> gradle.properties
+          echo "ksp.incremental=false" >> gradle.properties
       - name: Run Fastlane release lane
         working-directory: iosApp
         run: |
