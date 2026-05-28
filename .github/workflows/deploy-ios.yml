@@ -4,7 +4,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: macos-15
+    runs-on: macos-latest
 
     env:
       GRADLE_OPTS: -Xmx6g
