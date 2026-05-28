@@ -29,15 +29,6 @@ jobs:
 
       - name: Check out repository
         uses: actions/checkout@v4
-      - name: Configure Gradle + Kotlin (CI memory fix)
-        run: |
-          cat <<EOF > gradle.properties
-          org.gradle.jvmargs=-Xmx6g -XX:MaxMetaspaceSize=2g -Dfile.encoding=UTF-8
-          kotlin.daemon.jvm.options=-Xmx4g
-          kotlin.native.concurrent.numberOfWorkers=2
-          ksp.incremental=false
-          org.gradle.workers.max=2
-          EOF
 
       - name: Set up Ruby (with Bundler)
         uses: ruby/setup-ruby@v1
