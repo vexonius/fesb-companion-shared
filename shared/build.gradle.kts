@@ -53,6 +53,7 @@ kotlin {
         iosMain.dependencies {
             //implementation(libs.ktor.client.darwin)
             implementation(libs.connectivity.device)
+            implementation(libs.androidx.room.runtime)
         }
     }
 }
@@ -62,7 +63,7 @@ dependencies {
     add("kspJvm", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
     //add("kspIosX64", libs.androidx.room.compiler)
-    //add("kspIosArm64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
     // Add any other platform target you use in your project, for example kspDesktop
 }
 
