@@ -78,27 +78,16 @@ kotlin {
             implementation(libs.connectivity.device)
             implementation(libs.ktor.client.darwin)
         }
-        nativeMain.dependencies {
-            implementation(libs.androidx.room.runtime)
-        }
     }
 }
+
 dependencies {
-
-    // Android
-
     add("kspAndroid", libs.androidx.room.compiler)
-
-    // JVM (Desktop)
-
-    //add("kspDesktop", libs.androidx.room.compiler)
-
-    // iOS
-
+    add("kspJvm", libs.androidx.room.compiler)
     add("kspIosSimulatorArm64", libs.androidx.room.compiler)
-
+    //add("kspIosX64", libs.androidx.room.compiler)
     add("kspIosArm64", libs.androidx.room.compiler)
-
+    // Add any other platform target you use in your project, for example kspDesktop
 }
 
 room {
