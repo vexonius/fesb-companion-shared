@@ -54,7 +54,7 @@ jobs:
           mkdir -p secrets
           echo "$AUTH_KEY_BASE64" | base64 --decode > secrets/Auth_key.p8
       - name: Build shared module first
-        run: ./gradlew clean :shared:build
+        run: ./gradlew clean :shared:build --no-configuration-cache
       - name: Run Fastlane release lane
         working-directory: iosApp
         run: |
