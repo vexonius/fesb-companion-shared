@@ -97,8 +97,8 @@ platform :ios do
     # Upload the build and metadata to App Store Connect, then submit for review and release.
     deliver(
       metadata_path: options[:metadata_path],  # Path to metadata folder
-      submit_for_review: true,        # Automatically submit the build for App Store review
-      automatic_release: true,        # Automatically release the app once approved (skip manual release)
+      submit_for_review: false,        # Automatically submit the build for App Store review
+      automatic_release: false,        # Automatically release the app once approved (skip manual release)
       api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],  # Use API key for App Store Connect
       skip_app_version_update: true,  # Don’t attempt to create a new app version in App Store Connect
       force: true,                    # Skip confirmation dialogs and HTML report checks

@@ -7,6 +7,8 @@ jobs:
     runs-on: macos-latest
 
     env:
+      GRADLE_OPTS: -Xmx6g
+      _JAVA_OPTIONS: -Xmx6g
       APP_IDENTIFIER: 'com.tstudioz.fax.fme'
       GIT_URL: 'git@github.com:stipe-jurkovic/FCAppleAppKeys.git'
       GIT_BRANCH: 'main'
@@ -53,8 +55,7 @@ jobs:
         run: |
           mkdir -p secrets
           echo "$AUTH_KEY_BASE64" | base64 --decode > secrets/Auth_key.p8
-      - name: Build shared module first
-        run: ./gradlew clean :shared:build --no-configuration-cache
+      
       - name: Run Fastlane release lane
         working-directory: iosApp
         run: |
