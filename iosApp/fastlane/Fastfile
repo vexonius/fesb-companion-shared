@@ -93,36 +93,50 @@ platform :ios do
     build_ios_project(
       options.merge(provisioning_profile_name: "match AppStore com.tstudioz.fax.fme 1779911279")
     )
+    # Choose distribution target (TestFlight vs App Store)
+    if ENV['APPSTORE_RELEASE'] == 'true'
+      UI.message("🚀 Uploading to App Store (via deliver)")
 
-    # Upload the build and metadata to App Store Connect, then submit for review and release.
-    deliver(
-      metadata_path: options[:metadata_path],  # Path to metadata folder
-      submit_for_review: false,        # Automatically submit the build for App Store review
-      automatic_release: false,        # Automatically release the app once approved (skip manual release)
-      api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],  # Use API key for App Store Connect
-      skip_app_version_update: true,  # Don’t attempt to create a new app version in App Store Connect
-      force: true,                    # Skip confirmation dialogs and HTML report checks
-      precheck_include_in_app_purchases: false,  # Skip automatic in-app purchase checks
-      overwrite_screenshots: true,    # Overwrite existing screenshots on App Store Connect
-      app_rating_config_path: options[:app_rating_config_path],
-      submission_information: {
-        add_id_info_uses_idfa: false,
-        add_id_info_limits_tracking: false,
-        add_id_info_serves_ads: false,
-        add_id_info_tracks_action: false,
-        add_id_info_tracks_install: false,
-        content_rights_has_rights: true,
-        content_rights_contains_third_party_content: false,
-        export_compliance_platform: 'ios',
-        export_compliance_compliance_required: false,
-        export_compliance_encryption_updated: false,
-        export_compliance_app_type: nil,
-        export_compliance_uses_encryption: false,
-        export_compliance_is_exempt: true,
-        export_compliance_contains_third_party_cryptography: false,
-        export_compliance_contains_proprietary_cryptography: false,
-        export_compliance_available_on_french_store: true
-      }
-    )
+      # Upload the build and metadata to App Store Connect, then submit for review and release.
+      deliver(
+        metadata_path: options[:metadata_path],  # Path to metadata folder
+        submit_for_review: false,        # Automatically submit the build for App Store review
+        automatic_release: false,        # Automatically release the app once approved (skip manual release)
+        api_key: Actions.lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],  # Use API key for App Store Connect
+        skip_app_version_update: true,  # Don’t attempt to create a new app version in App Store Connect
+        force: true,                    # Skip confirmation dialogs and HTML report checks
+        precheck_include_in_app_purchases: false,  # Skip automatic in-app purchase checks
+        overwrite_screenshots: true,    # Overwrite existing screenshots on App Store Connect
+        app_rating_config_path: options[:app_rating_config_path],
+        submission_information: {
+          add_id_info_uses_idfa: false,
+          add_id_info_limits_tracking: false,
+          add_id_info_serves_ads: false,
+          add_id_info_tracks_action: false,
+          add_id_info_tracks_install: false,
+          content_rights_has_rights: true,
+          content_rights_contains_third_party_content: false,
+          export_compliance_platform: 'ios',
+          export_compliance_compliance_required: false,
+          export_compliance_encryption_updated: false,
+          export_compliance_app_type: nil,
+          export_compliance_uses_encryption: false,
+          export_compliance_is_exempt: true,
+          export_compliance_contains_third_party_cryptography: false,
+          export_compliance_contains_proprietary_cryptography: false,
+          export_compliance_available_on_french_store: true
+        }
+      )
+    else
+      UI.message("🧪 Uploading to TestFlight")
+    
+      upload_to_testflight(
+        ipa: "iosApp/build/iosApp.ipa",
+        api_key: Actions.lane_context[:app_store_connect_api_key],
+        skip_waiting_for_build_processing: true,
+        distribute_external: false
+      )
+    end
+  
   end
 end
