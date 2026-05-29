@@ -1,6 +1,15 @@
 name: Deploy iOS to App Store
 on:
   workflow_dispatch:
+    inputs:
+      release_type:
+        description: "Release type"
+        required: true
+        default: "testflight"
+        type: choice
+        options:
+          - testflight
+          - appstore
 
 jobs:
   deploy:
@@ -20,6 +29,7 @@ jobs:
       AUTH_KEY_BASE64: ${{ secrets.APPSTORE_PRIVATE_KEY }}
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       MATCH_SSH_PRIVATE_KEY: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
+      APPSTORE_RELEASE: ${{ inputs.release_type == 'appstore' }}
 
     steps:
       - name: Set up latest Xcode
