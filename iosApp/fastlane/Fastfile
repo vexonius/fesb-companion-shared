@@ -5,6 +5,8 @@ platform :ios do
   # Shared Private Lane Helpers
   #############################
 
+  release_type = ENV['RELEASE_TYPE']
+
   private_lane :setup_ci_if_needed do
     unless ENV['CI']
       UI.message("🖥️ Running locally, skipping CI-specific setup.")
@@ -94,7 +96,8 @@ platform :ios do
       options.merge(provisioning_profile_name: "match AppStore com.tstudioz.fax.fme 1779911279")
     )
     # Choose distribution target (TestFlight vs App Store)
-    if ENV['APPSTORE_RELEASE'] == 'true'
+    case release_type
+    when 'appstore'
       UI.message("🚀 Uploading to App Store (via deliver)")
 
       # Upload the build and metadata to App Store Connect, then submit for review and release.
@@ -127,7 +130,7 @@ platform :ios do
           export_compliance_available_on_french_store: true
         }
       )
-    else
+    when 'testflight'
       UI.message("🧪 Uploading to TestFlight")
     
       upload_to_testflight(
@@ -136,7 +139,8 @@ platform :ios do
         skip_waiting_for_build_processing: true,
         distribute_external: false
       )
+    when 'none'
+      UI.message("⏭️ Skipping upload (build only mode)")
     end
-  
   end
 end
