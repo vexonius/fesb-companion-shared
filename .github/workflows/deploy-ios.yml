@@ -50,6 +50,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Set up Java 11 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+
       - name: Set up Ruby (with Bundler)
         uses: ruby/setup-ruby@v1
         with:
