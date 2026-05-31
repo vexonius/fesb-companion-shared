@@ -10,6 +10,7 @@ on:
         options:
           - testflight
           - appstore
+          - none
       export_ipa:
         description: "Export IPA as artifact"
         required: false
