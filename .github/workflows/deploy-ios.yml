@@ -55,6 +55,10 @@ jobs:
         with:
           distribution: temurin
           java-version: "11"
+      - name: Build KMP (Gradle step)
+        run: |
+          ./gradlew clean
+          ./gradlew :composeApp:linkReleaseFrameworkIosArm64
 
       - name: Set up Ruby (with Bundler)
         uses: ruby/setup-ruby@v1
