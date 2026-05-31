@@ -38,7 +38,7 @@ jobs:
       AUTH_KEY_BASE64: ${{ secrets.APPSTORE_PRIVATE_KEY }}
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       MATCH_SSH_PRIVATE_KEY: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
-      APPSTORE_RELEASE: ${{ inputs.release_type == 'appstore' }}
+      RELEASE_TYPE: ${{ inputs.release_type }}
       EXPORT_IPA: ${{ inputs.export_ipa }}
 
     steps:
