@@ -44,7 +44,7 @@ platform :ios do
     provisioning_profile_name = options[:provisioning_profile_name]
 
     gradle(
-     tasks:    [":composeApp:assembleComposeAppReleaseXCFramework])
+     tasks:    [":composeApp:assembleComposeAppReleaseXCFramework"])
 
     build_ios_app(
       scheme: "iosApp",                                            # Your Xcode scheme name
