@@ -13,7 +13,11 @@ on:
       export_ipa:
         description: "Export IPA as artifact"
         required: false
-        default: "false"
+        default: "no"
+        type: choice
+        options:
+          - "yes"
+          - "no"
 
 jobs:
   deploy:
@@ -86,3 +90,9 @@ jobs:
             match_password:"$MATCH_PASSWORD" \
             git_private_key:"$HOME/.ssh/match_ci_key" \
             key_filepath:"secrets/Auth_key.p8"
+      - name: Upload IPA artifact
+        if: ${{ inputs.export_ipa == 'yes' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: iosApp/build/iosApp.ipa
