@@ -45,7 +45,7 @@ platform :ios do
 
     gradle(
   project_dir: "..",
-  tasks: [":assemble"]
+  tasks: [":composeApp:assemble"]
 )
 
     build_ios_app(
