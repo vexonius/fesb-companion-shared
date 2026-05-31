@@ -5,7 +5,7 @@ on:
       release_type:
         description: "Release type"
         required: true
-        default: "testflight"
+        default: "none"
         type: choice
         options:
           - testflight
