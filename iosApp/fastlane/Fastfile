@@ -43,12 +43,12 @@ platform :ios do
 
     build_ios_app(
       scheme: "iosApp",                                            # Your Xcode scheme name
-      project: "iosApp.xcodeproj",                         # Path to your .xcodeproj
+      project: "iosApp.xcodeproj",                                 # Path to your .xcodeproj
       output_name: "iosApp.ipa",                                   # Name of the .ipa file generated
-      output_directory: "iosApp/build",                           # Output directory for the .ipa
+      output_directory: File.expand_path("../build", __dir__),     # Output directory for the .ipa
       export_options: {                                            # Export options for code signing
         provisioningProfiles: {
-          app_identifier => provisioning_profile_name             # Specify the provisioning profile to use
+          app_identifier => provisioning_profile_name              # Specify the provisioning profile to use
         }
       },
       xcargs: "CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=\"Apple Distribution\" DEVELOPMENT_TEAM=5S598DJMXN PROVISIONING_PROFILE_SPECIFIER=\"#{provisioning_profile_name}\""
