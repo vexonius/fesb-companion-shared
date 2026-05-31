@@ -10,6 +10,10 @@ on:
         options:
           - testflight
           - appstore
+      export_ipa:
+        description: "Export IPA as artifact"
+        required: false
+        default: "false"
 
 jobs:
   deploy:
@@ -30,6 +34,7 @@ jobs:
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
       MATCH_SSH_PRIVATE_KEY: ${{ secrets.MATCH_SSH_PRIVATE_KEY }}
       APPSTORE_RELEASE: ${{ inputs.release_type == 'appstore' }}
+      EXPORT_IPA: ${{ inputs.export_ipa }}
 
     steps:
       - name: Set up latest Xcode
