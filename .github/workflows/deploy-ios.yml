@@ -97,10 +97,15 @@ jobs:
             match_password:"$MATCH_PASSWORD" \
             git_private_key:"$HOME/.ssh/match_ci_key" \
             key_filepath:"secrets/Auth_key.p8"
-      - name: Upload IPA artifacts
+      - name: Upload IPA artifacts 1
         uses: actions/upload-artifact@v4
         with:
-          name: ios-ipa
-          path: |
+          name: ios-ipa1
+          path: 
             iosApp/build/iosApp1.ipa
+      - name: Upload IPA artifacts 2
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa2
+          path: 
             iosApp/build/iosApp2.ipa
