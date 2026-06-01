@@ -31,7 +31,7 @@ jobs:
       GIT_URL: 'git@github.com:stipe-jurkovic/FCAppleAppKeys.git'
       GIT_BRANCH: 'main'
       MATCH_TYPE: 'appstore'
-      PROVISIONING_PROFILE_NAME: 'match AppStore com.tstudioz.fax.fme 1779911279'
+      PROVISIONING_PROFILE_NAME: 'match AppStore com.tstudioz.fax.fme'
       METADATA_PATH: './fastlane/metadata'
       APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
       APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
