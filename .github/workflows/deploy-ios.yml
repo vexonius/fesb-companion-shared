@@ -102,10 +102,4 @@ jobs:
         with:
           name: ios-ipa1
           path: 
-            iosApp/build/iosApp1.ipa
-      - name: Upload IPA artifacts 2
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-ipa2
-          path: 
-            iosApp/build/iosApp2.ipa
+            iosApp/build/iosApp.ipa
