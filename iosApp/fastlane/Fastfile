@@ -98,7 +98,7 @@ platform :ios do
 
     # Build the iOS app using the App Store provisioning profile (generates an IPA).
     build_ios_project(
-      options.merge(provisioning_profile_name: "match AppStore com.tstudioz.fax.fme 1779911279")
+      options.merge(provisioning_profile_name: "match AppStore com.tstudioz.fax.fme")
     )
     # Choose distribution target (TestFlight vs App Store)
     case release_type
