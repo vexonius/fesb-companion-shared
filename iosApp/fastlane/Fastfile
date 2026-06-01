@@ -43,11 +43,6 @@ platform :ios do
     app_identifier = options[:app_identifier]
     provisioning_profile_name = options[:provisioning_profile_name]
 
-    gradle(
-  project_dir: "..",
-  tasks: [":composeApp:linkReleaseFrameworkIosArm64"]
-)
-
     build_ios_app(
       scheme: "iosApp",                                            # Your Xcode scheme name
       project: "iosApp.xcodeproj",                                 # Path to your .xcodeproj
