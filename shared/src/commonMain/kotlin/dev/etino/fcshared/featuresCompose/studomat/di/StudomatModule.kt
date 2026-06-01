@@ -1,8 +1,8 @@
 package dev.etino.fcshared.featuresCompose.studomat.di
 
 import dev.etino.fcshared.KoinNames
-import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import dev.etino.fcshared.featuresCompose.studomat.view.StudomatViewModel
+import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import dev.etino.fcshared.featuresKotlin.networking.CustomCookieStorage
 import dev.etino.fcshared.featuresKotlin.networking.interceptors.ISVULoginInterceptor
 import dev.etino.fcshared.featuresKotlin.studomat.dao.StudomatDao

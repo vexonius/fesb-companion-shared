@@ -3,7 +3,6 @@ package dev.etino.fcshared.featuresCompose.studomat.view
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.multiplatform.webview.cookie.Cookie
-import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.featuresKotlin.networking.CustomCookieStorage
 import dev.etino.fcshared.featuresKotlin.studomat.data.sortedByNameAndSemester
 import dev.etino.fcshared.featuresKotlin.studomat.models.Student
@@ -11,6 +10,7 @@ import dev.etino.fcshared.featuresKotlin.studomat.models.StudomatYear
 import dev.etino.fcshared.featuresKotlin.studomat.models.StudomatYearInfo
 import dev.etino.fcshared.featuresKotlin.studomat.repository.StudomatRepository
 import dev.etino.fcshared.featuresKotlin.studomat.repository.models.StudomatRepositoryResult
+import dev.etino.fcshared.networking.ConnectivityObserver
 import fesb_companion_shared.shared.generated.resources.Res
 import fesb_companion_shared.shared.generated.resources.studomar_error
 import fesb_companion_shared.shared.generated.resources.studomat_error_general

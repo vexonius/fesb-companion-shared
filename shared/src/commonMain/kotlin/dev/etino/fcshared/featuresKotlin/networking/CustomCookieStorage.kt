@@ -81,7 +81,7 @@ class CustomCookieStorage : CookiesStorage {
     }
 
     suspend fun isISSPTokenValid(): Boolean {
-        val cookies = get(IksicaService.Companion.targetUrl)
+        val cookies = get(IksicaService.targetUrl)
         val authCookies = cookies.filter { it.name == authCookieISSP }
 
         return authCookies.isNotEmpty()

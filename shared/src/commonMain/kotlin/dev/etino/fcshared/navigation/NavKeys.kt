@@ -23,6 +23,7 @@ data object TimeTable : NavKey
 
 @Serializable
 data object Login : NavKey
+
 @Serializable
 data object Application : NavKey
 
@@ -31,6 +32,7 @@ data object Splash : NavKey
 
 @Serializable
 data object Settings : NavKey
+
 val config = SavedStateConfiguration {
     serializersModule = SerializersModule {
         polymorphic(NavKey::class) {

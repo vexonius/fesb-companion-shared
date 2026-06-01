@@ -25,8 +25,8 @@ import dev.etino.fcshared.compose.accentRed
 import dev.etino.fcshared.compose.contentColors
 import dev.etino.fcshared.compose.theme_dark_surface
 import dev.etino.fcshared.featuresKotlin.attendance.models.AttendanceEntry
-import fesb_companion_shared.shared.generated.resources.attendance_stats_format
 import fesb_companion_shared.shared.generated.resources.Res
+import fesb_companion_shared.shared.generated.resources.attendance_stats_format
 import org.jetbrains.compose.resources.stringResource
 
 

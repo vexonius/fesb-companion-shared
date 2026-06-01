@@ -30,8 +30,8 @@ fun splitEvents(events: List<Event>): List<PositionedEvent> {
                     event,
                     splitType = if (date == startDate) SplitType.End else if (date == endDate) SplitType.Start else SplitType.Both,
                     date = date,
-                    start = if (date == startDate) event.start.time else LocalTime(0,0,0),
-                    end = if (date == endDate) event.end.time else LocalTime(23,59,59),
+                    start = if (date == startDate) event.start.time else LocalTime(0, 0, 0),
+                    end = if (date == endDate) event.end.time else LocalTime(23, 59, 59),
                 )
             }
             splitEvents

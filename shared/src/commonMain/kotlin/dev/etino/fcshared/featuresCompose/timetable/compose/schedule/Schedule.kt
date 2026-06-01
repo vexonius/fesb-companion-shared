@@ -39,14 +39,14 @@ fun Schedule(
     timeLabel: @Composable (time: LocalTime) -> Unit = { BasicSidebarLabel(time = it) },
     minDate: LocalDate = events.minByOrNull(Event::start)?.start?.date ?: LocalDate.now(),
     maxDate: LocalDate = events.maxByOrNull(Event::end)?.end?.date ?: LocalDate.now(),
-    minTime: LocalTime = LocalTime(0, 0,0),
-    maxTime: LocalTime = LocalTime(23, 59,59),
+    minTime: LocalTime = LocalTime(0, 0, 0),
+    maxTime: LocalTime = LocalTime(23, 59, 59),
     daySize: ScheduleSize = ScheduleSize.Adaptive(64.dp),
     hourSize: ScheduleSize = ScheduleSize.Adaptive(44.dp),
     eventsGlowing: Boolean = false
 ) {
     val numDays = minDate.until(maxDate, DateTimeUnit.DAY).toInt() + 1
-    val numMinutes = minTime.until(maxTime, DateTimeUnit.MINUTE) +1
+    val numMinutes = minTime.until(maxTime, DateTimeUnit.MINUTE) + 1
     val numHours = numMinutes.toFloat() / 60f
     val verticalScrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()

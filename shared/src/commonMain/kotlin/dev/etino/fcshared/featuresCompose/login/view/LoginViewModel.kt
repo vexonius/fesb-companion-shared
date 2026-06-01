@@ -5,14 +5,14 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dev.etino.fcshared.featuresKotlin.SPKey
-import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import dev.etino.fcshared.featuresCompose.login.attendanceTestData
 import dev.etino.fcshared.featuresCompose.login.eventsTestData
 import dev.etino.fcshared.featuresCompose.login.receiptsTestData
 import dev.etino.fcshared.featuresCompose.login.studentDataTestData
 import dev.etino.fcshared.featuresCompose.login.studomatSubjectTestData
 import dev.etino.fcshared.featuresCompose.login.studomatYearInfoTestData
+import dev.etino.fcshared.featuresKotlin.SPKey
+import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import dev.etino.fcshared.featuresKotlin.login.user.UserRepositoryInterface
 import dev.etino.fcshared.featuresKotlin.login.user.models.UserRepositoryResult
 import fesb_companion_shared.shared.generated.resources.Res
@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.StringResource
 class LoginViewModel(
     private val repository: UserRepositoryInterface,
     private val datastore: DataStore<Preferences>,
-    private val db : AppDatabase,
+    private val db: AppDatabase,
 ) : ViewModel() {
 
     var username = MutableStateFlow("")
@@ -65,7 +65,7 @@ class LoginViewModel(
         }
     }
 
-    init{
+    init {
         checkIfFirstTimeInApp()
         checkIfLoggedIn()
     }
@@ -86,12 +86,12 @@ class LoginViewModel(
         val password = password.value.trim()
 
         if (username == "test" && password == "testpassword12421") {
-             setTestMode(true)
-             viewModelScope.launch(Dispatchers.Default + handler) {
-                 repository.insertDummyUser()
-             }
-             addTestData()
-             loggedIn.value = true
+            setTestMode(true)
+            viewModelScope.launch(Dispatchers.Default + handler) {
+                repository.insertDummyUser()
+            }
+            addTestData()
+            loggedIn.value = true
         }
 
         if (username.isEmpty() || password.isEmpty()) {

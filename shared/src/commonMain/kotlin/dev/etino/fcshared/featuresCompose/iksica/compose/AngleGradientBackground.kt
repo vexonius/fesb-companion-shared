@@ -35,13 +35,21 @@ fun Modifier.angledGradientBackground(
         val alpha = (degreesNormalised * PI / 180).toFloat()
 
         val gradientLength = when (alpha) {
-            in 0f..gamma, in (2 * PI - gamma)..2 * PI -> { x / cos(alpha) }
+            in 0f..gamma, in (2 * PI - gamma)..2 * PI -> {
+                x / cos(alpha)
+            }
 
-            in gamma..(PI - gamma).toFloat() -> { y / sin(alpha) }
+            in gamma..(PI - gamma).toFloat() -> {
+                y / sin(alpha)
+            }
 
-            in (PI - gamma)..(PI + gamma) -> { x / -cos(alpha) }
+            in (PI - gamma)..(PI + gamma) -> {
+                x / -cos(alpha)
+            }
 
-            in (PI + gamma)..(2 * PI - gamma) -> { y / -sin(alpha) }
+            in (PI + gamma)..(2 * PI - gamma) -> {
+                y / -sin(alpha)
+            }
 
             else -> hypot(x, y)
         }
@@ -58,5 +66,3 @@ fun Modifier.angledGradientBackground(
             size = size
         )
     }
-
-

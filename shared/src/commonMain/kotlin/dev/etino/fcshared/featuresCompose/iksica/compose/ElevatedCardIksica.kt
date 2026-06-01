@@ -21,15 +21,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.compose.AppTheme
 import dev.etino.fcshared.compose.glowingColor
 import dev.etino.fcshared.compose.gradientColors
 import dev.etino.fcshared.featuresCompose.iksica.formatBalance
-import fesb_companion_shared.shared.generated.resources.*
-import org.jetbrains.compose.resources.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import dev.etino.fcshared.featuresKotlin.iksica.models.StudentData
+import fesb_companion_shared.shared.generated.resources.Res
+import fesb_companion_shared.shared.generated.resources.card_balance_label
+import fesb_companion_shared.shared.generated.resources.card_number_label
+import fesb_companion_shared.shared.generated.resources.daily_support_label
+import fesb_companion_shared.shared.generated.resources.iksica_balance
+import fesb_companion_shared.shared.generated.resources.jmbag_label
+import fesb_companion_shared.shared.generated.resources.name_label
+import fesb_companion_shared.shared.generated.resources.oib_label
+import fesb_companion_shared.shared.generated.resources.right_until_label
+import fesb_companion_shared.shared.generated.resources.rights_from_label
+import fesb_companion_shared.shared.generated.resources.rights_level_label
+import org.jetbrains.compose.resources.stringResource
 
 @Preview
 @Composable
@@ -40,7 +50,7 @@ fun ElevatedCardIksica(
     onClick: () -> Unit = {}
 ) {
     val cornersRadius = 30.dp
-    val glowingRadius = 100.dp
+    100.dp
 
     Box(
         modifier = Modifier

@@ -24,9 +24,9 @@ fun BasicEvent(
 ) {
     val event = positionedEvent.event
     val topRadius =
-        if (positionedEvent.splitType == SplitType.Companion.Start || positionedEvent.splitType == SplitType.Companion.Both) 0.dp else 8.dp
+        if (positionedEvent.splitType == SplitType.Start || positionedEvent.splitType == SplitType.Both) 0.dp else 8.dp
     val bottomRadius =
-        if (positionedEvent.splitType == SplitType.Companion.End || positionedEvent.splitType == SplitType.Companion.Both) 0.dp else 8.dp
+        if (positionedEvent.splitType == SplitType.End || positionedEvent.splitType == SplitType.Both) 0.dp else 8.dp
 
     Column(
         modifier = modifier

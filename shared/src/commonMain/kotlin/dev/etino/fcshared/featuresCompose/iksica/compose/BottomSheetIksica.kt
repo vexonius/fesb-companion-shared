@@ -26,11 +26,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.compose.contentColors
+import dev.etino.fcshared.featuresCompose.iksica.formatBalance
 import dev.etino.fcshared.featuresKotlin.iksica.models.Receipt
 import dev.etino.fcshared.featuresKotlin.iksica.models.ReceiptItem
 import dev.etino.fcshared.featuresKotlin.now
-import dev.etino.fcshared.featuresCompose.iksica.formatBalance
-import fesb_companion_shared.shared.generated.resources.*
+import fesb_companion_shared.shared.generated.resources.Res
+import fesb_companion_shared.shared.generated.resources.amount_x
+import fesb_companion_shared.shared.generated.resources.currency
+import fesb_companion_shared.shared.generated.resources.price_of_item
+import fesb_companion_shared.shared.generated.resources.subsidized_price_of_item
+import fesb_companion_shared.shared.generated.resources.transaction_details
+import fesb_companion_shared.shared.generated.resources.transaction_paid
+import fesb_companion_shared.shared.generated.resources.transaction_subsidized
+import fesb_companion_shared.shared.generated.resources.transaction_total
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
 
@@ -165,7 +173,9 @@ fun IksicaItemDetailed(item: ReceiptItem) {
                 )
                 Text(
                     text =
-                        formatBalance((item.totalInCents - item.subsidizedAmountInCents) * item.amount) + stringResource(Res.string.currency),
+                        formatBalance((item.totalInCents - item.subsidizedAmountInCents) * item.amount) + stringResource(
+                            Res.string.currency
+                        ),
                     modifier = Modifier
                         .weight(0.20f)
                         .padding(start = 10.dp),

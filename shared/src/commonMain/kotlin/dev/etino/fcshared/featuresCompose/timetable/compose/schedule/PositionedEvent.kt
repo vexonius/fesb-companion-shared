@@ -28,7 +28,7 @@ data class PositionedEvent(
     val column: Int = 0,
     val columnSpan: Int = 1,
     val columnTotal: Int = 1,
-){
+) {
     fun overlapsWith(other: PositionedEvent): Boolean {
         return date == other.date && start < other.end && end > other.start
     }

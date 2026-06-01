@@ -93,7 +93,8 @@ fun MenzaCompose(menzaViewModel: MenzaViewModel) {
                         item(key = "item$iteration") {
                             val currentPage = state.currentPage
                             val firstVisibleIndex by remember { derivedStateOf { indicatorScrollState.firstVisibleItemIndex } }
-                            val lastVisibleIndex = indicatorScrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+                            val lastVisibleIndex =
+                                indicatorScrollState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
                             val size by animateDpAsState(
                                 targetValue = when (iteration) {
                                     currentPage -> {

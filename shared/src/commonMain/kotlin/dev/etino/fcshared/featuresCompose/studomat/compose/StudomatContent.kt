@@ -42,7 +42,9 @@ import dev.etino.fcshared.compose.studomatBlue
 import dev.etino.fcshared.featuresKotlin.studomat.models.StudomatYear
 import dev.etino.fcshared.featuresKotlin.studomat.models.StudomatYearInfo
 import fesb_companion_shared.shared.generated.resources.Res
-import fesb_companion_shared.shared.generated.resources.*
+import fesb_companion_shared.shared.generated.resources.open_icon
+import fesb_companion_shared.shared.generated.resources.open_webview
+import fesb_companion_shared.shared.generated.resources.webview
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -165,9 +167,11 @@ fun DotIndicatorsStudomat(pageCount: Int, pagerState: PagerState) {
                             currentPage -> {
                                 10.dp
                             }
+
                             in firstVisibleIndex + 1..<lastVisibleIndex -> {
                                 7.dp
                             }
+
                             else -> {
                                 4.dp
                             }

@@ -8,11 +8,11 @@ import com.kizitonwose.calendar.core.minusMonths
 import com.kizitonwose.calendar.core.now
 import com.kizitonwose.calendar.core.plusMonths
 import dev.etino.fcshared.featuresKotlin.login.user.UserRepositoryInterface
-import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.featuresKotlin.timetable.Event
 import dev.etino.fcshared.featuresKotlin.timetable.MonthData
 import dev.etino.fcshared.featuresKotlin.timetable.TimeTableInfo
 import dev.etino.fcshared.featuresKotlin.timetable.repository.interfaces.TimeTableRepositoryInterface
+import dev.etino.fcshared.networking.ConnectivityObserver
 import fesb_companion_shared.shared.generated.resources.Res
 import fesb_companion_shared.shared.generated.resources.general_error
 import kotlinx.coroutines.CoroutineExceptionHandler

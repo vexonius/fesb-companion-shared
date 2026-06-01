@@ -1,8 +1,8 @@
 package dev.etino.fcshared.featuresCompose.iksica.di
 
 import dev.etino.fcshared.KoinNames
-import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import dev.etino.fcshared.featuresCompose.iksica.view.IksicaViewModel
+import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import dev.etino.fcshared.featuresKotlin.iksica.dao.IksicaDao
 import dev.etino.fcshared.featuresKotlin.iksica.repository.IksicaRepository
 import dev.etino.fcshared.featuresKotlin.iksica.repository.IksicaRepositoryInterface

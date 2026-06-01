@@ -28,7 +28,7 @@ fun BasicSchedule(
     minDate: LocalDate = events.minByOrNull(Event::start)?.start?.date ?: LocalDate.now(),
     maxDate: LocalDate = events.maxByOrNull(Event::end)?.end?.date ?: LocalDate.now(),
     minDayTime: LocalTime = LocalTime(0, 0),
-    maxDayTime: LocalTime = LocalTime(23, 59,59),
+    maxDayTime: LocalTime = LocalTime(23, 59, 59),
     dayWidth: Dp,
     hourHeight: Dp,
     eventsGlowing: Boolean = false

@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import dev.etino.fcshared.database.AppDatabase
+import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import kotlinx.coroutines.InternalCoroutinesApi
 import okio.Path.Companion.toPath
 import org.koin.dsl.module
@@ -30,6 +30,7 @@ fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
         name = dbFile.absolutePath,
     ).setDriver(BundledSQLiteDriver())
 }
+
 const val DATABASE_NAME = "fesbCompanionIosDatabase"
 
 
@@ -42,6 +43,7 @@ fun createDataStore(): DataStore<Preferences> = createDataStore(
         file.absolutePath
     }
 )
+
 fun createDataStore(producePath: () -> String): DataStore<Preferences> =
     PreferenceDataStoreFactory.createWithPath(
         produceFile = { producePath().toPath() }

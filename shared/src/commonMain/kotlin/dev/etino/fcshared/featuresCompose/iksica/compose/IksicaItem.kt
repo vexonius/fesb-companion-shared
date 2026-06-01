@@ -17,10 +17,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.compose.contentColors
-import dev.etino.fcshared.featuresKotlin.iksica.models.Receipt
-import dev.etino.fcshared.featuresKotlin.now
 import dev.etino.fcshared.featuresCompose.iksica.daysAgoText
 import dev.etino.fcshared.featuresCompose.iksica.formatBalance
+import dev.etino.fcshared.featuresKotlin.iksica.models.Receipt
+import dev.etino.fcshared.featuresKotlin.now
 import fesb_companion_shared.shared.generated.resources.Res
 import fesb_companion_shared.shared.generated.resources.currency
 import fesb_companion_shared.shared.generated.resources.minus_amount

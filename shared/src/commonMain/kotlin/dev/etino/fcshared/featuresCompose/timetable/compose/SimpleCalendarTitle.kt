@@ -68,19 +68,19 @@ fun SimpleCalendarTitle(
 
 fun monthNameHr(month: Int): String =
     when (month) {
-       0 -> "Siječanj"
-       1 -> "Veljača"
-       2 -> "Ožujak"
-       3 -> "Travanj"
-       4 -> "Svibanj"
-       5 -> "Lipanj"
-       6 -> "Srpanj"
-       7 -> "Kolovoz"
-       8 -> "Rujan"
-       9  -> "Listopad"
-       10 -> "Studeni"
-       11 -> "Prosinac"
-       else -> ""
+        0 -> "Siječanj"
+        1 -> "Veljača"
+        2 -> "Ožujak"
+        3 -> "Travanj"
+        4 -> "Svibanj"
+        5 -> "Lipanj"
+        6 -> "Srpanj"
+        7 -> "Kolovoz"
+        8 -> "Rujan"
+        9 -> "Listopad"
+        10 -> "Studeni"
+        11 -> "Prosinac"
+        else -> ""
     }
 
 @Composable

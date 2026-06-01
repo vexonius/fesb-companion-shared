@@ -8,9 +8,9 @@ import dev.etino.fcshared.featuresKotlin.home.models.WeatherDisplay
 import dev.etino.fcshared.featuresKotlin.home.repository.NoteRepositoryInterface
 import dev.etino.fcshared.featuresKotlin.home.repository.WeatherRepositoryInterface
 import dev.etino.fcshared.featuresKotlin.login.user.UserRepositoryInterface
-import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.featuresKotlin.timetable.Event
 import dev.etino.fcshared.featuresKotlin.timetable.repository.interfaces.TimeTableRepositoryInterface
+import dev.etino.fcshared.networking.ConnectivityObserver
 import fesb_companion_shared.shared.generated.resources.Res
 import fesb_companion_shared.shared.generated.resources.general_error
 import fesb_companion_shared.shared.generated.resources.weather_error

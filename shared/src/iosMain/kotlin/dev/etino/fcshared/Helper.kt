@@ -11,7 +11,7 @@ import dev.etino.fcshared.featuresCompose.timetable.di.timetableModule
 import dev.etino.fcshared.featuresKotlin.networking.servicesModule
 import org.koin.core.context.startKoin
 
-fun initKoin(){
+fun initKoin() {
     startKoin {
         modules(
             attendanceModule,

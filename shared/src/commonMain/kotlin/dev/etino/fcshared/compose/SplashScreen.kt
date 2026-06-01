@@ -17,7 +17,7 @@ import fesb_companion_shared.shared.generated.resources.f_icon
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun SplashScreen(){
+fun SplashScreen() {
     Scaffold {
         Column(
             Modifier.padding(it).fillMaxSize(),

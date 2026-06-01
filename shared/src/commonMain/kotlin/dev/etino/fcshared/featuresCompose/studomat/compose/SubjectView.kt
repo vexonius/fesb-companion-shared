@@ -24,10 +24,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.etino.fcshared.featuresKotlin.studomat.models.StudomatSubject
 import dev.etino.fcshared.compose.passGreen
 import dev.etino.fcshared.featuresCompose.home.compose.noRippleClickable
-import fesb_companion_shared.shared.generated.resources.*
+import dev.etino.fcshared.featuresKotlin.studomat.models.StudomatSubject
+import fesb_companion_shared.shared.generated.resources.Res
+import fesb_companion_shared.shared.generated.resources.ects_enrolled
+import fesb_companion_shared.shared.generated.resources.elective_group
+import fesb_companion_shared.shared.generated.resources.enrolled_subjects
+import fesb_companion_shared.shared.generated.resources.exam_date
+import fesb_companion_shared.shared.generated.resources.exercises
+import fesb_companion_shared.shared.generated.resources.grade
+import fesb_companion_shared.shared.generated.resources.is_taken
+import fesb_companion_shared.shared.generated.resources.lectures
+import fesb_companion_shared.shared.generated.resources.semester
+import fesb_companion_shared.shared.generated.resources.status
 import org.jetbrains.compose.resources.stringResource
 
 

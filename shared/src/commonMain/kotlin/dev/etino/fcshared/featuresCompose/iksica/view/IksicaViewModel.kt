@@ -36,6 +36,7 @@ class IksicaViewModel(
             _showSnackbar.emit(resId)
         }
     }
+
     val internetAvailable: StateFlow<Boolean> = connectivityObserver.isConnected
 
     private val _iksicaData = MutableStateFlow<IksicaData?>(null)

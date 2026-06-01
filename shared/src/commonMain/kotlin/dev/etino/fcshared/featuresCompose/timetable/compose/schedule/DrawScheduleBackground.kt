@@ -18,7 +18,7 @@ fun DrawScope.drawScheduleBackground(
 ) {
     val dayWidthPx = dayWidth.toPx()
     val hourHeightPx = hourHeight.toPx()
-    val firstHour = LocalTime(minDayTime.hour,0,0)
+    val firstHour = LocalTime(minDayTime.hour, 0, 0)
     val firstHourOffsetMinutes = (firstHour.toSecondOfDay() - minDayTime.toSecondOfDay()) / 60
     val firstHourOffset = (firstHourOffsetMinutes / 60f) * hourHeightPx
 

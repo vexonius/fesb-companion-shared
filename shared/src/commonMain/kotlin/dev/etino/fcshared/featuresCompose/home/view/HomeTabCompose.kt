@@ -47,8 +47,8 @@ import dev.etino.fcshared.featuresCompose.menza.view.MenzaCompose
 import dev.etino.fcshared.featuresCompose.menza.view.MenzaViewModel
 import dev.etino.fcshared.featuresKotlin.home.models.Note
 import dev.etino.fcshared.featuresKotlin.home.models.WeatherDisplay
-import dev.etino.fcshared.navigation.Settings
 import dev.etino.fcshared.featuresKotlin.now
+import dev.etino.fcshared.navigation.Settings
 import fesb_companion_shared.shared.generated.resources.Res
 import fesb_companion_shared.shared.generated.resources.hi_user
 import fesb_companion_shared.shared.generated.resources.settings_icon
@@ -156,8 +156,10 @@ fun HomeTabCompose(
                         homeViewModel,
                         {
                             scope.launch {
-                                snackbarHostState.showSnackbar(it,
-                                    duration = SnackbarDuration.Indefinite)
+                                snackbarHostState.showSnackbar(
+                                    it,
+                                    duration = SnackbarDuration.Indefinite
+                                )
                             }
                         }
                     )

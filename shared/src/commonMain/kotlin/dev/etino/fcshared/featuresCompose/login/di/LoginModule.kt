@@ -1,7 +1,7 @@
 package dev.etino.fcshared.featuresCompose.login.di
 
-import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import dev.etino.fcshared.featuresCompose.login.view.LoginViewModel
+import dev.etino.fcshared.featuresKotlin.database.AppDatabase
 import dev.etino.fcshared.featuresKotlin.login.dao.UserDao
 import dev.etino.fcshared.featuresKotlin.login.user.UserRepository
 import dev.etino.fcshared.featuresKotlin.login.user.UserRepositoryInterface

@@ -113,7 +113,7 @@ fun TimetableItem(event: Event) {
         ) {
             val dividerColor = MaterialTheme.colorScheme.outline
             val dividerWidth = 1.dp
-            val hours=  event.start.time.until(event.end.time, DateTimeUnit.MINUTE)/60f
+            val hours = event.start.time.until(event.end.time, DateTimeUnit.MINUTE) / 60f
             val time = hours * 6
             Canvas(modifier = Modifier.size(Dp(time * 5.dp.value) + 5.dp, 10.dp)) {
                 val radius = 5.dp.toPx()

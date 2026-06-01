@@ -33,7 +33,7 @@ fun getRoomDatabase(
         .build()
 }
 
-fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase>{
+fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
     val dbFilePath = documentDirectory() + "/my_room.db"
     return Room.databaseBuilder<AppDatabase>(
         name = dbFilePath,

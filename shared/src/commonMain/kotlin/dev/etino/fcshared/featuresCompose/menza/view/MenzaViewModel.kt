@@ -8,8 +8,8 @@ import dev.etino.fcshared.featuresKotlin.menza.models.MenzaLocation
 import dev.etino.fcshared.featuresKotlin.menza.models.menzaLocations
 import dev.etino.fcshared.featuresKotlin.menza.repository.CamerasRepositoryInterface
 import dev.etino.fcshared.featuresKotlin.menza.repository.MenzaRepositoryInterface
-import dev.etino.fcshared.networking.ConnectivityObserver
 import dev.etino.fcshared.featuresKotlin.now
+import dev.etino.fcshared.networking.ConnectivityObserver
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import io.ktor.http.Url

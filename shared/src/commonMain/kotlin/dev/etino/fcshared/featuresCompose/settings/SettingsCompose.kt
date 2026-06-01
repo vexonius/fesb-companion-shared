@@ -72,7 +72,7 @@ val listItemStartPadding = 16.dp
 fun SettingsCompose(
     viewModel: SettingsViewModel = koinViewModel(),
     paddingValues: PaddingValues,
-    goBack: ()->Unit,
+    goBack: () -> Unit,
 ) {
     Scaffold(
         Modifier.padding(paddingValues),
@@ -87,9 +87,9 @@ fun SettingsCompose(
                         "Nazad",
                         modifier = Modifier.padding(horizontal = 4.dp)
                             .clip(CircleShape)
-                            .clickable{
-                            goBack()
-                        }.padding(8.dp)
+                            .clickable {
+                                goBack()
+                            }.padding(8.dp)
                     )
                 },
                 windowInsets = WindowInsets()
