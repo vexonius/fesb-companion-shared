@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.compose.meniColor
 import dev.etino.fcshared.featuresCompose.home.view.HomeViewModel
 import dev.etino.fcshared.featuresCompose.home.view.sidePadding
-import dev.etino.fcshared.featuresCompose.iksica.angledGradientBackground
+import dev.etino.fcshared.featuresCompose.iksica.compose.angledGradientBackground
 import fesb_companion_shared.shared.generated.resources.Res
 import fesb_companion_shared.shared.generated.resources.menza_desc
 import fesb_companion_shared.shared.generated.resources.menza_title
