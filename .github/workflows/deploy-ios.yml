@@ -101,5 +101,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
-          path: 
+          path:
             iosApp/build/iosApp.ipa
