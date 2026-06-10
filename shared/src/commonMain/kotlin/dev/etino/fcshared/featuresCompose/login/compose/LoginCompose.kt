@@ -50,6 +50,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.etino.fcshared.compose.AppTheme
 import dev.etino.fcshared.featuresCompose.login.models.TextFieldModel
 import fesb_companion_shared.shared.generated.resources.Res
 import fesb_companion_shared.shared.generated.resources.login_action_submit
@@ -247,12 +248,14 @@ fun ButtonCircularLoading(
 @Preview
 @Composable
 fun LoginComposePreview() {
-    LoginCompose(
-        MutableStateFlow(false),
-        MutableStateFlow(""),
-        MutableStateFlow(""),
-        MutableStateFlow(true),
-        {},
-        MutableSharedFlow()
-    )
+    AppTheme{
+        LoginCompose(
+            MutableStateFlow(false),
+            MutableStateFlow(""),
+            MutableStateFlow(""),
+            MutableStateFlow(true),
+            {},
+            MutableSharedFlow()
+        )
+    }
 }

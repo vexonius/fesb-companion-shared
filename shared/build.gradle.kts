@@ -1,24 +1,16 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.androidMultiplatformLibrary)
     kotlin("plugin.serialization") version libs.versions.kotlin
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.ksp)
 }
 
 kotlin {
-    androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -29,10 +21,26 @@ kotlin {
         }
     }
     jvm()
+
+    androidLibrary {
+        namespace = "dev.etino.fcshared.shared"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+        androidResources {
+            enable = true
+        }
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+    }
+
     sourceSets {
         androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.connectivity.device)
+            implementation(libs.ui.tooling.preview)
         }
         commonMain.dependencies {
             implementation(libs.runtime)
@@ -78,7 +86,9 @@ kotlin {
         }
     }
 }
-
+dependencies {
+    androidRuntimeClasspath(libs.ui.tooling)
+}
 dependencies {
     add("kspAndroid", libs.androidx.room.compiler)
     add("kspJvm", libs.androidx.room.compiler)
@@ -90,54 +100,5 @@ dependencies {
 
 room {
     schemaDirectory("$projectDir/schemas")
-}
-
-android {
-    namespace = "dev.etino.fcshared"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        applicationId = "dev.etino.fcshared"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-        create("releaseDebug") {
-            isMinifyEnabled = true
-            signingConfig = signingConfigs.getByName("debug")
-            applicationIdSuffix = ".debug"
-            isDebuggable = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-dependencies {
-    debugImplementation(libs.ui.tooling)
-}
-
-compose.desktop {
-    application {
-        mainClass = "dev.etino.fcshared.MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "dev.etino.fcshared"
-            packageVersion = "1.0.0"
-        }
-    }
 }
 

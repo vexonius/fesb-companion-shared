@@ -30,5 +30,6 @@ dependencyResolutionManagement {
     }
 }
 
+include(":androidApp")
+include(":desktopApp")
 include(":shared")
-include(":shared:sharedtest")
