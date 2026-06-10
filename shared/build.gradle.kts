@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidMultiplatformLibrary)
     kotlin("plugin.serialization") version libs.versions.kotlin
-    alias(libs.plugins.androidx.room)
     alias(libs.plugins.ksp)
 }
 
@@ -97,8 +96,3 @@ dependencies {
     add("kspIosArm64", libs.androidx.room.compiler)
     // Add any other platform target you use in your project, for example kspDesktop
 }
-
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-
