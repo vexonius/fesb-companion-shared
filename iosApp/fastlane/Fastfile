@@ -134,7 +134,7 @@ platform :ios do
       UI.message("🧪 Uploading to TestFlight")
     
       upload_to_testflight(
-        ipa: "iosApp/build/iosApp.ipa",
+        ipa: "build/iosApp.ipa",
         api_key: Actions.lane_context[:app_store_connect_api_key],
         skip_waiting_for_build_processing: true,
         distribute_external: false
