@@ -65,7 +65,7 @@ fun Application(routeToLogin: () -> Unit) {
         bottomBar = {
             MainBottomBar(
                 navigate = navigator::navigate,
-                topLevelRoute = navigationState.topLevelRoute,
+                topLevelRoute = navigationState.backStacks[navigationState.topLevelRoute]?.last(),
                 topLevelRoutes = topLevelRoutes,
                 timetableViewModel = timetableViewModel,
             )
