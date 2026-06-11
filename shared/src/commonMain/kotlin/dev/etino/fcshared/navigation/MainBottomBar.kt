@@ -22,11 +22,11 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun MainBottomBar(
     navigate: (NavKey) -> Unit,
-    topLevelRoute: NavKey,
+    topLevelRoute: NavKey?,
     topLevelRoutes: List<TopLevelRoute>,
     timetableViewModel: TimetableViewModel
 ) {
-    val bottomBarHiddenRoutes = listOf(Login, Settings)
+    val bottomBarHiddenRoutes = listOf(Settings)
     if (!bottomBarHiddenRoutes.contains(topLevelRoute)) {
         NavigationBar(
             contentColor = MaterialTheme.colorScheme.onSurface,

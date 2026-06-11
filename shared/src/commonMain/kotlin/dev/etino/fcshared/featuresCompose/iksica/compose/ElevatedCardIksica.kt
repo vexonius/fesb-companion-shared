@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.etino.fcshared.compose.AppTheme
@@ -167,13 +169,23 @@ fun CardIksicaPopupRow(
 ) {
     Row(
         Modifier
-            .padding(20.dp, 10.dp)
+            .padding(10.dp, 10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = leftText, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.bodyMedium)
-        Text(text = rightText, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.bodyMedium)
+        Text(
+            text = leftText,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(Modifier.width(5.dp))
+        Text(
+            text = rightText,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.End
+        )
     }
     if (divider) {
         HorizontalDivider(
