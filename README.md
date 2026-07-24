@@ -1,7 +1,7 @@
 # FESB Companion
 
 <p align="center">
-  <img src="shared/src/commonMain/composeResources/drawable/app_icon.png" alt="FESB Companion" width="160"/>
+  <img src="iosApp/iosApp/Assets.xcassets/AppIcon.appiconset/Iconbackgroud.png" alt="FESB Companion" width="160"/>
 </p>
 
 <p align="center">
