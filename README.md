@@ -24,7 +24,7 @@ A modern Kotlin Multiplatform application for students of the
 
 FESB Companion is an unofficial student companion designed to make everyday university life easier.
 
-Built with **Kotlin Multiplatform**, the application shares business logic across Android, iOS and Desktop while providing a native user experience on every platform.
+The application is built using **Kotlin Multiplatform (KMP)** and **Compose Multiplatform (CMP)**, allowing the same UI, business logic, networking, and data layer to be shared across Android, iOS, and Desktop. This approach minimizes platform-specific code while delivering a consistent user experience on every platform.
 
 ## Features
 
@@ -55,6 +55,7 @@ Built with **Kotlin Multiplatform**, the application shares business logic acros
 ### Shared
 
 - Kotlin Multiplatform
+- Compose Multiplatform
 - Kotlin Coroutines
 - Kotlinx Serialization
 - Ktor
@@ -128,20 +129,21 @@ Open the `iosApp` project in Xcode and run it on a simulator or physical device.
 
 ## Architecture
 
-The project follows a Kotlin Multiplatform architecture where business logic is shared between all supported platforms.
+The application uses a shared Compose UI and shared business logic across all supported platforms.
 
 ```
-          Shared Module
-      ┌──────────────────┐
-      │ UI Components    │
-      │ Domain Logic     │
-      │ Networking       │
-      │ Data Layer       │
-      └────────┬─────────┘
-               │
-   ┌───────────┼───────────┐
-   │           │           │
-Android      iOS       Desktop
+             Shared Module
+      ┌──────────────────────────┐
+      │ Compose UI (100% Shared) │
+      │ UI Components            │
+      │ Domain Logic             │
+      │ Networking               │
+      │ Data Layer               │
+      └────────────┬─────────────┘
+                   │
+       ┌───────────┼───────────┐
+       │           │           │
+    Android       iOS        Desktop
 ```
 
 ---
