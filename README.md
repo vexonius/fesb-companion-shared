@@ -1,7 +1,7 @@
 # FESB Companion
 
 <p align="center">
-  <img src="docs/images/logo.png" alt="FESB Companion" width="160"/>
+  <img src="shared/src/commonMain/composeResources/drawable/app_icon.png" alt="FESB Companion" width="160"/>
 </p>
 
 <p align="center">
